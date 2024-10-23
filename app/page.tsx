@@ -11,6 +11,7 @@ export default function Home() {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [activeKey, setActiveKey] = useState<string>("login");
+    const [user, setUser] = useState<any>(null);
 
     function handleEmailChange(e: ChangeEvent<HTMLInputElement>) {
         setEmail(e.target.value);
@@ -22,10 +23,13 @@ export default function Home() {
 
     function handleLogin() {
         signInWithEmailAndPassword(auth, email, password).then((userCredential: any) => {
+            setUser(userCredential.user);
             toast.success("Logged in successfully!");
         }).catch((error: any) => {
             toast.error(error.message);
         });
+        setEmail("");
+        setPassword("");
     }
 
     function handleRegister() {
@@ -34,10 +38,13 @@ export default function Home() {
         }).catch((error: any) => {
             toast.error(error.message);
         });
+        setEmail("");
+        setPassword("");
     }
 
     function handleLogout() {
         signOut(auth).then(() => {
+            setUser(null);
             toast.success("Logged out successfully!");
         }).catch((error: any) => {
             toast.error(error.message);
@@ -48,7 +55,7 @@ export default function Home() {
         return (
             <div>
                 <h2>Dashboard</h2>
-                <p>Welcome {auth.currentUser ? auth.currentUser.email : "Guest"}</p>
+                <p>Welcome {user.email}</p>
                 <Button onClick={handleLogout} color="primary">
                     Logout
                 </Button>
@@ -130,12 +137,11 @@ export default function Home() {
             />
         );
     }
-    console.log(auth);
 
     return (
         <>  
             {toasterComponent()}
-            {auth==null ? dashboardComponent() : authComponent()}
+            {user != null ? dashboardComponent() : authComponent()}
         </>
     );
 }
