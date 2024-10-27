@@ -1,24 +1,14 @@
 "use client";
 
-import { Dashboard } from "./components/dashboard";
-import { Authentication } from "./components/authentication";
-import { Toast } from "./components/toast";
+import { Authenticated } from "./modifiers";
 import Navigation from "./components/navigation";
-import { useUser } from "./context";
+import Home from "./components/home";
 
 export default function Page() {
-    const { user } = useUser();
     return (
-        <>
-            <Toast />
-            { user ? 
-                <>
-                    <Navigation />
-                    <Dashboard />
-                </>
-            :
-                <Authentication />
-            }
-        </>
+        <Authenticated>
+            <Navigation itemActive="Home" />
+            <Home />
+        </Authenticated>
     );
 }
