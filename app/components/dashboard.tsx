@@ -2,18 +2,11 @@
 
 import { Button } from "@nextui-org/react";
 import { handleLogout } from "./authentication";
-import { useEffect, useState } from "react";
+import { getUser } from "../context";
 
 function Dashboard() {
 
-    const [user, setUser] = useState<any>(null);
-    
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-        const storedUser = localStorage.getItem("user");
-        setUser(storedUser);
-        }
-    }, []);
+    const { user, setUser } = getUser();
 
     return (
         <div>

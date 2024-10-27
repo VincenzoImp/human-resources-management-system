@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, ChangeEvent, useEffect } from "react";
+import { useState, ChangeEvent } from "react";
 import { Input, Button, Card, Tabs, Tab } from "@nextui-org/react";
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "../firebase/config";
-import toast from "react-hot-toast";
-
+import { toast } from "./toast";
+import { getUser } from "../context";
 
 function handleEmailChange(e: ChangeEvent<HTMLInputElement>, setEmail: any) {
     setEmail(e.target.value);
@@ -18,7 +18,6 @@ function handlePasswordChange(e: ChangeEvent<HTMLInputElement>, setPassword: any
 function handleLogin(email: string, password: string, setEmail: any, setPassword: any, setUser: any) {
     signInWithEmailAndPassword(auth, email, password).then((userCredential: any) => {
         setUser(userCredential.user);
-        localStorage.setItem("user", userCredential.user);
         toast.success("Logged in successfully!");
     }).catch((error: any) => {
         toast.error(error.message);
@@ -50,16 +49,7 @@ function Authentication() {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [activeKey, setActiveKey] = useState<string>("login");
-
-    const [user, setUser] = useState<any>(null);
-    
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-        const storedUser = localStorage.getItem("user");
-        setUser(storedUser);
-        }
-    }, []);
-
+    const { user, setUser } = getUser();
     return (
         <div className="flex flex-col items-center">
             <h1 className="text-2xl font-bold text-center">Authentication</h1>

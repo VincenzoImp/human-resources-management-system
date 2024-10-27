@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Providers from "./providers";
+import { ContextProvider } from "./context";
 
 export const metadata: Metadata = {
 	title: "IWN",
@@ -12,7 +13,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
 	<html lang="it">
 		<body className="justify-center items-center flex h-screen w-screen">
 			<Providers>
-				{children}
+				<ContextProvider>
+					{children}
+				</ContextProvider>
 			</Providers>
 		</body>
 	</html>
