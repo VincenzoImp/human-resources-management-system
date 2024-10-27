@@ -1,8 +1,7 @@
 "use client";
 
 import React from "react";
-import { Navbar, NavbarBrand, NavbarMenuToggle, NavbarMenuItem, NavbarMenu, NavbarContent, NavbarItem, Link, Button, Dropdown, DropdownTrigger, Avatar, DropdownMenu, DropdownItem } from "@nextui-org/react";
-// import {AcmeLogo} from "./AcmeLogo.jsx";
+import { Navbar, NavbarBrand, NavbarMenuToggle, NavbarMenuItem, NavbarMenu, NavbarContent, NavbarItem, Link, Dropdown, DropdownTrigger, Avatar, DropdownMenu, DropdownItem } from "@nextui-org/react";
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -32,15 +31,13 @@ export default function Navigation() {
 
       <NavbarContent className="sm:hidden pr-3" justify="center">
         <NavbarBrand>
-          {/* <AcmeLogo /> */}
-          <p className="font-bold text-inherit">ACME</p>
+          <p className="font-bold text-inherit">IWN</p>
         </NavbarBrand>
       </NavbarContent>
 
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarBrand>
-          {/* <AcmeLogo /> */}
-          <p className="font-bold text-inherit">ACME</p>
+          <p className="font-bold text-inherit">IWN</p>
         </NavbarBrand>
         <NavbarItem>
           <Link color="foreground" href="#">

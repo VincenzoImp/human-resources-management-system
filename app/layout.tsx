@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
 	<html lang="it">
-		<body className="justify-center items-center flex h-screen w-screen">
+		<body>
 			<Providers>
 				<ContextProvider>
 					{children}

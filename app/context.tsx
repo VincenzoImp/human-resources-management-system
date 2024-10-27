@@ -3,10 +3,11 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { ReactNode } from "react";
+import { User } from "firebase/auth";
 
 interface ContextType {
-    user: any;
-    setUser: React.Dispatch<React.SetStateAction<any>>;
+    user: User | null;
+    setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
 const Context = React.createContext<ContextType | null>(null);
@@ -32,7 +33,7 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
     );
 }
 
-function getUser() {
+function useUser() {
     const context = React.useContext(Context);
     if (!context) {
         throw new Error("Context not found");
@@ -41,4 +42,4 @@ function getUser() {
     return { user, setUser };
 }
 
-export { ContextProvider, getUser };
+export { ContextProvider, useUser };

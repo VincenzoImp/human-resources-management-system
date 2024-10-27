@@ -2,16 +2,16 @@
 
 import { Button } from "@nextui-org/react";
 import { handleLogout } from "./authentication";
-import { getUser } from "../context";
+import { useUser } from "../context";
 
 function Dashboard() {
 
-    const { user, setUser } = getUser();
+    const { user, setUser } = useUser();
 
     return (
         <div>
             <h2>Dashboard</h2>
-            <p>Welcome {user.email}</p>
+            <p>Welcome {user?.email}</p>
             <Button onClick={() => handleLogout(setUser)} color="primary">
                 Logout
             </Button>
