@@ -11,8 +11,11 @@ interface Employee {
     birthplace: string;
     birthplace_nation: string;
     birthplace_provincia: string;
+    document: string;
     email: string;
+    employed: boolean;
     gender: string;
+    id: string;
     livingplace_address: string;
     livingplace_nation: string;
     livingplace_provincia: string;
@@ -28,8 +31,9 @@ interface Employee {
 interface ContextType {
     user: User | null;
     setUser: React.Dispatch<React.SetStateAction<User | null>>;
-    employees: Map<string, Employee> | null;
-    setEmployees: React.Dispatch<React.SetStateAction<Map<string, Employee> | null>>;
+    employees: Array<Employee> | null;
+    setEmployees: React.Dispatch<React.SetStateAction<Array<Employee> | null>>;
+    employeeColumns: { field: string, headerName: string }[];
 }
 
 const Context = React.createContext<ContextType | null>(null);
@@ -49,17 +53,36 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
         }
     }, [user]);
 
-    const [employees, setEmployees] = useState<Map<string, Employee> | null>(null);
+    const [employees, setEmployees] = useState<Array<Employee> | null>(null);
     useEffect(() => {
         if (!employees) {
-            getEmployees().then((newEmployees) => {
-                return setEmployees(newEmployees);
+            getEmployees().then((data: Array<Employee>) => {
+                setEmployees(data);
             });
         }
     }, [employees]);
 
+    const employeeColumns = [
+        { field: "bitrhdate", headerName: "Birthdate"},
+        { field: "birthplace", headerName: "Birthplace"},
+        { field: "birthplace_nation", headerName: "Birthplace Nation"},
+        { field: "birthplace_provincia", headerName: "Birthplace Provincia"},
+        { field: "email", headerName: "Email"},
+        { field: "gender", headerName: "Gender"},
+        { field: "livingplace_address", headerName: "Livingplace Address"},
+        { field: "livingplace_nation", headerName: "Livingplace Nation"},
+        { field: "livingplace_provincia", headerName: "Livingplace Provincia"},
+        { field: "livingplace_zipcode", headerName: "Livingplace Zipcode"},
+        { field: "n_mat", headerName: "N Mat"},
+        { field: "n_pro", headerName: "N Pro"},
+        { field: "name", headerName: "Name"},
+        { field: "phone", headerName: "Phone"},
+        { field: "surname", headerName: "Surname"},
+        { field: "tax_code", headerName: "Tax Code"}
+    ]
+
     return (
-        <Context.Provider value={{ user, setUser, employees, setEmployees }}>
+        <Context.Provider value={{ user, setUser, employees, setEmployees, employeeColumns }}>
             {children}
         </Context.Provider>
     );
@@ -83,5 +106,14 @@ function useEmployees() {
     return { employees, setEmployees };
 }
 
-export { ContextProvider, useUser, useEmployees };
+function useEmployeeColumns() {
+    const context = React.useContext(Context);
+    if (!context) {
+        throw new Error("Context not found");
+    }
+    const { employeeColumns } = context;
+    return { employeeColumns };
+}
+
+export { ContextProvider, useUser, useEmployees, useEmployeeColumns };
 export type { Employee };
