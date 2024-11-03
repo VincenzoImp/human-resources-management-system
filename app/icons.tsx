@@ -1,6 +1,6 @@
 import { JSX, SVGProps } from "react";
 
-const PlusIcon = ({size = 24, width, height, ...props}: {size?: number, width?: number, height?: number, [key: string]: any}) => {
+const PlusIcon = ({size = 24, width, height } : {size?: number, width?: number, height?: number}) => {
     return (
         <svg
             aria-hidden="true"
@@ -10,7 +10,6 @@ const PlusIcon = ({size = 24, width, height, ...props}: {size?: number, width?: 
             role="presentation"
             viewBox="0 0 24 24"
             width={size || width}
-            {...props}
         >
             <g
                 fill="none"
@@ -54,7 +53,7 @@ const SearchIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) =>
     );
 };
 
-const ChevronDownIcon = ({strokeWidth = 1.5, ...otherProps}) => {
+const ChevronDownIcon = ({strokeWidth = 1.5}: {strokeWidth?: number}) => {
     return (
         <svg
             aria-hidden="true"
@@ -64,7 +63,6 @@ const ChevronDownIcon = ({strokeWidth = 1.5, ...otherProps}) => {
             role="presentation"
             viewBox="0 0 24 24"
             width="1em"
-            {...otherProps}
         >
             <path
                 d="m19.92 8.95-6.52 6.52c-.77.77-2.03.77-2.8 0L4.08 8.95"
@@ -77,7 +75,7 @@ const ChevronDownIcon = ({strokeWidth = 1.5, ...otherProps}) => {
     );
 };
 
-const VerticalDotsIcon = ({size = 24, width, height, ...props}: {size?: number, width?: number, height?: number, [key: string]: any}) => {
+const VerticalDotsIcon = ({size = 24, width, height}: {size?: number, width?: number, height?: number}) => {
     return (
         <svg
             aria-hidden="true"
@@ -87,7 +85,6 @@ const VerticalDotsIcon = ({size = 24, width, height, ...props}: {size?: number, 
             role="presentation"
             viewBox="0 0 24 24"
             width={size || width}
-            {...props}
         >
             <path
                 d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"

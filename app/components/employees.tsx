@@ -1,6 +1,7 @@
 "use client";
 
-import { useEmployees, useEmployeeColumns } from "../context";
+import { pushEmployee } from "../api";
+import { getEmployeeColumns, getEmployees } from "../context";
 import type { Employee } from "../context";
 import {
     Table,
@@ -15,8 +16,6 @@ import {
     Dropdown,
     DropdownMenu,
     DropdownItem,
-    Chip,
-    User,
     Pagination,
 } from "@nextui-org/react";
 import { ChevronDownIcon, PlusIcon, SearchIcon } from "../icons";
@@ -24,13 +23,13 @@ import { AwaitedReactNode, JSXElementConstructor, Key, ReactElement, ReactNode, 
 import { ColumnElement } from "@react-types/table";
 
 export default function Employees() {
-	const employeeColumns = useEmployeeColumns();
-    const { employees } = useEmployees();
+	const employeeColumns = getEmployeeColumns();
+    const employees = getEmployees();
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [page, setPage] = useState(1);
 	const [searchValue, setsearchValue] = useState("");
     const [employedValue, setemployedValue] = useState<boolean | null>(null);
-
+	
 	const filteredItems = useMemo(() => {
         let filteredEmployees = employees ? employees : Array<Employee>();
 		if (searchValue) {
@@ -49,26 +48,13 @@ export default function Employees() {
 		return filteredEmployees;
 	}, [employees, searchValue, employedValue]);
 
-	const pages = Math.ceil(filteredItems.length / rowsPerPage);
+	const pages = useMemo(() =>	Math.ceil(filteredItems.length / rowsPerPage), [filteredItems, rowsPerPage]);
 
 	const items = useMemo(() => {
 		const start = (page - 1) * rowsPerPage;
 		const end = start + rowsPerPage;
-
 		return filteredItems.slice(start, end);
 	}, [page, filteredItems, rowsPerPage]);
-
-	const onNextPage = useCallback(() => {
-		if (page < pages) {
-			setPage(page + 1);
-		}
-	}, [page, pages]);
-
-	const onPreviousPage = useCallback(() => {
-		if (page > 1) {
-			setPage(page - 1);
-		}
-	}, [page]);
 
 	const onRowsPerPageChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
 		setRowsPerPage(parseInt(e.target.value, 10));
@@ -78,10 +64,10 @@ export default function Employees() {
 	const onSearchChange = useCallback((value: string) => {
 		if (value) {
 			setsearchValue(value);
-			setPage(1);
 		} else {
 			setsearchValue("");
 		}
+		setPage(1);
 	}, []);
 
 	const onClear = useCallback(() => {
@@ -100,16 +86,21 @@ export default function Employees() {
 				<div className="flex justify-between gap-3 items-end">
 					<Input
 						isClearable
-						className="w-full sm:max-w-[44%]"
+						className="w-full"
 						placeholder="Search by name..."
 						startContent={<SearchIcon />}
 						value={searchValue}
 						onClear={() => onClear()}
 						onValueChange={onSearchChange}
 					/>
-					<Dropdown>
+					<Dropdown 
+						closeOnSelect={false} 
+						aria-label="Employed" 
+						placement="bottom-start"
+						
+					>
 						<DropdownTrigger>
-							<Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">
+							<Button endContent={<ChevronDownIcon />} variant="flat">
 								Employed
 							</Button>
 						</DropdownTrigger>
@@ -119,6 +110,7 @@ export default function Employees() {
 							<DropdownItem onClick={() => onEmployedChange(false)}>Unemployed</DropdownItem>
 						</DropdownMenu>
 					</Dropdown>
+					
 					<Button color="primary" endContent={<PlusIcon />}>
 						Add New
 					</Button>
@@ -142,46 +134,61 @@ export default function Employees() {
 	}, [searchValue, employedValue, onRowsPerPageChange, employees]);
 
 	const bottomContent = useMemo(() => {
-		return (
-			<div className="py-2 px-2 flex justify-between items-center">
-				<span className="w-[30%] text-small text-default-400">
-					{filteredItems.length === 0 ? "No employees found" : ""}
-				</span>
-				<Pagination
-					isCompact
-					showControls
-					showShadow
-					color="primary"
-					page={page}
-					total={pages}
-					onChange={setPage}
-				/>
-				<div className="hidden sm:flex w-[30%] justify-end gap-2">
-					<Button isDisabled={pages === 1} size="sm" variant="flat" onPress={onPreviousPage}>
-						Previous
-					</Button>
-					<Button isDisabled={pages === 1} size="sm" variant="flat" onPress={onNextPage}>
-						Next
-					</Button>
+		if (pages > 1) {
+			return (
+				<div className="flex w-full justify-center">
+					<Pagination 
+						isCompact
+						showControls
+						showShadow
+						page={page}
+						total={pages}
+						// onChange={handlePageChange}
+					/>
 				</div>
-			</div>
-		);
-	}, [filteredItems.length, page, pages]);
+			);
+		}
+		return null;
+	}, [page, pages]);
+
+	function createEmployee() {
+		const employee = {
+			birthdate: new Date(),
+			birthplace: "Rome",
+			birthplace_nation: "Italy",
+			birthplace_provincia: "RM",
+			document: "123456789",
+			email: "example@gmail.com",
+			employed: true,
+			gender: "M",
+			id: "123456",
+			livingplace_address: "Via Roma 1",
+			livingplace_nation: "Italy",
+			livingplace_provincia: "RM",
+			livingplace_zipcode: 12345,
+			n_mat: 123456,
+			n_pro: 123456,
+			name: "John",
+			phone: "1234567890",
+			surname: "Doe",
+			tax_code: "ABCDEF12G34H567I",
+		};
+		pushEmployee(employee);
+	}
+
 
 	return (
+		<div className="container mx-auto mt-8">
+			{/* <button onClick={createEmployee}>click</button> */}
 		<Table
 			aria-label="Employees"
-			isHeaderSticky
 			bottomContent={bottomContent}
 			bottomContentPlacement="outside"
-			classNames={{
-				wrapper: "max-h-[382px]",
-			}}
 			topContent={topContent}
 			topContentPlacement="outside"
 		>
-			<TableHeader columns={employeeColumns.employeeColumns.map((column) => column.field)}>
-				{employeeColumns.employeeColumns.map((column: { field: Key | null | undefined; headerName: string | number | bigint | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<AwaitedReactNode> | ColumnElement<unknown> | null | undefined; }) => (
+			<TableHeader columns={employeeColumns.map((column) => column.field)}>
+				{employeeColumns.map((column: { field: Key | null | undefined; headerName: string | number | bigint | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<AwaitedReactNode> | ColumnElement<unknown> | null | undefined; }) => (
 					<TableColumn
 						key={column.field}
 						align="start"
@@ -191,17 +198,18 @@ export default function Employees() {
 					</TableColumn>
 				))}
 			</TableHeader>
-			<TableBody emptyContent={"No employees found"} items={items}>
+			<TableBody emptyContent={"\n"} items={items}>
 				{filteredItems.map((employee) => (
 					<TableRow key={employee.id}>
-						{employeeColumns.employeeColumns.map((column: { field: Key }) => (
+						{employeeColumns.map((column: { field: Key, headerName: string }) => (
 							<TableCell key={column.field}>
-								az
+								{employee[column.field]}
 							</TableCell>
 						))}
 					</TableRow>
 				))}
 			</TableBody>
 		</Table>
+		</div>
 	);
 }

@@ -1,10 +1,8 @@
 "use client";
 
-import React, { useEffect } from "react";
-import { useState } from "react";
-import { ReactNode } from "react";
+import React, { useEffect, useState, ReactNode } from "react";
 import { User } from "firebase/auth";
-import { getEmployees } from "./api";
+import { pullEmployees } from "./api";
 
 interface Employee {
     birthdate: Date;
@@ -15,7 +13,7 @@ interface Employee {
     email: string;
     employed: boolean;
     gender: string;
-    id: string;
+    id?: string;
     livingplace_address: string;
     livingplace_nation: string;
     livingplace_provincia: string;
@@ -32,7 +30,6 @@ interface ContextType {
     user: User | null;
     setUser: React.Dispatch<React.SetStateAction<User | null>>;
     employees: Array<Employee> | null;
-    setEmployees: React.Dispatch<React.SetStateAction<Array<Employee> | null>>;
     employeeColumns: { field: string, headerName: string }[];
 }
 
@@ -56,7 +53,7 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
     const [employees, setEmployees] = useState<Array<Employee> | null>(null);
     useEffect(() => {
         if (!employees) {
-            getEmployees().then((data: Array<Employee>) => {
+            pullEmployees().then((data: Array<Employee>) => {
                 setEmployees(data);
             });
         }
@@ -69,6 +66,7 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
         { field: "birthplace_provincia", headerName: "Birthplace Provincia"},
         { field: "email", headerName: "Email"},
         { field: "gender", headerName: "Gender"},
+        { field: "id", headerName: ""},
         { field: "livingplace_address", headerName: "Livingplace Address"},
         { field: "livingplace_nation", headerName: "Livingplace Nation"},
         { field: "livingplace_provincia", headerName: "Livingplace Provincia"},
@@ -82,7 +80,7 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
     ]
 
     return (
-        <Context.Provider value={{ user, setUser, employees, setEmployees, employeeColumns }}>
+        <Context.Provider value={{ user, setUser, employees, employeeColumns }}>
             {children}
         </Context.Provider>
     );
@@ -97,23 +95,23 @@ function useUser() {
     return { user, setUser };
 }
 
-function useEmployees() {
+function getEmployees() {
     const context = React.useContext(Context);
     if (!context) {
         throw new Error("Context not found");
     }
-    const { employees, setEmployees } = context;
-    return { employees, setEmployees };
+    const { employees } = context;
+    return employees;
 }
 
-function useEmployeeColumns() {
+function getEmployeeColumns() {
     const context = React.useContext(Context);
     if (!context) {
         throw new Error("Context not found");
     }
     const { employeeColumns } = context;
-    return { employeeColumns };
+    return employeeColumns;
 }
 
-export { ContextProvider, useUser, useEmployees, useEmployeeColumns };
+export { ContextProvider, useUser, getEmployees, getEmployeeColumns };
 export type { Employee };
