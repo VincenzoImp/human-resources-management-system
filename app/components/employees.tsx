@@ -4,11 +4,14 @@
 import { useEmployeeColumns, useEmployees } from "../context";
 import type { Employee } from "../context";
 
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination } from "@nextui-org/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination, useDisclosure, Modal, ModalHeader, ModalContent, ModalBody, ModalFooter } from "@nextui-org/react";
 import { SearchIcon } from "../icons";
 import { Key, useCallback, useMemo, useState } from "react";
 
 export default function Employees() {
+
+	// modal
+	const {isOpen, onOpen, onClose} = useDisclosure();
 
 	const employeeColumns = useEmployeeColumns();
     const employees = useEmployees();
@@ -96,7 +99,7 @@ export default function Employees() {
 					<Input
 						isClearable
 						className="w-full"
-						placeholder="Search by name or surname"
+						placeholder="Search..."
 						startContent={<SearchIcon />}
 						value={searchValue}
 						onClear={onClear}
@@ -122,7 +125,7 @@ export default function Employees() {
 						</DropdownMenu>
 					</Dropdown>
 					
-					<Button color="primary">
+					<Button color="primary" onClick={onOpen}>
 						Add New
 					</Button>
 				</div>
@@ -170,34 +173,73 @@ export default function Employees() {
 	}, []);
 
 	return (
-		<div className="container mx-auto my-8">
-		<Table
-			aria-label="Employees"
-			bottomContent={bottomContent}
-			bottomContentPlacement="outside"
-			topContent={topContent}
-			topContentPlacement="outside"
-			selectionMode="single"
-		>
-			<TableHeader columns={visibleCloumns.map((column) => column.headerName)}>
-				{ visibleCloumns.map((column: { field: string, headerName: string }) => (
-					<TableColumn key={column.field} align="center">
-						{column.headerName}
-					</TableColumn>
-				))}
-			</TableHeader>
-			<TableBody emptyContent={"\n"} items={items}>
-				{items.map((employee : Employee) => (
-					<TableRow key={employee.id} href={`/employees/${employee.id}`}>
-						{visibleCloumns.map((column : { field: string, headerName: string }) => (
-							<TableCell key={column.field}>
-								{renderCell(employee, column)}
-							</TableCell>
-						))}
-					</TableRow>
-				))}
-			</TableBody>
-		</Table>
-		</div>
+		<>
+			<Table
+				className="container mx-auto my-8"
+				aria-label="Employees"
+				bottomContent={bottomContent}
+				bottomContentPlacement="outside"
+				topContent={topContent}
+				topContentPlacement="outside"
+				selectionMode="single"
+			>
+				<TableHeader columns={visibleCloumns.map((column) => column.headerName)}>
+					{ visibleCloumns.map((column: { field: string, headerName: string }) => (
+						<TableColumn key={column.field} align="center">
+							{column.headerName}
+						</TableColumn>
+					))}
+				</TableHeader>
+				<TableBody emptyContent={"\n"} items={items}>
+					{items.map((employee : Employee) => (
+						<TableRow key={employee.id} href={`/employees/${employee.id}`}>
+							{visibleCloumns.map((column : { field: string, headerName: string }) => (
+								<TableCell key={column.field}>
+									{renderCell(employee, column)}
+								</TableCell>
+							))}
+						</TableRow>
+					))}
+				</TableBody>
+			</Table>
+		      <Modal 
+			  size="full"
+			  isOpen={isOpen} 
+			  onClose={onClose} 
+			>
+			  <ModalContent>
+				{(onClose) => (
+				  <>
+					<ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader>
+					<ModalBody>
+					  <p> 
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+						Nullam pulvinar risus non risus hendrerit venenatis.
+						Pellentesque sit amet hendrerit risus, sed porttitor quam.
+					  </p>
+					  <p>
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+						Nullam pulvinar risus non risus hendrerit venenatis.
+						Pellentesque sit amet hendrerit risus, sed porttitor quam.
+					  </p>
+					  <p>
+						Magna exercitation reprehenderit magna aute tempor cupidatat consequat elit
+						dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt cillum quis. 
+						Velit duis sit officia eiusmod Lorem aliqua enim laboris do dolor eiusmod. 
+					  </p>
+					</ModalBody>
+					<ModalFooter>
+					  <Button color="danger" variant="light" onPress={onClose}>
+						Close
+					  </Button>
+					  <Button color="primary" onPress={onClose}>
+						Action
+					  </Button>
+					</ModalFooter>
+				  </>
+				)}
+			  </ModalContent>
+			</Modal>
+		</>
 	);
 }
