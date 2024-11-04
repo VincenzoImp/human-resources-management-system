@@ -127,7 +127,7 @@ export default function Employees() {
 					</Button>
 				</div>
 				<div className="flex justify-between items-center">
-					<span className="text-default-400 text-small">Total {employees ? employees.length : 0} employees</span>
+					<span className="text-default-400 text-small">Total {filteredItems ? filteredItems.length : 0} employees</span>
 					<label className="flex items-center text-default-400 text-small">
 						Rows per page:
 						<select
@@ -154,7 +154,7 @@ export default function Employees() {
 						showShadow
 						page={page}
 						total={pages}
-						// onChange={handlePageChange}
+						onChange={setPage}
 					/>
 				</div>
 			);
