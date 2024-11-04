@@ -60,10 +60,11 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
     }, [employees]);
 
     const employeeColumns = [
-        { field: "bitrhdate", headerName: "Birthdate"},
+        { field: "birthdate", headerName: "Birthdate"},
         { field: "birthplace", headerName: "Birthplace"},
         { field: "birthplace_nation", headerName: "Birthplace Nation"},
         { field: "birthplace_provincia", headerName: "Birthplace Provincia"},
+        { field: "document", headerName: "Document"},
         { field: "email", headerName: "Email"},
         { field: "employed", headerName: "Employed"},
         { field: "gender", headerName: "Gender"},

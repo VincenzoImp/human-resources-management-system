@@ -1,27 +1,15 @@
 "use client";
 
-import { pushEmployee } from "../api";
+// import { pushEmployee } from "../api";
 import { useEmployeeColumns, useEmployees } from "../context";
 import type { Employee } from "../context";
-import {
-    Table,
-    TableHeader,
-    TableColumn,
-    TableBody,
-    TableRow,
-    TableCell,
-    Input,
-    Button,
-    DropdownTrigger,
-    Dropdown,
-    DropdownMenu,
-    DropdownItem,
-    Pagination,
-} from "@nextui-org/react";
+
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination } from "@nextui-org/react";
 import { ChevronDownIcon, PlusIcon, SearchIcon } from "../icons";
 import { useCallback, useMemo, useState } from "react";
 
 export default function Employees() {
+	
 	const employeeColumns = useEmployeeColumns();
     const employees = useEmployees();
     const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -30,7 +18,7 @@ export default function Employees() {
     const [employedValue, setemployedValue] = useState<boolean | null>(null);
 
 	const visibleCloumns = useMemo(() => {
-		const subset = ["id", "name", "surname", "email", "phone", "employed", "gender", "document", "n_mat", "n_pro"];
+		const subset = ["name", "surname", "email", "phone", "employed", "gender", "n_mat", "n_pro"];
 		return employeeColumns.filter((column) => subset.includes(column.field)).sort((a, b) => subset.indexOf(a.field) - subset.indexOf(b.field));
 	}, [employeeColumns]);
 		
@@ -52,7 +40,9 @@ export default function Employees() {
 		return filteredEmployees;
 	}, [employees, searchValue, employedValue]);
 
-	const pages = useMemo(() =>	Math.ceil(filteredItems.length / rowsPerPage), [filteredItems, rowsPerPage]);
+	const pages = useMemo(() =>	{
+		return Math.ceil(filteredItems.length / rowsPerPage);
+	}, [filteredItems, rowsPerPage]);
 
 	const items = useMemo(() => {
 		const start = (page - 1) * rowsPerPage;
@@ -94,14 +84,13 @@ export default function Employees() {
 						placeholder="Search by name..."
 						startContent={<SearchIcon />}
 						value={searchValue}
-						onClear={() => onClear()}
+						onClear={onClear}
 						onValueChange={onSearchChange}
 					/>
 					<Dropdown 
 						closeOnSelect={false} 
 						aria-label="Employed" 
-						placement="bottom-start"
-						
+						placement="bottom"
 					>
 						<DropdownTrigger>
 							<Button endContent={<ChevronDownIcon />} variant="flat">
@@ -155,59 +144,61 @@ export default function Employees() {
 		return null;
 	}, [page, pages]);
 
-	function createEmployee() {
-		const employee = {
-			birthdate: new Date(),
-			birthplace: "Rome",
-			birthplace_nation: "Italy",
-			birthplace_provincia: "RM",
-			document: "123456789",
-			email: "example@gmail.com",
-			employed: true,
-			gender: "M",
-			id: "123456",
-			livingplace_address: "Via Roma 1",
-			livingplace_nation: "Italy",
-			livingplace_provincia: "RM",
-			livingplace_zipcode: 12345,
-			n_mat: 123456,
-			n_pro: 123456,
-			name: "John",
-			phone: "1234567890",
-			surname: "Doe",
-			tax_code: "ABCDEF12G34H567I",
-		};
-		pushEmployee(employee);
-	}
+	// function createEmployee() {
+	// 	const employee = {
+	// 		birthdate: new Date(),
+	// 		birthplace: "Rome",
+	// 		birthplace_nation: "Italy",
+	// 		birthplace_provincia: "RM",
+	// 		document: "123456789",
+	// 		email: "example@gmail.com",
+	// 		employed: true,
+	// 		gender: "M",
+	// 		id: "1236",
+	// 		livingplace_address: "Via Roma 1",
+	// 		livingplace_nation: "Italy",
+	// 		livingplace_provincia: "RM",
+	// 		livingplace_zipcode: 12345,
+	// 		n_mat: 123456,
+	// 		n_pro: 123456,
+	// 		name: "Vincezp",
+	// 		phone: "1234567890",
+	// 		surname: "Impellizzeri",
+	// 		tax_code: "ABCDEF12G34H567I",
+	// 	};
+	// 	pushEmployee(employee);
+	// }
 
+	function renderCell(employee: Employee, column: { field: string, headerName: string }) {
+		if (column.field === "employed") {
+			return employee[column.field] ? "Yes" : "No";
+		}
+		return employee[column.field as keyof Employee]?.toString();
+	}
 
 	return (
 		<div className="container mx-auto mt-8">
-			<button onClick={createEmployee}>click</button>
+			{/* <button onClick={createEmployee}>click</button> */}
 		<Table
 			aria-label="Employees"
 			bottomContent={bottomContent}
-			bottomContentPlacement="outside"
+			bottomContentPlacement="inside"
 			topContent={topContent}
 			topContentPlacement="outside"
 		>
 			<TableHeader columns={visibleCloumns.map((column) => column.headerName)}>
 				{ visibleCloumns.map((column: { field: string, headerName: string }) => (
-					<TableColumn
-						key={column.field}
-						align="start"
-						allowsSorting={false}
-					>
-						{column.headerName} {/* Render the header name */}
+					<TableColumn key={column.field} align="center">
+						{column.headerName}
 					</TableColumn>
 				))}
 			</TableHeader>
 			<TableBody emptyContent={"\n"} items={items}>
-				{filteredItems.map((employee : Employee) => (
+				{items.map((employee : Employee) => (
 					<TableRow key={employee.id}>
 						{visibleCloumns.map((column : { field: string, headerName: string }) => (
 							<TableCell key={column.field}>
-								{employee[column.field as keyof Employee]?.toString()}
+								{renderCell(employee, column)}
 							</TableCell>
 						))}
 					</TableRow>
