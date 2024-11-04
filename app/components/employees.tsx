@@ -12,7 +12,7 @@ export default function Employees() {
 	
 	const employeeColumns = useEmployeeColumns();
     const employees = useEmployees();
-    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
     const [page, setPage] = useState(1);
 	const [searchValue, setsearchValue] = useState("");
     const [employedValue, setemployedValue] = useState<boolean | null>(null);
@@ -116,9 +116,9 @@ export default function Employees() {
 							className="bg-transparent outline-none text-default-400 text-small"
 							onChange={onRowsPerPageChange}
 						>
-							<option value="5">5</option>
 							<option value="10">10</option>
-							<option value="15">15</option>
+							<option value="25">25</option>
+							<option value="50">50</option>
 						</select>
 					</label>
 				</div>
