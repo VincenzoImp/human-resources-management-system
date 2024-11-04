@@ -1,15 +1,15 @@
 import { JSX, SVGProps } from "react";
 
-const PlusIcon = ({size = 24, width, height, props } : {size?: number, width?: number, height?: number, props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>}) => {
+const PlusIcon = (props : JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
     return (
         <svg
             aria-hidden="true"
             fill="none"
             focusable="false"
-            height={size || height}
+            height="1em"
             role="presentation"
             viewBox="0 0 24 24"
-            width={size || width}
+            width="1em"
             {...props}
         >
             <g
@@ -24,7 +24,7 @@ const PlusIcon = ({size = 24, width, height, props } : {size?: number, width?: n
             </g>
         </svg>
     );
-};
+}
 
 const SearchIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
     return (
@@ -54,7 +54,7 @@ const SearchIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) =>
     );
 };
 
-const ChevronDownIcon = ({strokeWidth = 1.5, props}: {strokeWidth?: number, props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>}) => {
+const ChevronDownIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
     return (
         <svg
             aria-hidden="true"
@@ -72,28 +72,9 @@ const ChevronDownIcon = ({strokeWidth = 1.5, props}: {strokeWidth?: number, prop
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeMiterlimit={10}
-                strokeWidth={strokeWidth} />
+                strokeWidth={1.5} />
         </svg>
     );
 };
 
-const VerticalDotsIcon = ({size = 24, width, height, props}: {size?: number, width?: number, height?: number, props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>}) => {
-    return (
-        <svg
-            aria-hidden="true"
-            fill="none"
-            focusable="false"
-            height={size || height}
-            role="presentation"
-            viewBox="0 0 24 24"
-            width={size || width}
-            {...props}
-        >
-            <path
-                d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
-                fill="currentColor" />
-        </svg>
-    );
-};
-
-export { PlusIcon, SearchIcon, ChevronDownIcon, VerticalDotsIcon };
+export { PlusIcon, SearchIcon, ChevronDownIcon };

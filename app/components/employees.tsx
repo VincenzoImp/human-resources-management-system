@@ -5,8 +5,8 @@ import { useEmployeeColumns, useEmployees } from "../context";
 import type { Employee } from "../context";
 
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination } from "@nextui-org/react";
-import { ChevronDownIcon, PlusIcon, SearchIcon } from "../icons";
-import { useCallback, useMemo, useState } from "react";
+import { SearchIcon } from "../icons";
+import { Key, useCallback, useMemo, useState } from "react";
 
 export default function Employees() {
 	
@@ -14,8 +14,8 @@ export default function Employees() {
     const employees = useEmployees();
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [page, setPage] = useState(1);
-	const [searchValue, setsearchValue] = useState("");
-    const [employedValue, setemployedValue] = useState<boolean | null>(null);
+	const [searchValue, setSearchValue] = useState("");
+	const [employedValue, setEmployedValue] = useState<string>("both");
 
 	const visibleCloumns = useMemo(() => {
 		const subset = ["name", "surname", "email", "phone", "employed", "gender", "n_mat", "n_pro"];
@@ -27,6 +27,9 @@ export default function Employees() {
 		if (searchValue) {
             filteredEmployees = filteredEmployees.filter((employee) => {
                 for (const word of searchValue.split(" ")) {
+					if (word === "") {
+						continue;
+					}
                     if (employee.name.toLowerCase().includes(word.toLowerCase()) || employee.surname.toLowerCase().includes(word.toLowerCase())) {
                         return true;
                     }
@@ -34,8 +37,14 @@ export default function Employees() {
                 return false;
             });
 		}
-		if (employedValue !== null) {
-			filteredEmployees = filteredEmployees.filter((employee) => employee.employed === employedValue);
+		if (employedValue !== "both") {
+			filteredEmployees = filteredEmployees.filter((employee) => {
+				if (employedValue === "true") {
+					return employee.employed;
+				} else {
+					return !employee.employed;
+				}
+			});
 		}
 		return filteredEmployees;
 	}, [employees, searchValue, employedValue]);
@@ -57,20 +66,26 @@ export default function Employees() {
 
 	const onSearchChange = useCallback((value: string) => {
 		if (value) {
-			setsearchValue(value);
+			setSearchValue(value);
 		} else {
-			setsearchValue("");
+			setSearchValue("");
 		}
 		setPage(1);
 	}, []);
 
 	const onClear = useCallback(() => {
-		setsearchValue("");
+		setSearchValue("");
 		setPage(1);
 	}, []);
 
-	const onEmployedChange = useCallback((value: boolean | null) => {
-		setemployedValue(value);
+	const onEmployedChange = useCallback((value: Key) => {
+		if (value === "true") {
+			setEmployedValue("true");
+		} else if (value === "false") {
+			setEmployedValue("false");
+		} else if (value === "both") {
+			setEmployedValue("both");
+		}
 		setPage(1);
 	}, []);
 
@@ -87,24 +102,27 @@ export default function Employees() {
 						onClear={onClear}
 						onValueChange={onSearchChange}
 					/>
-					<Dropdown 
-						closeOnSelect={false} 
-						aria-label="Employed" 
-						placement="bottom"
-					>
+					<Dropdown>
 						<DropdownTrigger>
-							<Button endContent={<ChevronDownIcon />} variant="flat">
-								Employed
+							<Button variant="flat">
+								Filter
 							</Button>
 						</DropdownTrigger>
-						<DropdownMenu>
-							<DropdownItem onClick={() => onEmployedChange(null)}>All</DropdownItem>
-							<DropdownItem onClick={() => onEmployedChange(true)}>Employed</DropdownItem>
-							<DropdownItem onClick={() => onEmployedChange(false)}>Unemployed</DropdownItem>
+						<DropdownMenu 
+							aria-label="Employed options"
+							variant="flat"
+							disallowEmptySelection
+							selectionMode="single"
+							onAction={(key) => onEmployedChange(key)}
+							selectedKeys={[employedValue]}
+						>
+							<DropdownItem key="both">All</DropdownItem>
+							<DropdownItem key="true">Employed</DropdownItem>
+							<DropdownItem key="false">Unemployed</DropdownItem>
 						</DropdownMenu>
 					</Dropdown>
 					
-					<Button color="primary" endContent={<PlusIcon />}>
+					<Button color="primary">
 						Add New
 					</Button>
 				</div>
@@ -124,7 +142,7 @@ export default function Employees() {
 				</div>
 			</div>
 		);
-	}, [searchValue, employees, onSearchChange, onClear, onEmployedChange, onRowsPerPageChange]);
+	}, [searchValue, employees, onSearchChange, onClear, onRowsPerPageChange, employedValue, onEmployedChange]);
 
 	const bottomContent = useMemo(() => {
 		if (pages > 1) {
