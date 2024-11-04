@@ -64,6 +64,7 @@ const ChevronDownIcon = ({strokeWidth = 1.5, ...props}: {strokeWidth?: number, p
             role="presentation"
             viewBox="0 0 24 24"
             width="1em"
+            {...props}
         >
             <path
                 d="m19.92 8.95-6.52 6.52c-.77.77-2.03.77-2.8 0L4.08 8.95"
@@ -86,6 +87,7 @@ const VerticalDotsIcon = ({size = 24, width, height, ...props}: {size?: number, 
             role="presentation"
             viewBox="0 0 24 24"
             width={size || width}
+            {...props}
         >
             <path
                 d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
