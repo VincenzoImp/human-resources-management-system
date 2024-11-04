@@ -182,7 +182,7 @@ export default function Employees() {
 		<Table
 			aria-label="Employees"
 			bottomContent={bottomContent}
-			bottomContentPlacement="inside"
+			bottomContentPlacement="outside"
 			topContent={topContent}
 			topContentPlacement="outside"
 		>
