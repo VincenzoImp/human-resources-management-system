@@ -1,7 +1,7 @@
 "use client";
 
 import { pushEmployee } from "../api";
-import { getEmployeeColumns, getEmployees } from "../context";
+import { useEmployeeColumns, useEmployees } from "../context";
 import type { Employee } from "../context";
 import {
     Table,
@@ -19,12 +19,11 @@ import {
     Pagination,
 } from "@nextui-org/react";
 import { ChevronDownIcon, PlusIcon, SearchIcon } from "../icons";
-import { AwaitedReactNode, JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, useCallback, useMemo, useState } from "react";
-import { ColumnElement } from "@react-types/table";
+import { useCallback, useMemo, useState } from "react";
 
 export default function Employees() {
-	const employeeColumns = getEmployeeColumns();
-    const employees = getEmployees();
+	const employeeColumns = useEmployeeColumns();
+    const employees = useEmployees();
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [page, setPage] = useState(1);
 	const [searchValue, setsearchValue] = useState("");
@@ -131,7 +130,7 @@ export default function Employees() {
 				</div>
 			</div>
 		);
-	}, [searchValue, employedValue, onRowsPerPageChange, employees]);
+	}, [searchValue, employees, onSearchChange, onClear, onEmployedChange, onRowsPerPageChange]);
 
 	const bottomContent = useMemo(() => {
 		if (pages > 1) {
@@ -179,7 +178,7 @@ export default function Employees() {
 
 	return (
 		<div className="container mx-auto mt-8">
-			{/* <button onClick={createEmployee}>click</button> */}
+			<button onClick={createEmployee}>click</button>
 		<Table
 			aria-label="Employees"
 			bottomContent={bottomContent}
@@ -188,7 +187,7 @@ export default function Employees() {
 			topContentPlacement="outside"
 		>
 			<TableHeader columns={employeeColumns.map((column) => column.field)}>
-				{employeeColumns.map((column: { field: Key | null | undefined; headerName: string | number | bigint | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<AwaitedReactNode> | ColumnElement<unknown> | null | undefined; }) => (
+				{employeeColumns.map((column: { field: string; headerName: string}) => (
 					<TableColumn
 						key={column.field}
 						align="start"
@@ -199,11 +198,11 @@ export default function Employees() {
 				))}
 			</TableHeader>
 			<TableBody emptyContent={"\n"} items={items}>
-				{filteredItems.map((employee) => (
+				{filteredItems.map((employee : Employee) => (
 					<TableRow key={employee.id}>
-						{employeeColumns.map((column: { field: Key, headerName: string }) => (
+						{employeeColumns.map((column: { field: string, headerName: string }) => (
 							<TableCell key={column.field}>
-								{employee[column.field]}
+								{employee[column.field as keyof Employee]?.toString()}
 							</TableCell>
 						))}
 					</TableRow>

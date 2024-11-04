@@ -95,7 +95,7 @@ function useUser() {
     return { user, setUser };
 }
 
-function getEmployees() {
+function useEmployees() {
     const context = React.useContext(Context);
     if (!context) {
         throw new Error("Context not found");
@@ -104,7 +104,7 @@ function getEmployees() {
     return employees;
 }
 
-function getEmployeeColumns() {
+function useEmployeeColumns() {
     const context = React.useContext(Context);
     if (!context) {
         throw new Error("Context not found");
@@ -113,5 +113,5 @@ function getEmployeeColumns() {
     return employeeColumns;
 }
 
-export { ContextProvider, useUser, getEmployees, getEmployeeColumns };
+export { ContextProvider, useUser, useEmployees, useEmployeeColumns };
 export type { Employee };
