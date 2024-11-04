@@ -5,7 +5,7 @@ import { useEmployeeColumns, useEmployees } from "../context";
 import type { Employee } from "../context";
 import NewEmployeeModal from "./newemployee";
 
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination, useDisclosure, Modal, ModalHeader, ModalContent, ModalBody, ModalFooter } from "@nextui-org/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination, useDisclosure } from "@nextui-org/react";
 import { SearchIcon } from "../icons";
 import { Key, useCallback, useMemo, useState } from "react";
 
@@ -146,7 +146,7 @@ export default function Employees() {
 				</div>
 			</div>
 		);
-	}, [searchValue, onSearchChange, onClear, onRowsPerPageChange, employedValue, onEmployedChange, filteredItems]);
+	}, [searchValue, onSearchChange, onClear, onRowsPerPageChange, employedValue, onEmployedChange, filteredItems, onOpen]);
 
 	const bottomContent = useMemo(() => {
 		if (pages > 1) {
