@@ -28,7 +28,12 @@ export default function Employees() {
     const [page, setPage] = useState(1);
 	const [searchValue, setsearchValue] = useState("");
     const [employedValue, setemployedValue] = useState<boolean | null>(null);
-	
+
+	const visibleCloumns = useMemo(() => {
+		const subset = ["id", "name", "surname", "email", "phone", "employed", "gender", "document", "n_mat", "n_pro"];
+		return employeeColumns.filter((column) => subset.includes(column.field)).sort((a, b) => subset.indexOf(a.field) - subset.indexOf(b.field));
+	}, [employeeColumns]);
+		
 	const filteredItems = useMemo(() => {
         let filteredEmployees = employees ? employees : Array<Employee>();
 		if (searchValue) {
@@ -186,8 +191,8 @@ export default function Employees() {
 			topContent={topContent}
 			topContentPlacement="outside"
 		>
-			<TableHeader columns={employeeColumns.map((column) => column.field)}>
-				{employeeColumns.map((column: { field: string; headerName: string}) => (
+			<TableHeader columns={visibleCloumns.map((column) => column.headerName)}>
+				{ visibleCloumns.map((column: { field: string, headerName: string }) => (
 					<TableColumn
 						key={column.field}
 						align="start"
@@ -200,7 +205,7 @@ export default function Employees() {
 			<TableBody emptyContent={"\n"} items={items}>
 				{filteredItems.map((employee : Employee) => (
 					<TableRow key={employee.id}>
-						{employeeColumns.map((column: { field: string, headerName: string }) => (
+						{visibleCloumns.map((column : { field: string, headerName: string }) => (
 							<TableCell key={column.field}>
 								{employee[column.field as keyof Employee]?.toString()}
 							</TableCell>

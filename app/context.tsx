@@ -65,6 +65,7 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
         { field: "birthplace_nation", headerName: "Birthplace Nation"},
         { field: "birthplace_provincia", headerName: "Birthplace Provincia"},
         { field: "email", headerName: "Email"},
+        { field: "employed", headerName: "Employed"},
         { field: "gender", headerName: "Gender"},
         { field: "id", headerName: ""},
         { field: "livingplace_address", headerName: "Livingplace Address"},
