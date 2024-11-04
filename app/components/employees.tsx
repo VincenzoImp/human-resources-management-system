@@ -3,6 +3,7 @@
 // import { pushEmployee } from "../api";
 import { useEmployeeColumns, useEmployees } from "../context";
 import type { Employee } from "../context";
+import NewEmployeeModal from "./newemployee";
 
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination, useDisclosure, Modal, ModalHeader, ModalContent, ModalBody, ModalFooter } from "@nextui-org/react";
 import { SearchIcon } from "../icons";
@@ -202,44 +203,7 @@ export default function Employees() {
 					))}
 				</TableBody>
 			</Table>
-		      <Modal 
-			  size="full"
-			  isOpen={isOpen} 
-			  onClose={onClose} 
-			>
-			  <ModalContent>
-				{(onClose) => (
-				  <>
-					<ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader>
-					<ModalBody>
-					  <p> 
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-						Nullam pulvinar risus non risus hendrerit venenatis.
-						Pellentesque sit amet hendrerit risus, sed porttitor quam.
-					  </p>
-					  <p>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-						Nullam pulvinar risus non risus hendrerit venenatis.
-						Pellentesque sit amet hendrerit risus, sed porttitor quam.
-					  </p>
-					  <p>
-						Magna exercitation reprehenderit magna aute tempor cupidatat consequat elit
-						dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt cillum quis. 
-						Velit duis sit officia eiusmod Lorem aliqua enim laboris do dolor eiusmod. 
-					  </p>
-					</ModalBody>
-					<ModalFooter>
-					  <Button color="danger" variant="light" onPress={onClose}>
-						Close
-					  </Button>
-					  <Button color="primary" onPress={onClose}>
-						Action
-					  </Button>
-					</ModalFooter>
-				  </>
-				)}
-			  </ModalContent>
-			</Modal>
+			<NewEmployeeModal isOpen={isOpen} onClose={onClose} />
 		</>
 	);
 }
