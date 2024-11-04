@@ -1,6 +1,6 @@
 import { JSX, SVGProps } from "react";
 
-const PlusIcon = ({size = 24, width, height } : {size?: number, width?: number, height?: number}) => {
+const PlusIcon = ({size = 24, width, height, ...props } : {size?: number, width?: number, height?: number, props?: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>}) => {
     return (
         <svg
             aria-hidden="true"
@@ -10,6 +10,7 @@ const PlusIcon = ({size = 24, width, height } : {size?: number, width?: number, 
             role="presentation"
             viewBox="0 0 24 24"
             width={size || width}
+            {...props}
         >
             <g
                 fill="none"
@@ -53,7 +54,7 @@ const SearchIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) =>
     );
 };
 
-const ChevronDownIcon = ({strokeWidth = 1.5}: {strokeWidth?: number}) => {
+const ChevronDownIcon = ({strokeWidth = 1.5, ...props}: {strokeWidth?: number, props?: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>}) => {
     return (
         <svg
             aria-hidden="true"
@@ -75,7 +76,7 @@ const ChevronDownIcon = ({strokeWidth = 1.5}: {strokeWidth?: number}) => {
     );
 };
 
-const VerticalDotsIcon = ({size = 24, width, height}: {size?: number, width?: number, height?: number}) => {
+const VerticalDotsIcon = ({size = 24, width, height, ...props}: {size?: number, width?: number, height?: number, props?: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>}) => {
     return (
         <svg
             aria-hidden="true"
