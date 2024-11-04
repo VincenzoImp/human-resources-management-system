@@ -9,7 +9,7 @@ import { SearchIcon } from "../icons";
 import { Key, useCallback, useMemo, useState } from "react";
 
 export default function Employees() {
-	
+
 	const employeeColumns = useEmployeeColumns();
     const employees = useEmployees();
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -96,7 +96,7 @@ export default function Employees() {
 					<Input
 						isClearable
 						className="w-full"
-						placeholder="Search by name..."
+						placeholder="Search by name or surname"
 						startContent={<SearchIcon />}
 						value={searchValue}
 						onClear={onClear}
@@ -142,7 +142,7 @@ export default function Employees() {
 				</div>
 			</div>
 		);
-	}, [searchValue, employees, onSearchChange, onClear, onRowsPerPageChange, employedValue, onEmployedChange]);
+	}, [searchValue, onSearchChange, onClear, onRowsPerPageChange, employedValue, onEmployedChange, filteredItems]);
 
 	const bottomContent = useMemo(() => {
 		if (pages > 1) {
@@ -162,47 +162,22 @@ export default function Employees() {
 		return null;
 	}, [page, pages]);
 
-	// function createEmployee() {
-	// 	const employee = {
-	// 		birthdate: new Date(),
-	// 		birthplace: "Rome",
-	// 		birthplace_nation: "Italy",
-	// 		birthplace_provincia: "RM",
-	// 		document: "123456789",
-	// 		email: "example@gmail.com",
-	// 		employed: true,
-	// 		gender: "M",
-	// 		id: "1236",
-	// 		livingplace_address: "Via Roma 1",
-	// 		livingplace_nation: "Italy",
-	// 		livingplace_provincia: "RM",
-	// 		livingplace_zipcode: 12345,
-	// 		n_mat: 123456,
-	// 		n_pro: 123456,
-	// 		name: "Vincezp",
-	// 		phone: "1234567890",
-	// 		surname: "Impellizzeri",
-	// 		tax_code: "ABCDEF12G34H567I",
-	// 	};
-	// 	pushEmployee(employee);
-	// }
-
-	function renderCell(employee: Employee, column: { field: string, headerName: string }) {
+	const renderCell = useCallback((employee: Employee, column: { field: string, headerName: string }) => {
 		if (column.field === "employed") {
 			return employee[column.field] ? "Yes" : "No";
 		}
 		return employee[column.field as keyof Employee]?.toString();
-	}
+	}, []);
 
 	return (
-		<div className="container mx-auto mt-8">
-			{/* <button onClick={createEmployee}>click</button> */}
+		<div className="container mx-auto my-8">
 		<Table
 			aria-label="Employees"
 			bottomContent={bottomContent}
 			bottomContentPlacement="outside"
 			topContent={topContent}
 			topContentPlacement="outside"
+			selectionMode="single"
 		>
 			<TableHeader columns={visibleCloumns.map((column) => column.headerName)}>
 				{ visibleCloumns.map((column: { field: string, headerName: string }) => (
@@ -213,7 +188,7 @@ export default function Employees() {
 			</TableHeader>
 			<TableBody emptyContent={"\n"} items={items}>
 				{items.map((employee : Employee) => (
-					<TableRow key={employee.id}>
+					<TableRow key={employee.id} href={`/employees/${employee.id}`}>
 						{visibleCloumns.map((column : { field: string, headerName: string }) => (
 							<TableCell key={column.field}>
 								{renderCell(employee, column)}
