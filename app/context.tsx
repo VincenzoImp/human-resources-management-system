@@ -3,6 +3,7 @@
 import React, { useEffect, useState, ReactNode } from "react";
 import { User } from "firebase/auth";
 import { pullEmployees } from "./api";
+import { useDisclosure } from "@nextui-org/react";
 
 interface Employee {
     birthdate: Date;
@@ -26,16 +27,28 @@ interface Employee {
     tax_code: string;
 }
 
+interface EmployeeCardProps {
+    isOpen: boolean;
+    onOpen: () => void;
+    onClose: () => void;
+    mode: "create" | "update" | "read";
+    setMode: React.Dispatch<React.SetStateAction<"create" | "update" | "read">>;
+    employeeID: string | null;
+    setEmployeeID: React.Dispatch<React.SetStateAction<string | null>>;
+}
+
 interface ContextType {
     user: User | null;
     setUser: React.Dispatch<React.SetStateAction<User | null>>;
     employees: Array<Employee> | null;
     employeeColumns: { field: string, headerName: string }[];
+    employeeCardProps: EmployeeCardProps;
 }
 
 const Context = React.createContext<ContextType | null>(null);
 
 const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
+
     const [user, setUser] = useState(() => {
         if (typeof window !== "undefined") {
             const user = localStorage.getItem("user");
@@ -73,7 +86,7 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
         { field: "email", headerName: "Email"},
         { field: "employed", headerName: "Employed"},
         { field: "gender", headerName: "Gender"},
-        { field: "id", headerName: ""},
+        { field: "id", headerName: "ID"},
         { field: "livingplace_address", headerName: "Livingplace Address"},
         { field: "livingplace_nation", headerName: "Livingplace Nation"},
         { field: "livingplace_provincia", headerName: "Livingplace Provincia"},
@@ -86,8 +99,12 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
         { field: "tax_code", headerName: "Tax Code"}
     ]
 
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [mode, setMode] = useState<"create" | "update" | "read">("read");
+    const [employeeID, setEmployeeID] = useState<string | null>(null);
+    
     return (
-        <Context.Provider value={{ user, setUser, employees, employeeColumns }}>
+        <Context.Provider value={{ user, setUser, employees, employeeColumns, employeeCardProps: { isOpen, onOpen, onClose, mode, setMode, employeeID, setEmployeeID } }}>
             {children}
         </Context.Provider>
     );
@@ -120,5 +137,15 @@ function useEmployeeColumns() {
     return employeeColumns;
 }
 
-export { ContextProvider, useUser, useEmployees, useEmployeeColumns };
+function useEmployeeCard() {
+    const context = React.useContext(Context);
+    if (!context) {
+        throw new Error("Context not found");
+    }
+    const { employeeCardProps } = context;
+    const { isOpen, onOpen, onClose, mode, setMode, employeeID, setEmployeeID } = employeeCardProps;
+    return { isOpen, onOpen, onClose, mode, setMode, employeeID, setEmployeeID };
+}
+
+export { ContextProvider, useUser, useEmployees, useEmployeeColumns, useEmployeeCard };
 export type { Employee };

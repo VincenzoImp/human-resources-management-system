@@ -1,15 +1,17 @@
 "use client";
 
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Input } from '@nextui-org/react';
+import { useEmployeeCard } from '../context';
 
-const EmployeeCard: React.FC<{ mode: "create" | "edit" | "delete"; isOpen: boolean; onClose: () => void }> = ({ mode, isOpen, onClose }) => {
-    return isOpen ? (
+export default function EmployeeCard() {
+	const { isOpen, onClose, mode } = useEmployeeCard();
+	return isOpen ? (
 		<Modal isOpen={isOpen} onClose={onClose}>
 			<ModalContent>
 				<ModalHeader>
-					<	h4>Employee Form {mode}</h4>
+					<h4>Employee Form {mode}</h4>
 				</ModalHeader>
-				<ModalBody style={{ maxHeight: '70vh', overflowY: 'auto' }}>
+				<ModalBody>
 					<Input label="Name" placeholder="Name" />
 					<Input label="Surname" placeholder="Surname" />
 					<Input label="Email" placeholder="Email" />
@@ -24,5 +26,3 @@ const EmployeeCard: React.FC<{ mode: "create" | "edit" | "delete"; isOpen: boole
 		</Modal>
 	) : <></>
 };
-
-export default EmployeeCard;
