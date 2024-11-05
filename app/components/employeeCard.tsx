@@ -2,12 +2,12 @@
 
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Input } from '@nextui-org/react';
 
-export default function EmployeeCard(mode: 'create' | 'edit' | 'delete', isOpen: boolean, onClose: () => void) {
-	return isOpen ? (
-		<Modal size="full" isOpen={isOpen} onClose={onClose}>
+const EmployeeCard: React.FC<{ mode: "create" | "edit" | "delete"; isOpen: boolean; onClose: () => void }> = ({ mode, isOpen, onClose }) => {
+    return isOpen ? (
+		<Modal isOpen={isOpen} onClose={onClose}>
 			<ModalContent>
 				<ModalHeader>
-					<	h4>Employee Form</h4>
+					<	h4>Employee Form {mode}</h4>
 				</ModalHeader>
 				<ModalBody style={{ maxHeight: '70vh', overflowY: 'auto' }}>
 					<Input label="Name" placeholder="Name" />
@@ -24,3 +24,5 @@ export default function EmployeeCard(mode: 'create' | 'edit' | 'delete', isOpen:
 		</Modal>
 	) : <></>
 };
+
+export default EmployeeCard;

@@ -41,10 +41,10 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
             const user = localStorage.getItem("user");
             try {
                 return user ? JSON.parse(user) : null;
-            }
-            catch (e) {
+            } catch (error) {
+                console.error(error);
                 return null;
-            }
+            }            
         }
     });
     useEffect(() => {
