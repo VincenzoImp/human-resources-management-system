@@ -96,11 +96,11 @@ export default function EmployeesTable() {
 		return employee[column.field as keyof Employee]?.toString();
 	}, []);
 
-	const openEmployeeCard = useCallback((employeeID: string | null, mode: "create" | "update" | "read") => {
+	function openEmployeeCard(employeeID: string | null, mode: "create" | "update" | "read") {
 		setMode(mode);
 		setEmployeeID(employeeID);
 		onOpen();
-	}, [onOpen, setMode, setEmployeeID]);
+	};
 
 	const topContent = useMemo(() => {
 		return (

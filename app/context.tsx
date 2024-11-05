@@ -103,6 +103,7 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
     const [mode, setMode] = useState<"create" | "update" | "read">("read");
     const [employeeID, setEmployeeID] = useState<string | null>(null);
     const employeeCardProps = { isOpen, onOpen, onClose, mode, setMode, employeeID, setEmployeeID };
+    
     return (
         <Context.Provider value={{ user, setUser, employees, employeeColumns, employeeCardProps }}>
             {children}
