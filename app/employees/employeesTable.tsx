@@ -96,11 +96,11 @@ export default function EmployeesTable() {
 		return employee[column.field as keyof Employee]?.toString();
 	}, []);
 
-	function openEmployeeCard(employeeID: string | null, mode: "create" | "update" | "read") {
+	const openEmployeeCard = useCallback((employeeID: string | null, mode: "create" | "update" | "read") => {
 		setMode(mode);
 		setEmployeeID(employeeID);
 		onOpen();
-	};
+	}, [onOpen, setMode, setEmployeeID]);
 
 	const topContent = useMemo(() => {
 		return (
@@ -167,7 +167,7 @@ export default function EmployeesTable() {
 
 	const tableRows = useMemo(() => {
 		return items.map((employee : Employee) => (
-			<TableRow key={employee.id} onClick={() => openEmployeeCard(employee.id ?? null, "read")}>
+			<TableRow key={employee.id} onClick={() => openEmployeeCard(employee.id ?? null, "read")} className="cursor-pointer hover:bg-default-100">
 				{visibleCloumns.map((column : { field: string, headerName: string }) => (
 					<TableCell key={column.field}>
 						{renderCell(employee, column)}
@@ -204,7 +204,6 @@ export default function EmployeesTable() {
 				bottomContentPlacement="outside"
 				topContent={topContent}
 				topContentPlacement="outside"
-				selectionMode="single"
 			>
 				<TableHeader columns={visibleCloumns.map((column) => column.headerName)}>
 					{tableColumns}
