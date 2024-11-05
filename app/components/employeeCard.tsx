@@ -4,8 +4,8 @@ import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Input
 import { useEmployeeCard } from '../context';
 
 export default function EmployeeCard() {
-	const { isOpen, onClose, mode } = useEmployeeCard();
-	return isOpen ? (
+	const { isOpen, onClose, mode } = useEmployeeCard();	
+	return (
 		<Modal isOpen={isOpen} onClose={onClose}>
 			<ModalContent>
 				<ModalHeader>
@@ -24,5 +24,5 @@ export default function EmployeeCard() {
 				</ModalFooter>
 			</ModalContent>
 		</Modal>
-	) : <></>
+	);
 };
