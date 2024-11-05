@@ -39,7 +39,12 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
     const [user, setUser] = useState(() => {
         if (typeof window !== "undefined") {
             const user = localStorage.getItem("user");
-            return user ? JSON.parse(user) : null;
+            try {
+                return user ? JSON.parse(user) : null;
+            }
+            catch (e) {
+                return null;
+            }
         }
     });
     useEffect(() => {

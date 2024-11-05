@@ -2,7 +2,7 @@
 
 import { Authenticated } from "../modifiers";
 import Navigation from "../components/navigation";
-import Employees from "../components/employees";
+import Employees from "./employees";
 
 export default function Page() {
     return (

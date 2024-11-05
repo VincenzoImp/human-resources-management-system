@@ -2,7 +2,7 @@
 
 import { Authenticated } from "../modifiers";
 import Navigation from "../components/navigation";
-import Specializations from "../components/specializations";
+import Specializations from "./specializations";
 
 export default function Page() {
     return (

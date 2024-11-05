@@ -2,7 +2,7 @@
 
 import { Authenticated } from "./modifiers";
 import Navigation from "./components/navigation";
-import Home from "./components/home";
+import Home from "./home/home";
 
 export default function Page() {
     return (

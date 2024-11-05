@@ -3,7 +3,7 @@
 import { Navbar, NavbarBrand, NavbarMenuToggle, NavbarMenuItem, NavbarMenu, NavbarContent, NavbarItem, Link, Dropdown, DropdownTrigger, Avatar, DropdownMenu, DropdownItem } from "@nextui-org/react";
 import { useState } from "react";
 import { useUser } from "../context";
-import { handleLogout } from "./authentication";
+import { handleLogout } from "../authentication/authentication";
 
 export default function Navigation({ itemActive }: Readonly<{ itemActive: string }>) {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);

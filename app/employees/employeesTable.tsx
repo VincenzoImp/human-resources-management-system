@@ -1,18 +1,13 @@
 "use client";
 
-// import { pushEmployee } from "../api";
 import { useEmployeeColumns, useEmployees } from "../context";
 import type { Employee } from "../context";
-import NewEmployeeModal from "./newemployee";
-
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination, useDisclosure } from "@nextui-org/react";
 import { SearchIcon } from "../icons";
 import { Key, useCallback, useMemo, useState } from "react";
+import EmployeeCard from "../components/employeeCard";
 
-export default function Employees() {
-
-	// modal
-	const {isOpen, onOpen, onClose} = useDisclosure();
+export default function EmployeesTable() {
 
 	const employeeColumns = useEmployeeColumns();
     const employees = useEmployees();
@@ -20,6 +15,7 @@ export default function Employees() {
     const [page, setPage] = useState(1);
 	const [searchValue, setSearchValue] = useState("");
 	const [employedValue, setEmployedValue] = useState<string>("both");
+	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const visibleCloumns = useMemo(() => {
 		const subset = ["name", "surname", "email", "phone", "employed", "gender", "n_mat", "n_pro"];
@@ -93,6 +89,13 @@ export default function Employees() {
 		setPage(1);
 	}, []);
 
+	const renderCell = useCallback((employee: Employee, column: { field: string, headerName: string }) => {
+		if (column.field === "employed") {
+			return employee[column.field] ? "yes" : "no";
+		}
+		return employee[column.field as keyof Employee]?.toString();
+	}, []);
+
 	const topContent = useMemo(() => {
 		return (
 			<div className="flex flex-col gap-4">
@@ -148,6 +151,26 @@ export default function Employees() {
 		);
 	}, [searchValue, onSearchChange, onClear, onRowsPerPageChange, employedValue, onEmployedChange, filteredItems, onOpen]);
 
+	const tableColumns = useMemo(() => {
+		return visibleCloumns.map((column: { field: string, headerName: string }) => (
+			<TableColumn key={column.field} align="center">
+				{column.headerName}
+			</TableColumn>
+		));
+	}, [visibleCloumns]);
+
+	const tableRows = useMemo(() => {
+		return items.map((employee : Employee) => (
+			<TableRow key={employee.id} href={`/employees/${employee.id}`}>
+				{visibleCloumns.map((column : { field: string, headerName: string }) => (
+					<TableCell key={column.field}>
+						{renderCell(employee, column)}
+					</TableCell>
+				))}
+			</TableRow>
+		));
+	}, [visibleCloumns, items, renderCell]);
+
 	const bottomContent = useMemo(() => {
 		if (pages > 1) {
 			return (
@@ -166,13 +189,6 @@ export default function Employees() {
 		return null;
 	}, [page, pages]);
 
-	const renderCell = useCallback((employee: Employee, column: { field: string, headerName: string }) => {
-		if (column.field === "employed") {
-			return employee[column.field] ? "Yes" : "No";
-		}
-		return employee[column.field as keyof Employee]?.toString();
-	}, []);
-
 	return (
 		<>
 			<Table
@@ -185,25 +201,13 @@ export default function Employees() {
 				selectionMode="single"
 			>
 				<TableHeader columns={visibleCloumns.map((column) => column.headerName)}>
-					{ visibleCloumns.map((column: { field: string, headerName: string }) => (
-						<TableColumn key={column.field} align="center">
-							{column.headerName}
-						</TableColumn>
-					))}
+					{tableColumns}
 				</TableHeader>
 				<TableBody emptyContent={"\n"} items={items}>
-					{items.map((employee : Employee) => (
-						<TableRow key={employee.id} href={`/employees/${employee.id}`}>
-							{visibleCloumns.map((column : { field: string, headerName: string }) => (
-								<TableCell key={column.field}>
-									{renderCell(employee, column)}
-								</TableCell>
-							))}
-						</TableRow>
-					))}
+					{tableRows}
 				</TableBody>
 			</Table>
-			<NewEmployeeModal isOpen={isOpen} onClose={onClose} />
+			<EmployeeCard mode="create" isOpen={isOpen} onClose={onClose} />
 		</>
 	);
 }
