@@ -1,11 +1,10 @@
 "use client";
 
-import { useEmployeeColumns, useEmployees, useEmployeeCard } from "../context";
+import { useEmployeeColumns, useEmployees } from "../context";
 import type { Employee } from "../context";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination } from "@nextui-org/react";
 import { SearchIcon } from "../icons";
 import { Key, useCallback, useMemo, useState } from "react";
-import EmployeeCard from "../components/employeeCard";
 
 export default function EmployeesTable() {
 
@@ -15,7 +14,6 @@ export default function EmployeesTable() {
     const [page, setPage] = useState(1);
 	const [searchValue, setSearchValue] = useState("");
 	const [employedValue, setEmployedValue] = useState<string>("both");
-	const { onOpen, setMode, setEmployeeID } = useEmployeeCard();
 
 	const visibleCloumns = useMemo(() => {
 		const subset = ["name", "surname", "email", "phone", "employed", "gender", "n_mat", "n_pro"];
@@ -96,12 +94,6 @@ export default function EmployeesTable() {
 		return employee[column.field as keyof Employee]?.toString();
 	}, []);
 
-	const openEmployeeCard = useCallback((employeeID: string | null, mode: "create" | "update" | "read") => {
-		setMode(mode);
-		setEmployeeID(employeeID);
-		onOpen();
-	}, [onOpen, setMode, setEmployeeID]);
-
 	const topContent = useMemo(() => {
 		return (
 			<div className="flex flex-col gap-4">
@@ -134,8 +126,7 @@ export default function EmployeesTable() {
 							<DropdownItem key="false">Unemployed</DropdownItem>
 						</DropdownMenu>
 					</Dropdown>
-					
-					<Button color="primary" onClick={() => openEmployeeCard(null, "create")}>
+					<Button color="primary" onClick={() => window.location.href = "/employees/add-new"}>
 						Add New
 					</Button>
 				</div>
@@ -155,7 +146,7 @@ export default function EmployeesTable() {
 				</div>
 			</div>
 		);
-	}, [searchValue, onSearchChange, onClear, onRowsPerPageChange, employedValue, onEmployedChange, filteredItems, openEmployeeCard]);
+	}, [searchValue, onSearchChange, onClear, onRowsPerPageChange, employedValue, onEmployedChange, filteredItems]);
 
 	const tableColumns = useMemo(() => {
 		return visibleCloumns.map((column: { field: string, headerName: string }) => (
@@ -167,7 +158,7 @@ export default function EmployeesTable() {
 
 	const tableRows = useMemo(() => {
 		return items.map((employee : Employee) => (
-			<TableRow key={employee.id} onClick={() => openEmployeeCard(employee.id ?? null, "read")} className="cursor-pointer hover:bg-default-100">
+			<TableRow key={employee.id} className="cursor-pointer hover:bg-default-100" href={`/employees/${employee.id}`}>
 				{visibleCloumns.map((column : { field: string, headerName: string }) => (
 					<TableCell key={column.field}>
 						{renderCell(employee, column)}
@@ -175,7 +166,7 @@ export default function EmployeesTable() {
 				))}
 			</TableRow>
 		));
-	}, [visibleCloumns, items, renderCell, openEmployeeCard]);
+	}, [visibleCloumns, items, renderCell]);
 
 	const bottomContent = useMemo(() => {
 		if (pages > 1) {
@@ -212,7 +203,6 @@ export default function EmployeesTable() {
 					{tableRows}
 				</TableBody>
 			</Table>
-			<EmployeeCard/>
 		</>
 	);
 }
