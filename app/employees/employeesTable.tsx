@@ -1,13 +1,14 @@
 "use client";
 
-import { useEmployeeColumns, useEmployees } from "../context";
+import { useEmployeeColumns, useEmployees, useUser } from "../context";
 import type { Employee } from "../context";
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination } from "@nextui-org/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination, user } from "@nextui-org/react";
 import { SearchIcon } from "../icons";
 import { Key, useCallback, useMemo, useState } from "react";
 
 export default function EmployeesTable() {
 
+	const { user } = useUser();
 	const employeeColumns = useEmployeeColumns();
     const employees = useEmployees();
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -126,9 +127,15 @@ export default function EmployeesTable() {
 							<DropdownItem key="false">Unemployed</DropdownItem>
 						</DropdownMenu>
 					</Dropdown>
-					<Button color="primary" onClick={() => window.location.href = "/employees/add-new"}>
-						Add New
-					</Button>
+					{ user ? (
+						<Button color="primary" onClick={() => window.location.href = "/employees/add-new"}>
+							Add New
+						</Button>
+					) : (
+						<Button color="primary" isDisabled>
+							Add New
+						</Button>
+					)}
 				</div>
 				<div className="flex justify-between items-center">
 					<span className="text-default-400 text-small">Total {filteredItems ? filteredItems.length : 0} employees</span>
@@ -146,7 +153,7 @@ export default function EmployeesTable() {
 				</div>
 			</div>
 		);
-	}, [searchValue, onSearchChange, onClear, onRowsPerPageChange, employedValue, onEmployedChange, filteredItems]);
+	}, [user, searchValue, onSearchChange, onClear, onRowsPerPageChange, employedValue, onEmployedChange, filteredItems]);
 
 	const tableColumns = useMemo(() => {
 		return visibleCloumns.map((column: { field: string, headerName: string }) => (

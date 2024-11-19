@@ -3,7 +3,6 @@
 import React, { useEffect, useState, ReactNode } from "react";
 import { User } from "firebase/auth";
 import { pullEmployees } from "./api";
-import { useDisclosure } from "@nextui-org/react";
 
 interface Employee {
     birthdate: Date;
@@ -87,10 +86,6 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
         { field: "surname", headerName: "Surname"},
         { field: "tax_code", headerName: "Tax Code"}
     ]
-
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const [mode, setMode] = useState<"create" | "update" | "read">("read");
-    const [employeeID, setEmployeeID] = useState<string | null>(null);
     
     return (
         <Context.Provider value={{ user, setUser, employees, employeeColumns }}>
