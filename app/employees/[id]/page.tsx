@@ -11,11 +11,7 @@ export default function Page({ params } : { params: { id: string } }) {
 	const employees = useEmployees();
 	const id = params.id;
 	if (id === "add-new") {
-		return (
-			<>
-				{AddNewPage()}
-			</>
-		)
+		return <AddNewPage />
 	}
 	if (employees) {
 		if (employee === undefined) {
@@ -26,16 +22,8 @@ export default function Page({ params } : { params: { id: string } }) {
 	if (employee === undefined) {
 		return null;
 	} else if (employee === null) {
-		return (
-			<>
-				<h1>Employee not found</h1>
-			</>
-		)
+		return <h1>Employee not found</h1>
 	} else {
-		return (
-			<>
-				{EmployeePage(employee, "view")}
-			</>
-		);
+		return <EmployeePage initialEmployee={employee} initialMode="view" />
 	}
 }
