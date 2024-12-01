@@ -5,25 +5,28 @@ import { User } from "firebase/auth";
 import { pullEmployees } from "./api";
 
 interface Employee {
-    birthdate: Date;
-    birthplace: string;
-    birthplace_nation: string;
-    birthplace_provincia: string;
-    document: string;
-    email: string;
-    employed: boolean;
-    gender: string;
-    id?: string;
-    livingplace_address: string;
-    livingplace_nation: string;
-    livingplace_provincia: string;
-    livingplace_zipcode: number;
-    n_mat: number;
-    n_pro: number;
-    name: string;
-    phone: string;
-    surname: string;
-    tax_code: string;
+    birthdate: number | null;
+    birthplace_city: string | null;
+    birthplace_nation: string | null;
+    birthplace_provincia: string | null;
+    birthplace_zipcode: number | null;
+    document: string | null;
+    email: string | null;
+    employed: boolean | null;
+    gender: string | null;
+    id?: string | null;
+    livingplace_address: string | null;
+    livingplace_city: string | null;
+    livingplace_nation: string | null;
+    livingplace_provincia: string | null;
+    livingplace_zipcode: number | null;
+    n_mat: number | null;
+    n_pro: number | null;
+    name: string | null;
+    phone: string | null;
+    surname: string | null;
+    tax_code: string | null;
+    qualifications: Record<string, Record<string, string>>
 }
 
 interface ContextType {
@@ -67,15 +70,17 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
 
     const employeeColumns = [
         { field: "birthdate", headerName: "Birthdate"},
-        { field: "birthplace", headerName: "Birthplace"},
+        { field: "birthplace_city", headerName: "Birthplace City"},
         { field: "birthplace_nation", headerName: "Birthplace Nation"},
         { field: "birthplace_provincia", headerName: "Birthplace Provincia"},
+        { field: "birthplace_zipcode", headerName: "Birthplace Zipcode"},
         { field: "document", headerName: "Document"},
         { field: "email", headerName: "Email"},
         { field: "employed", headerName: "Employed"},
         { field: "gender", headerName: "Gender"},
         { field: "id", headerName: "ID"},
         { field: "livingplace_address", headerName: "Livingplace Address"},
+        { field: "livingplace_city", headerName: "Livingplace City"},
         { field: "livingplace_nation", headerName: "Livingplace Nation"},
         { field: "livingplace_provincia", headerName: "Livingplace Provincia"},
         { field: "livingplace_zipcode", headerName: "Livingplace Zipcode"},
@@ -84,7 +89,8 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
         { field: "name", headerName: "Name"},
         { field: "phone", headerName: "Phone"},
         { field: "surname", headerName: "Surname"},
-        { field: "tax_code", headerName: "Tax Code"}
+        { field: "tax_code", headerName: "Tax Code"},
+        { field: "qualifications", headerName: "Qualifications"}
     ]
     
     return (

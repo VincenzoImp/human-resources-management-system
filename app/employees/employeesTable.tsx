@@ -29,7 +29,7 @@ export default function EmployeesTable() {
 					if (word === "") {
 						continue;
 					}
-                    if (employee.name.toLowerCase().includes(word.toLowerCase()) || employee.surname.toLowerCase().includes(word.toLowerCase())) {
+					if ((employee.name && employee.name.toLowerCase().includes(word.toLowerCase())) || (employee.surname && employee.surname.toLowerCase().includes(word.toLowerCase()))) {
                         return true;
                     }
                 }
