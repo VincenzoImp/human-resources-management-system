@@ -81,14 +81,14 @@ export default function EmployeePage({ initialEmployee, initialMode }: { initial
                             {mode === "view" ? (
                                 <Input 
                                     label={employeeColumns.find(column => column.field === "employed")?.headerName}
-                                    value={employee.employed ? employee.employed ? "True" : "False" : ""}
+                                    value={employee.employed || ""}
                                     isReadOnly
                                 />
                             ) : (
                                 <Select
                                     label={employeeColumns.find(column => column.field === "employed")?.headerName}
-                                    onChange={(e) => handleInputChange("employed", e.target.value === "" ? null : e.target.value === "True" ? true : false)}
-                                    defaultSelectedKeys={[employee.employed ? employee.employed ? "True" : "False" : ""]}
+                                    onChange={(e) => handleInputChange("employed", e.target.value)}
+                                    defaultSelectedKeys={[employee.employed || ""]}
                                     isRequired
                                 >
                                     <SelectItem value="True" key={"True"}>True</SelectItem>
@@ -181,9 +181,14 @@ export default function EmployeePage({ initialEmployee, initialMode }: { initial
                                 </Button>
                             </>
                         ) : (
-                            <Button color="primary" onClick={() => setMode("edit")}>
-                                Edit
-                            </Button>
+                            <>
+                                <Button color="danger" onClick={() => window.location.href = "/employees"}>
+                                    Delete
+                                </Button>
+                                <Button color="primary" onClick={() => setMode("edit")}>
+                                    Edit
+                                </Button>
+                            </>
                         )}
                     </div>
                 </div>

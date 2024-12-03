@@ -12,7 +12,7 @@ interface Employee {
     birthplace_zipcode: number | null;
     document: string | null;
     email: string | null;
-    employed: boolean | null;
+    employed: "True" | "False" | null;
     gender: string | null;
     id?: string | null;
     livingplace_address: string | null;

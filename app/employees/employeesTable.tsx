@@ -14,10 +14,10 @@ export default function EmployeesTable() {
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [page, setPage] = useState(1);
 	const [searchValue, setSearchValue] = useState("");
-	const [employedValue, setEmployedValue] = useState<string>("both");
+	const [employedValue, setEmployedValue] = useState<string>("Both");
 
 	const visibleCloumns = useMemo(() => {
-		const subset = ["name", "surname", "email", "phone", "employed", "gender", "n_mat", "n_pro"];
+		const subset = ["name", "surname", "phone", "email", "gender", "tax_code", "employed"];
 		return employeeColumns.filter((column) => subset.includes(column.field)).sort((a, b) => subset.indexOf(a.field) - subset.indexOf(b.field));
 	}, [employeeColumns]);
 		
@@ -36,12 +36,14 @@ export default function EmployeesTable() {
                 return false;
             });
 		}
-		if (employedValue !== "both") {
+		if (employedValue !== "Both") {
 			filteredEmployees = filteredEmployees.filter((employee) => {
-				if (employedValue === "true") {
+				if (employedValue === "True") {
 					return employee.employed;
-				} else {
+				} else if (employedValue === "False") {
 					return !employee.employed;
+				} else {
+					return "";
 				}
 			});
 		}
@@ -78,20 +80,17 @@ export default function EmployeesTable() {
 	}, []);
 
 	const onEmployedChange = useCallback((value: Key) => {
-		if (value === "true") {
-			setEmployedValue("true");
-		} else if (value === "false") {
-			setEmployedValue("false");
-		} else if (value === "both") {
-			setEmployedValue("both");
+		if (value === "True") {
+			setEmployedValue("True");
+		} else if (value === "False") {
+			setEmployedValue("False");
+		} else if (value === "Both") {
+			setEmployedValue("Both");
 		}
 		setPage(1);
 	}, []);
 
 	const renderCell = useCallback((employee: Employee, column: { field: string, headerName: string }) => {
-		if (column.field === "employed") {
-			return employee[column.field] ? "yes" : "no";
-		}
 		return employee[column.field as keyof Employee]?.toString();
 	}, []);
 
@@ -122,9 +121,9 @@ export default function EmployeesTable() {
 							onAction={(key) => onEmployedChange(key)}
 							selectedKeys={[employedValue]}
 						>
-							<DropdownItem key="both">All</DropdownItem>
-							<DropdownItem key="true">Employed</DropdownItem>
-							<DropdownItem key="false">Unemployed</DropdownItem>
+							<DropdownItem key="Both">All</DropdownItem>
+							<DropdownItem key="True">Employed</DropdownItem>
+							<DropdownItem key="False">Unemployed</DropdownItem>
 						</DropdownMenu>
 					</Dropdown>
 					{ user ? (
