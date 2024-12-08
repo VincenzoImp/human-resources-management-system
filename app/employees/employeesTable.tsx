@@ -2,7 +2,7 @@
 
 import { useEmployeeColumns, useEmployees, useUser } from "../context";
 import type { Employee } from "../context";
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination, user } from "@nextui-org/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination } from "@nextui-org/react";
 import { SearchIcon } from "../icons";
 import { Key, useCallback, useMemo, useState } from "react";
 

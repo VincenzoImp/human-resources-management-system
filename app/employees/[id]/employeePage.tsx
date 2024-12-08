@@ -7,6 +7,10 @@ import { useEmployeeColumns } from "../../context";
 import { pushEmployee } from "@/app/api";
 
 function handleSave({ employee, mode, setMode }: { employee: Employee, mode: "add" | "view" | "edit", setMode: (mode: "add" | "view" | "edit") => void }) {
+    if (mode === "edit") {
+        // Update employee
+    }
+    setMode("view");
     pushEmployee(employee);
 }
 
@@ -14,7 +18,7 @@ export default function EmployeePage({ initialEmployee, initialMode }: { initial
     const [mode, setMode] = useState<"add" | "view" | "edit">(initialMode);
     const [employee, setEmployee] = useState<Employee>(initialEmployee);
     const employeeColumns = useEmployeeColumns();
-    const handleInputChange = (field: keyof Employee, value: any) => {
+    const handleInputChange = (field: keyof Employee, value: string | number | boolean | null | Record<string, Record<string, string>>) => {
         setEmployee(prev => ({ ...prev, [field]: value }));
     };
     console.log(employee);
