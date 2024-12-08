@@ -5,20 +5,35 @@ import { Input, Select, DatePicker, Button, SelectItem, Card, CardHeader, CardBo
 import type { Employee } from "../../context";
 import { useEmployeeColumns } from "../../context";
 import { pushEmployee } from "@/app/api";
+import { toast } from "../../components/toast";
 
-function handleSave({ employee, mode, setMode }: { employee: Employee, mode: "add" | "view" | "edit", setMode: (mode: "add" | "view" | "edit") => void }) {
-    if (mode === "edit") {
-        // Update employee
+async function handleSave({ employee, mode, setMode }: { employee: Employee, mode: "add" | "view" | "edit", setMode: (mode: "add" | "view" | "edit") => void }) {
+    const requiredKeys = ["name", "surname", "phone", "email", "gender", "tax_code", "employed"];
+    for (const key of requiredKeys as (keyof Employee)[]) {
+        if (!employee[key]) {
+            toast.error("Please fill all required fields before saving");
+            return;
+        }
     }
-    setMode("view");
-    pushEmployee(employee);
+    try {
+        employee.id = await pushEmployee(employee);
+        window.location.href = "/employees/" + employee.id;
+        if (mode === "add") {
+            toast.success("Employee added successfully");
+        } else if (mode === "edit") {
+            toast.success("Employee updated successfully");
+        }
+    } catch (error) {
+        console.error(error);
+        toast.error("An error occurred while saving the employee");
+    }
 }
 
 export default function EmployeePage({ initialEmployee, initialMode }: { initialEmployee: Employee, initialMode: "add" | "view" | "edit" }) {
     const [mode, setMode] = useState<"add" | "view" | "edit">(initialMode);
     const [employee, setEmployee] = useState<Employee>(initialEmployee);
     const employeeColumns = useEmployeeColumns();
-    const handleInputChange = (field: keyof Employee, value: string | number | boolean | null | Record<string, Record<string, string>>) => {
+    const handleInputChange = (field: keyof Employee, value: string | number | null | Record<string, Record<string, string>>) => {
         setEmployee(prev => ({ ...prev, [field]: value }));
     };
     console.log(employee);

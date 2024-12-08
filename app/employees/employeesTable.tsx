@@ -38,13 +38,7 @@ export default function EmployeesTable() {
 		}
 		if (employedValue !== "Both") {
 			filteredEmployees = filteredEmployees.filter((employee) => {
-				if (employedValue === "True") {
-					return employee.employed;
-				} else if (employedValue === "False") {
-					return !employee.employed;
-				} else {
-					return "";
-				}
+				return employee.employed !== null && employee.employed.toString() === employedValue;
 			});
 		}
 		return filteredEmployees;
@@ -80,13 +74,7 @@ export default function EmployeesTable() {
 	}, []);
 
 	const onEmployedChange = useCallback((value: Key) => {
-		if (value === "True") {
-			setEmployedValue("True");
-		} else if (value === "False") {
-			setEmployedValue("False");
-		} else if (value === "Both") {
-			setEmployedValue("Both");
-		}
+		setEmployedValue(value as string);
 		setPage(1);
 	}, []);
 

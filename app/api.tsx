@@ -1,4 +1,4 @@
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { db } from "./firebase/config";
 import { Employee } from "./context";
 
@@ -13,18 +13,28 @@ async function pullEmployees() {
     return employees;
 }
 
-// async function pushEmployee(employee: Employee) {
-//     try {
-//         delete employee.id;
-//         const docRef = await addDoc(collection(db, "employees"), employee);
-//         console.log("Document written with ID: ", docRef.id);
-//     } catch (e) {
-//         console.error("Error adding document: ", e);
-//     }
-// }
-
-async function pushEmployee(employee: Employee) {
-    await addDoc(collection(db, "employees"), employee);
+async function pullEmployee(id: string) {
+    const docRef = doc(db, "employees", id);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+        const employee = docSnap.data() as Employee;
+        employee.id = docSnap.id;
+        return employee;
+    }
+    return null;
 }
 
-export { pullEmployees, pushEmployee };
+async function pushEmployee(employee: Employee) {
+    const id = employee.id;
+    delete employee.id;
+    if (!id) {
+        const docRef = await addDoc(collection(db, "employees"), employee);
+        employee.id = docRef.id;
+    } else {
+        await setDoc(doc(db, "employees", id), employee);
+        employee.id = id;
+    }
+    return employee.id;
+}
+
+export { pullEmployees, pullEmployee, pushEmployee };
