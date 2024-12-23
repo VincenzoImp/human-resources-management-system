@@ -7,7 +7,7 @@ import { useEmployeeColumns } from "../../context";
 import { pushEmployee } from "@/app/api";
 import { toast } from "../../components/toast";
 
-async function handleSave({ employee, mode, setMode }: { employee: Employee, mode: "add" | "view" | "edit", setMode: (mode: "add" | "view" | "edit") => void }) {
+async function handleSave({ employee, mode }: { employee: Employee, mode: "add" | "view" | "edit", setMode: (mode: "add" | "view" | "edit") => void }) {
     const requiredKeys = ["name", "surname", "phone", "email", "gender", "tax_code", "employed"];
     for (const key of requiredKeys as (keyof Employee)[]) {
         if (!employee[key]) {
