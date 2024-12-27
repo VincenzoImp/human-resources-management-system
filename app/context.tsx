@@ -92,7 +92,7 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
         { field: "tax_code", headerName: "Tax Code"},
         { field: "qualifications", headerName: "Qualifications"}
     ]
-    
+
     return (
         <Context.Provider value={{ user, setUser, employees, employeeColumns }}>
             {children}

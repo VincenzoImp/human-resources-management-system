@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Input, Select, DatePicker, DateInput, Button, SelectItem, Card, CardHeader, CardBody } from "@nextui-org/react";
+import { Input, Select, DatePicker, DateInput, Button, SelectItem, Card, CardHeader, CardBody, Table, TableHeader, TableBody, TableRow, TableCell, TableColumn, Chip, useDisclosure, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Slider, Tooltip } from "@nextui-org/react";
 import type { Employee } from "../../context";
 import { useEmployeeColumns } from "../../context";
 import { createEmployee, modifyEmployee, deleteEmployee } from "@/app/api";
 import { toast } from "../../components/toast";
 import { parseDate } from "@internationalized/date";
 import { I18nProvider } from "@react-aria/i18n";
+import { DeleteIcon, EditIcon, PlusIcon } from "@/app/icons";
 
 async function handleSave({ employee, mode }: { employee: Employee, mode: "add" | "view" | "edit", setMode: (mode: "add" | "view" | "edit") => void }) {
     const requiredKeys = ["name", "surname", "phone", "email", "gender", "tax_code", "employed"];
@@ -58,6 +59,7 @@ export default function EmployeePage({ initialEmployee, initialMode }: { initial
     const handleInputChange = (field: keyof Employee, value: string | number | null | Record<string, Record<string, string>>) => {
         setEmployee(prev => ({ ...prev, [field]: value }));
     };
+    const {isOpen, onOpen, onOpenChange} = useDisclosure();
     console.log(employee);
     const title = mode === "add" ? "Add New Employee" : mode === "edit" ? "Edit Employee" : "Employee Details";
     return (
@@ -222,6 +224,93 @@ export default function EmployeePage({ initialEmployee, initialMode }: { initial
                                 onChange={(e) => handleInputChange("livingplace_zipcode", e.target.value.replace(/[^\d]/g, ""))}
                                 {...(mode === "view" ? { isReadOnly: true } : { isClearable: true, onClear: () => handleInputChange("livingplace_zipcode", null) })}
                             />
+                        </CardBody>
+                    </Card>
+                    <Card>
+                        <CardHeader className="flex justify-between">
+                            <h2 className="text-lg font-medium">Qualifications</h2>
+                            {mode === "view" ? null : (
+                                <Chip variant="light" className="inline-block" endContent={
+                                    <Button size="sm" isIconOnly color="default" onPress={onOpen}>
+                                        <PlusIcon />
+                                    </Button>
+                                }>
+                                </Chip>
+                            )}
+                        </CardHeader>
+                        <CardBody>
+                            <Table removeWrapper>
+                                <TableHeader>
+                                    <TableColumn align="center">Qualification</TableColumn>
+                                    <TableColumn align="center">Specification</TableColumn>
+                                    <TableColumn align="center">Score</TableColumn>
+                                    <TableColumn align="center">
+                                        {mode === "view" ? null: "Actions"}
+                                    </TableColumn>
+                                </TableHeader>
+                                <TableBody emptyContent={"Empty"}>
+                                    <TableRow>
+                                        <TableCell>High School Diploma</TableCell>
+                                        <TableCell>Scientific</TableCell>
+                                        <TableCell>5</TableCell>
+                                        <TableCell>
+                                            {mode === "view" ? null: (
+                                                <div className="flex items-center justify-center gap-4">
+                                                    <Tooltip content="Edit Qualification">
+                                                        <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                                                            <EditIcon />
+                                                        </span>
+                                                    </Tooltip>
+                                                    <Tooltip color="danger" content="Delete Qualification">
+                                                        <span className="text-lg text-danger cursor-pointer active:opacity-50">
+                                                            <DeleteIcon />
+                                                        </span>
+                                                    </Tooltip>
+                                                </div>
+                                            )}
+                                        </TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+                        <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+                            <ModalContent>
+                                {(onClose) => (
+                                    <>
+                                    <ModalHeader className="flex flex-col gap-1">Add Qualification</ModalHeader>
+                                    <ModalBody>
+                                        <Input 
+                                            label={"Qualifications Name"}
+                                            value={""}                                        
+                                        />
+                                        <Input 
+                                            label={"Qualifications Specification"}
+                                            value={""}
+                                        />
+                                        <Slider 
+                                            label={"Qualifications Score"}
+                                            defaultValue={0}
+                                            maxValue={5}
+                                            step={0.5}
+                                            minValue={0}
+                                            showTooltip={true}
+                                            endContent={"5"}
+                                            startContent={"0"}
+                                            hideValue={true}
+                                            showSteps={true}
+                                        />
+                                    </ModalBody>
+                                    <ModalFooter>
+                                        <Button color="danger" variant="light" onPress={onClose}>
+                                        Close
+                                        </Button>
+                                        <Button color="primary" onPress={onClose}>
+                                        Action
+                                        </Button>
+                                    </ModalFooter>
+                                    </>
+                                )}
+                            </ModalContent>
+                        </Modal>
                         </CardBody>
                     </Card>
                     <div className="flex justify-end gap-4">
