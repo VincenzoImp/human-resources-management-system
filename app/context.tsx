@@ -5,7 +5,7 @@ import { User } from "firebase/auth";
 import { readEmployees } from "./api";
 
 interface Employee {
-    birthdate: number | null;
+    birthdate: string | null;
     birthplace_city: string | null;
     birthplace_nation: string | null;
     birthplace_provincia: string | null;

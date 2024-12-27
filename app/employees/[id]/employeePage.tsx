@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Input, Select, DatePicker, Button, SelectItem, Card, CardHeader, CardBody } from "@nextui-org/react";
+import { Input, Select, DatePicker, DateInput, Button, SelectItem, Card, CardHeader, CardBody } from "@nextui-org/react";
 import type { Employee } from "../../context";
 import { useEmployeeColumns } from "../../context";
 import { createEmployee, modifyEmployee, deleteEmployee } from "@/app/api";
 import { toast } from "../../components/toast";
+import { parseDate } from "@internationalized/date";
+import { I18nProvider } from "@react-aria/i18n";
 
 async function handleSave({ employee, mode }: { employee: Employee, mode: "add" | "view" | "edit", setMode: (mode: "add" | "view" | "edit") => void }) {
     const requiredKeys = ["name", "surname", "phone", "email", "gender", "tax_code", "employed"];
@@ -141,11 +143,24 @@ export default function EmployeePage({ initialEmployee, initialMode }: { initial
                             <h2 className="text-lg font-medium">Birth Informations</h2>
                         </CardHeader>
                         <CardBody className="flex flex-col gap-4 grid grid-cols-1 sm:grid-cols-2">
-                            <DatePicker 
-                                label={employeeColumns.find(column => column.field === "birthdate")?.headerName}
-                                onChange={(e) => handleInputChange("birthdate", e ? new Date(e.toString()).getTime() : null)}
-                                showMonthAndYearPickers isReadOnly={mode === "view"}
-                            />
+                            {mode === "view" ? (
+                                <I18nProvider locale="it-IT">
+                                    <DateInput 
+                                        label={employeeColumns.find(column => column.field === "birthdate")?.headerName}
+                                        defaultValue={employee.birthdate ? parseDate(employee.birthdate as string) : null}
+                                        isReadOnly
+                                    />
+                                </I18nProvider>
+                            ) : (
+                                <I18nProvider locale="it-IT">
+                                    <DatePicker 
+                                        label={employeeColumns.find(column => column.field === "birthdate")?.headerName}
+                                        onChange={(e) => handleInputChange("birthdate", e ? e.toString() : null)}
+                                        defaultValue={employee.birthdate ? parseDate(employee.birthdate as string) : null}
+                                        showMonthAndYearPickers
+                                    />
+                                </I18nProvider>
+                            )}
                             <Input 
                                 label={employeeColumns.find(column => column.field === "birthplace_city")?.headerName}
                                 value={employee.birthplace_city || ""}
