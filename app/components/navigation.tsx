@@ -15,17 +15,14 @@ export default function Navigation({ itemActive }: Readonly<{ itemActive: string
 	const { user, setUser } = useUser();
 	return (
 		<Navbar isBordered isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>
-
 			<NavbarContent className="sm:hidden" justify="start">
 				<NavbarMenuToggle aria-label={isMenuOpen ? "Close menu" : "Open menu"} />
 			</NavbarContent>
-
 			<NavbarContent justify="center" className="sm:flex-1">
 				<NavbarBrand>
 					<p className="font-bold text-inherit">IWN</p>
 				</NavbarBrand>
 			</NavbarContent>  
-
 			<NavbarContent className="hidden sm:flex gap-4" justify="center">
 				{menuItems.map((item, index) => (
 					<NavbarItem key={`${item}-${index}`} isActive={itemActive === item}>
@@ -39,7 +36,6 @@ export default function Navigation({ itemActive }: Readonly<{ itemActive: string
 					</NavbarItem>
 				))}
 			</NavbarContent>
-
 			<NavbarContent as="div" justify="end">
 				<Dropdown placement="bottom-end">
 					<DropdownTrigger>
@@ -62,7 +58,6 @@ export default function Navigation({ itemActive }: Readonly<{ itemActive: string
 					</DropdownMenu>
 				</Dropdown>
 			</NavbarContent>
-
 			<NavbarMenu>
 				{menuItems.map((item, index) => (
 					<NavbarMenuItem key={`${item}-${index}`}>

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Input, Select, DatePicker, Button, SelectItem, Card, CardHeader, CardBody } from "@nextui-org/react";
 import type { Employee } from "../../context";
 import { useEmployeeColumns } from "../../context";
-import { pushEmployee } from "@/app/api";
+import { createEmployee, modifyEmployee, deleteEmployee } from "@/app/api";
 import { toast } from "../../components/toast";
 
 async function handleSave({ employee, mode }: { employee: Employee, mode: "add" | "view" | "edit", setMode: (mode: "add" | "view" | "edit") => void }) {
@@ -15,17 +15,37 @@ async function handleSave({ employee, mode }: { employee: Employee, mode: "add" 
             return;
         }
     }
-    try {
-        employee.id = await pushEmployee(employee);
-        window.location.href = "/employees/" + employee.id;
-        if (mode === "add") {
+    if (mode === "add") {
+        try {
+            employee.id = await createEmployee(employee);
+            window.location.href = "/employees/" + employee.id;
             toast.success("Employee added successfully");
-        } else if (mode === "edit") {
-            toast.success("Employee updated successfully");
+        } catch (error) {
+            console.error(error);
+            toast.error("An error occurred while saving the employee");
         }
-    } catch (error) {
+    }
+    if (mode === "edit") {
+        try {
+            employee.id = await modifyEmployee(employee);
+            window.location.href = "/employees/" + employee.id;
+            toast.success("Employee updated successfully");
+        } catch (error) {
+            console.error(error);
+            toast.error("An error occurred while saving the employee");
+        }
+    }
+}
+
+async function handleRemove(id: string) {
+    try {
+        await deleteEmployee(id);
+        window.location.href = "/employees";
+        toast.success("Employee deleted successfully");
+    }
+    catch (error) {
         console.error(error);
-        toast.error("An error occurred while saving the employee");
+        toast.error("An error occurred while deleting the employee");
     }
 }
 
@@ -69,7 +89,7 @@ export default function EmployeePage({ initialEmployee, initialMode }: { initial
                             <Input 
                                 label={employeeColumns.find(column => column.field === "email")?.headerName}
                                 value={employee.email || ""}
-                                onChange={(e) => handleInputChange("email", e.target.value)} 
+                                onChange={(e) => handleInputChange("email", e.target.value.toLowerCase())}
                                 {...(mode === "view" ? { isReadOnly: true } : { isRequired: true, isClearable: true, onClear: () => handleInputChange("email", null) })}
                                 type="email"
                             />
@@ -201,7 +221,7 @@ export default function EmployeePage({ initialEmployee, initialMode }: { initial
                             </>
                         ) : (
                             <>
-                                <Button color="danger" onClick={() => window.location.href = "/employees"}>
+                                <Button color="danger" onClick={() => employee.id ? handleRemove(employee.id) : toast.error("An error occurred while deleting the employee")}>
                                     Delete
                                 </Button>
                                 <Button color="primary" onClick={() => setMode("edit")}>

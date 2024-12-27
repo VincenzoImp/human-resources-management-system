@@ -1,14 +1,8 @@
 "use client";
 
-import { Authenticated } from "./modifiers";
-import Navigation from "./components/navigation";
-import Home from "./home/home";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
-    return (
-        <Authenticated>
-            <Navigation itemActive="Home" />
-            <Home />
-        </Authenticated>
-    );
+    const router = useRouter();
+    router.push("/home");
 }

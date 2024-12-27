@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, ReactNode } from "react";
 import { User } from "firebase/auth";
-import { pullEmployees } from "./api";
+import { readEmployees } from "./api";
 
 interface Employee {
     birthdate: number | null;
@@ -62,7 +62,7 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
     const [employees, setEmployees] = useState<Array<Employee> | null>(null);
     useEffect(() => {
         if (!employees) {
-            pullEmployees().then((data: Array<Employee>) => {
+            readEmployees().then((data: Array<Employee>) => {
                 setEmployees(data);
             });
         }

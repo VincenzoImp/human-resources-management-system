@@ -1,8 +1,8 @@
-import { addDoc, collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { db } from "./firebase/config";
 import { Employee } from "./context";
 
-async function pullEmployees() {
+async function readEmployees() {
     const querySnapshot = await getDocs(collection(db, "employees"));
     const employees = new Array<Employee>();
     querySnapshot.forEach(doc => {
@@ -13,7 +13,7 @@ async function pullEmployees() {
     return employees;
 }
 
-async function pullEmployee(id: string) {
+async function readEmployee(id: string) {
     const docRef = doc(db, "employees", id);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
@@ -24,17 +24,25 @@ async function pullEmployee(id: string) {
     return null;
 }
 
-async function pushEmployee(employee: Employee) {
-    const id = employee.id;
+async function createEmployee(employee: Employee) {
     delete employee.id;
-    if (!id) {
-        const docRef = await addDoc(collection(db, "employees"), employee);
-        employee.id = docRef.id;
-    } else {
-        await setDoc(doc(db, "employees", id), employee);
-        employee.id = id;
-    }
-    return employee.id;
+    const docRef = await addDoc(collection(db, "employees"), employee);
+    return docRef.id;
 }
 
-export { pullEmployees, pullEmployee, pushEmployee };
+async function modifyEmployee(employee: Employee) {
+    if (!employee.id) {
+        throw new Error("Employee ID is required");
+    }
+    const docRef = doc(db, "employees", employee.id);
+    delete employee.id;
+    await setDoc(docRef, employee);
+    return docRef.id;
+}
+
+async function deleteEmployee(id: string) {
+    const docRef = doc(db, "employees", id);
+    await deleteDoc(docRef);
+}
+
+export { readEmployees, readEmployee, createEmployee, modifyEmployee, deleteEmployee };
