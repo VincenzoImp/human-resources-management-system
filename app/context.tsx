@@ -20,8 +20,8 @@ interface Employee {
     livingplace_nation: string | null;
     livingplace_provincia: string | null;
     livingplace_zipcode: number | null;
-    n_mat: number | null;
-    n_pro: number | null;
+    // n_mat: number | null;
+    // n_pro: number | null;
     name: string | null;
     phone: string | null;
     surname: string | null;
@@ -84,8 +84,8 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
         { field: "livingplace_nation", headerName: "Livingplace Nation"},
         { field: "livingplace_provincia", headerName: "Livingplace Provincia"},
         { field: "livingplace_zipcode", headerName: "Livingplace Zipcode"},
-        { field: "n_mat", headerName: "N Mat"},
-        { field: "n_pro", headerName: "N Pro"},
+        // { field: "n_mat", headerName: "N Mat"},
+        // { field: "n_pro", headerName: "N Pro"},
         { field: "name", headerName: "Name"},
         { field: "phone", headerName: "Phone"},
         { field: "surname", headerName: "Surname"},

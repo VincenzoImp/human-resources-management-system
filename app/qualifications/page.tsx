@@ -2,13 +2,13 @@
 
 import { Authenticated } from "../modifiers";
 import Navigation from "../components/navigation";
-import Specializations from "./specializations";
+import Qualifications from "./qualifications";
 
 export default function Page() {
     return (
         <Authenticated>
-            <Navigation itemActive="Specializations" />
-            <Specializations />
+            <Navigation itemActive="Qualifications" />
+            <Qualifications />
         </Authenticated>
     );
 }

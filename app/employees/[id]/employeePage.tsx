@@ -130,8 +130,8 @@ export default function EmployeePage({ initialEmployee, initialMode }: { initial
                                     defaultSelectedKeys={[employee.employed || ""]}
                                     isRequired
                                 >
-                                    <SelectItem value="True" key={"True"}>True</SelectItem>
-                                    <SelectItem value="False" key={"False"}>False</SelectItem>
+                                    <SelectItem value="Yes" key={"Yes"}>Yes</SelectItem>
+                                    <SelectItem value="No" key={"No"}>No</SelectItem>
                                 </Select>
                             )}
                         </CardBody>

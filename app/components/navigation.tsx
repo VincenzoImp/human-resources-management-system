@@ -10,7 +10,7 @@ export default function Navigation({ itemActive }: Readonly<{ itemActive: string
 	const menuItems = [
 		"Home",
 		"Employees",
-		"Specializations"
+		"Qualifications"
 	];
 	const { user, setUser } = useUser();
 	return (
