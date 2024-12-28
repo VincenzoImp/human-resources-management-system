@@ -110,8 +110,8 @@ export default function EmployeesTable() {
 							selectedKeys={[employedValue]}
 						>
 							<DropdownItem key="Both">All</DropdownItem>
-							<DropdownItem key="True">Employed</DropdownItem>
-							<DropdownItem key="False">Unemployed</DropdownItem>
+							<DropdownItem key="Yes">Employed</DropdownItem>
+							<DropdownItem key="No">Unemployed</DropdownItem>
 						</DropdownMenu>
 					</Dropdown>
 					{ user ? (
