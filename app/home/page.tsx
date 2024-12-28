@@ -7,7 +7,7 @@ import Home from "./home";
 export default function Page() {
     return (
         <Authenticated>
-            <Navigation itemActive="Home" />
+            <Navigation itemActive="home" />
             <Home />
         </Authenticated>
     );

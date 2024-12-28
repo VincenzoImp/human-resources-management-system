@@ -1,11 +1,13 @@
 "use client";
 
 import EmployeesTable from "./employeesTable";
+import { useText } from "../context";
 
 export default function Employees() {
+	const text = useText();
 	return (
 		<>
-			<h1 className="text-4xl font-bold text-center m-8">Employees</h1>
+			<h1 className="text-4xl font-bold text-center m-8">{text.employees.employees}</h1>
 			<EmployeesTable />
 		</>
 	);

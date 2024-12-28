@@ -7,7 +7,7 @@ import Qualifications from "./qualifications";
 export default function Page() {
     return (
         <Authenticated>
-            <Navigation itemActive="Qualifications" />
+            <Navigation itemActive="qualifications" />
             <Qualifications />
         </Authenticated>
     );

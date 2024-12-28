@@ -10,9 +10,9 @@ interface Employee {
     birthplace_nation: string | null;
     birthplace_provincia: string | null;
     birthplace_zipcode: number | null;
-    document: string | null;
+    documents: string | null;
     email: string | null;
-    employed: "True" | "False" | null;
+    employed: "Yes" | "No" | null;
     gender: string | null;
     id?: string | null;
     livingplace_address: string | null;
@@ -33,7 +33,7 @@ interface ContextType {
     user: User | null;
     setUser: React.Dispatch<React.SetStateAction<User | null>>;
     employees: Array<Employee> | null;
-    employeeColumns: { field: string, headerName: string }[];
+    text: Record<string, Record<string, string>>;
 }
 
 const Context = React.createContext<ContextType | null>(null);
@@ -48,7 +48,7 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
             } catch (error) {
                 console.error(error);
                 return null;
-            }            
+            }
         }
     });
     useEffect(() => {
@@ -68,33 +68,111 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
         }
     }, [employees]);
 
-    const employeeColumns = [
-        { field: "birthdate", headerName: "Birthdate"},
-        { field: "birthplace_city", headerName: "Birthplace City"},
-        { field: "birthplace_nation", headerName: "Birthplace Nation"},
-        { field: "birthplace_provincia", headerName: "Birthplace Provincia"},
-        { field: "birthplace_zipcode", headerName: "Birthplace Zipcode"},
-        { field: "document", headerName: "Document"},
-        { field: "email", headerName: "Email"},
-        { field: "employed", headerName: "Employed"},
-        { field: "gender", headerName: "Gender"},
-        { field: "id", headerName: "ID"},
-        { field: "livingplace_address", headerName: "Livingplace Address"},
-        { field: "livingplace_city", headerName: "Livingplace City"},
-        { field: "livingplace_nation", headerName: "Livingplace Nation"},
-        { field: "livingplace_provincia", headerName: "Livingplace Provincia"},
-        { field: "livingplace_zipcode", headerName: "Livingplace Zipcode"},
-        // { field: "n_mat", headerName: "N Mat"},
-        // { field: "n_pro", headerName: "N Pro"},
-        { field: "name", headerName: "Name"},
-        { field: "phone", headerName: "Phone"},
-        { field: "surname", headerName: "Surname"},
-        { field: "tax_code", headerName: "Tax Code"},
-        { field: "qualifications", headerName: "Qualifications"}
-    ]
+    const text = {
+        authentication: {
+            authentication: "Autenticazione",
+            loginSuccess: "Accesso effettuato con successo!",
+            registrationSuccess: "Registrazione effettuata con successo!",
+            logoutSuccess: "Disconnessione effettuata con successo!",
+            login: "Accesso",
+            register: "Registrazione",
+            email: "Email",
+            emailPlaceholder: "Inserisci la tua email",
+            password: "Password",
+            passwordPlaceholder: "Inserisci la tua password",
+            loginButton: "Accedi",
+            registerButton: "Registrati",
+            emailError: "Inserisci un'email valida",
+            passwordError: "La password deve contenere almeno 6 caratteri",
+            logoutButton: "Disconnetti",
+            loggedInAs: "Accesso come",
+        },
+        home: {
+            home: "Home"
+        },
+        employees: {
+            employees: "Dipendenti",
+        },
+        employeesTable: {
+            searchPlaceholder: "Cerca per nome o cognome",
+            filter: "Filtra",
+            addNew: "Aggiungi Nuovo",
+            rowsPerPage: "Righe per pagina",
+            totalEmployees: "Totale dipendenti",
+        },
+        employeePage: {
+            personalInformations: "Informazioni Personali",
+            birthInformations: "Informazioni di Nascita",
+            livingInformations: "Informazioni di Residenza",
+            qualifications: "Qualifiche",
+            documents: "Documenti",
+            edit: "Modifica",
+            save: "Salva",
+            delete: "Elimina",
+            cancel: "Annulla",            
+            addTitle: "Aggiungi Dipendente",
+            editTitle: "Modifica Dipendente",
+            viewTitle: "Dettagli Dipendente",
+            addSuccess: "Dipendente aggiunto con successo!",
+            editSuccess: "Dipendente modificato con successo!",
+            deleteSuccess: "Dipendente eliminato con successo!",
+            fillRequiredFields: "Compila i campi obbligatori",
+        },
+        qualifications: {
+            qualifications: "Qualifiche"
+        },
+        navigation: {
+            home: "Home",
+            employees: "Dipendenti",
+            qualifications: "Qualifiche"
+        },
+        other: {
+            iwn: "IWN",
+            yes: "Sì",
+            no: "No",
+            employeds: "Assunti",
+            unemployeds: "Non Assunti",
+            all: "Tutti",
+            male: "Maschio",
+            female: "Femmina",
+            other: "Altro"
+        },
+        employeeAttributes: {
+            birthdate: "Data di Nascita",
+            birthplace_city: "Città di Nascita",
+            birthplace_nation: "Nazione di Nascita",
+            birthplace_provincia: "Provincia di Nascita",
+            birthplace_zipcode: "CAP di Nascita",
+            documents: "Documenti",
+            email: "Email",
+            employed: "Assunto",
+            gender: "Genere",
+            id: "ID",
+            livingplace_address: "Indirizzo di Residenza",
+            livingplace_city: "Città di Residenza",
+            livingplace_nation: "Nazione di Residenza",
+            livingplace_provincia: "Provincia di Residenza",
+            livingplace_zipcode: "CAP di Residenza",
+            // n_mat: "N Mat",
+            // n_pro: "N Pro",
+            name: "Nome",
+            phone: "Telefono",
+            surname: "Cognome",
+            tax_code: "Codice Fiscale",
+            qualifications: "Qualifiche"
+        },
+        qualificationsList: {
+            tubista: "Tubista",
+            saldatore: "Saldatore",
+            carpentiere: "Carpentiere",
+            impiegato: "Impiegato",
+            capo_tecnico: "Capo Tecnico",
+            manovale: "Manovale"
+        },
+    }
 
     return (
-        <Context.Provider value={{ user, setUser, employees, employeeColumns }}>
+        <Context.Provider value={{ user, setUser, employees, text }}>
             {children}
         </Context.Provider>
     );
@@ -118,14 +196,14 @@ function useEmployees() {
     return employees;
 }
 
-function useEmployeeColumns() {
+function useText() {
     const context = React.useContext(Context);
     if (!context) {
         throw new Error("Context not found");
     }
-    const { employeeColumns } = context;
-    return employeeColumns;
+    const { text } = context;
+    return text;
 }
 
-export { ContextProvider, useUser, useEmployees, useEmployeeColumns };
+export { ContextProvider, useUser, useEmployees, useText };
 export type { Employee };

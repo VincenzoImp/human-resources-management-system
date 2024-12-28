@@ -18,7 +18,7 @@ export default function Page({ params } : { params: { id: string } }) {
 			birthplace_nation: null,
 			birthplace_provincia: null,
 			birthplace_zipcode: null,
-			document: null,
+			documents: null,
 			email: null,
 			employed: null,
 			gender: null,
@@ -39,7 +39,7 @@ export default function Page({ params } : { params: { id: string } }) {
 	if (id === "add-new") {
 		return (
 			<>
-				<Navigation itemActive="Employees" />
+				<Navigation itemActive="employees" />
 				<EmployeePage initialEmployee={emptyEmployee()} initialMode="add" />
 			</>
 		)
@@ -57,7 +57,7 @@ export default function Page({ params } : { params: { id: string } }) {
 	} else {
 		return (
 			<>
-				<Navigation itemActive="Employees" />
+				<Navigation itemActive="employees" />
 				<EmployeePage initialEmployee={employee} initialMode="view" />
 			</>
 		);

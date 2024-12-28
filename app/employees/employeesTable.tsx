@@ -1,6 +1,6 @@
 "use client";
 
-import { useEmployeeColumns, useEmployees, useUser } from "../context";
+import { useEmployees, useText, useUser } from "../context";
 import type { Employee } from "../context";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination } from "@nextui-org/react";
 import { SearchIcon } from "../icons";
@@ -9,17 +9,13 @@ import { Key, useCallback, useMemo, useState } from "react";
 export default function EmployeesTable() {
 
 	const { user } = useUser();
-	const employeeColumns = useEmployeeColumns();
     const employees = useEmployees();
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [page, setPage] = useState(1);
 	const [searchValue, setSearchValue] = useState("");
-	const [employedValue, setEmployedValue] = useState<string>("Both");
-
-	const visibleCloumns = useMemo(() => {
-		const subset = ["name", "surname", "phone", "email", "gender", "tax_code", "employed"];
-		return employeeColumns.filter((column) => subset.includes(column.field)).sort((a, b) => subset.indexOf(a.field) - subset.indexOf(b.field));
-	}, [employeeColumns]);
+	const [employedValue, setEmployedValue] = useState<string>("all");
+	const text = useText();
+	const visibleCloumns = useMemo(() => ["name", "surname", "phone", "email", "gender", "tax_code", "employed"], []);
 		
 	const filteredItems = useMemo(() => {
         let filteredEmployees = employees ? employees : Array<Employee>();
@@ -36,8 +32,9 @@ export default function EmployeesTable() {
                 return false;
             });
 		}
-		if (employedValue !== "Both") {
+		if (employedValue !== "all") {
 			filteredEmployees = filteredEmployees.filter((employee) => {
+				// TO DO
 				return employee.employed !== null && employee.employed.toString() === employedValue;
 			});
 		}
@@ -78,8 +75,8 @@ export default function EmployeesTable() {
 		setPage(1);
 	}, []);
 
-	const renderCell = useCallback((employee: Employee, column: { field: string, headerName: string }) => {
-		return employee[column.field as keyof Employee]?.toString();
+	const renderCell = useCallback((employee: Employee, column: string) => {
+		return employee[column as keyof Employee]?.toString();
 	}, []);
 
 	const topContent = useMemo(() => {
@@ -89,7 +86,7 @@ export default function EmployeesTable() {
 					<Input
 						isClearable
 						className="w-full"
-						placeholder="Search..."
+						placeholder={text.employeesTable.searchPlaceholder}
 						startContent={<SearchIcon />}
 						value={searchValue}
 						onClear={onClear}
@@ -98,36 +95,35 @@ export default function EmployeesTable() {
 					<Dropdown>
 						<DropdownTrigger>
 							<Button variant="flat">
-								Filter
+								{text.employeesTable.filter}
 							</Button>
 						</DropdownTrigger>
 						<DropdownMenu 
-							aria-label="Employed options"
 							variant="flat"
 							disallowEmptySelection
 							selectionMode="single"
 							onAction={(key) => onEmployedChange(key)}
 							selectedKeys={[employedValue]}
 						>
-							<DropdownItem key="Both">All</DropdownItem>
-							<DropdownItem key="Yes">Employed</DropdownItem>
-							<DropdownItem key="No">Unemployed</DropdownItem>
+							<DropdownItem key="all">{text.other.all}</DropdownItem>
+							<DropdownItem key="yes">{text.other.employeds}</DropdownItem>
+							<DropdownItem key="no">{text.other.unemployeds}</DropdownItem>
 						</DropdownMenu>
 					</Dropdown>
 					{ user ? (
 						<Button color="primary" onClick={() => window.location.href = "/employees/add-new"}>
-							Add New
+							{text.employeesTable.addNew}
 						</Button>
 					) : (
 						<Button color="primary" isDisabled>
-							Add New
+							{text.employeesTable.addNew}
 						</Button>
 					)}
 				</div>
 				<div className="flex justify-between items-center">
-					<span className="text-default-400 text-small">Total {filteredItems ? filteredItems.length : 0} employees</span>
+					<span className="text-default-400 text-small">{text.employeesTable.totalEmployees}: {filteredItems ? filteredItems.length : 0}</span>
 					<label className="flex items-center text-default-400 text-small">
-						Rows per page:
+						{text.employeesTable.rowsPerPage}:
 						<select
 							className="bg-transparent outline-none text-default-400 text-small"
 							onChange={onRowsPerPageChange}
@@ -140,21 +136,21 @@ export default function EmployeesTable() {
 				</div>
 			</div>
 		);
-	}, [user, searchValue, onSearchChange, onClear, onRowsPerPageChange, employedValue, onEmployedChange, filteredItems]);
+	}, [user, searchValue, onSearchChange, onClear, onRowsPerPageChange, employedValue, onEmployedChange, filteredItems, text]);
 
 	const tableColumns = useMemo(() => {
-		return visibleCloumns.map((column: { field: string, headerName: string }) => (
-			<TableColumn key={column.field} align="center">
-				{column.headerName}
+		return visibleCloumns.map((column : string) => (
+			<TableColumn key={column}>
+				{text.employeeAttributes[column]}
 			</TableColumn>
 		));
-	}, [visibleCloumns]);
+	}, [visibleCloumns, text]);
 
 	const tableRows = useMemo(() => {
 		return items.map((employee : Employee) => (
 			<TableRow key={employee.id} className="cursor-pointer hover:bg-default-100" href={`/employees/${employee.id}`}>
-				{visibleCloumns.map((column : { field: string, headerName: string }) => (
-					<TableCell key={column.field}>
+				{visibleCloumns.map((column : string) => (
+					<TableCell key={column}>
 						{renderCell(employee, column)}
 					</TableCell>
 				))}
@@ -184,13 +180,12 @@ export default function EmployeesTable() {
 		<>
 			<Table
 				className="container mx-auto my-8"
-				aria-label="Employees"
 				bottomContent={bottomContent}
 				bottomContentPlacement="outside"
 				topContent={topContent}
 				topContentPlacement="outside"
 			>
-				<TableHeader columns={visibleCloumns.map((column) => column.headerName)}>
+				<TableHeader>
 					{tableColumns}
 				</TableHeader>
 				<TableBody emptyContent={"\n"} items={items}>

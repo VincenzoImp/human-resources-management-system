@@ -7,7 +7,7 @@ import Employees from "./employees";
 export default function Page() {
     return (
         <Authenticated>
-            <Navigation itemActive="Employees" />
+            <Navigation itemActive="employees" />
             <Employees />
         </Authenticated>
     );

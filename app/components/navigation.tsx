@@ -2,36 +2,37 @@
 
 import { Navbar, NavbarBrand, NavbarMenuToggle, NavbarMenuItem, NavbarMenu, NavbarContent, NavbarItem, Link, Dropdown, DropdownTrigger, Avatar, DropdownMenu, DropdownItem } from "@nextui-org/react";
 import { useState } from "react";
-import { useUser } from "../context";
+import { useText, useUser } from "../context";
 import { handleLogout } from "../authentication/authentication";
 
 export default function Navigation({ itemActive }: Readonly<{ itemActive: string }>) {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
-	const menuItems = [
-		"Home",
-		"Employees",
-		"Qualifications"
-	];
+	const text = useText();
+	const menuItems = {
+		home: text.navigation.home,
+		employees: text.navigation.employees,
+		qualifications: text.navigation.qualifications
+	};
 	const { user, setUser } = useUser();
 	return (
 		<Navbar isBordered isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>
 			<NavbarContent className="sm:hidden" justify="start">
-				<NavbarMenuToggle aria-label={isMenuOpen ? "Close menu" : "Open menu"} />
+				<NavbarMenuToggle/>
 			</NavbarContent>
 			<NavbarContent justify="center" className="sm:flex-1">
 				<NavbarBrand>
-					<p className="font-bold text-inherit">IWN</p>
+					<p className="font-bold text-inherit">{text.other.iwn}</p>
 				</NavbarBrand>
 			</NavbarContent>  
 			<NavbarContent className="hidden sm:flex gap-4" justify="center">
-				{menuItems.map((item, index) => (
-					<NavbarItem key={`${item}-${index}`} isActive={itemActive === item}>
+				{Object.entries(menuItems).map(([key, value], index) => (
+					<NavbarItem key={`${key}-${index}`} isActive={itemActive === key}>
 						<Link
-							color={itemActive === item ? "primary" : "foreground"}
-							href={`/${item.toLowerCase()}`}
-							aria-current={itemActive === item ? "page" : undefined}
+							color={itemActive === key ? "primary" : "foreground"}
+							href={`/${key}`}
+							aria-current={itemActive === key ? "page" : undefined}
 						>
-							{item}
+							{value}
 						</Link>
 					</NavbarItem>
 				))}
@@ -47,27 +48,27 @@ export default function Navigation({ itemActive }: Readonly<{ itemActive: string
 							showFallback
 						/>
 					</DropdownTrigger>
-					<DropdownMenu aria-label="Profile Actions" variant="flat">
+					<DropdownMenu variant="flat">
 						<DropdownItem key="profile" className="h-14 gap-2">
-							<p className="font-semibold">Signed in as</p>
+							<p className="font-semibold">{text.authentication.loggedInAs}</p>
 							<p className="font-semibold">{user?.email}</p>
 						</DropdownItem>
-						<DropdownItem key="logout" color="danger" onClick={() => handleLogout(setUser)}>
-							Log Out
+						<DropdownItem key="logout" color="danger" onClick={() => handleLogout(text.authentication.logoutSuccess, setUser)}>
+							{text.authentication.logoutButton}
 						</DropdownItem>
 					</DropdownMenu>
 				</Dropdown>
 			</NavbarContent>
 			<NavbarMenu>
-				{menuItems.map((item, index) => (
-					<NavbarMenuItem key={`${item}-${index}`}>
+				{Object.entries(menuItems).map(([key, value], index) => (
+					<NavbarMenuItem key={`${key}-${index}`}>
 						<Link
 							className="w-full"
-							color = { itemActive === item ? "primary" : "foreground" }
-							href={`/${item.toLowerCase()}`}
+							color = { itemActive === key ? "primary" : "foreground" }
+							href={`/${key.toLowerCase()}`}
 							size="lg"
 						>
-							{item}
+							{value}
 						</Link>
 					</NavbarMenuItem>
 				))}
@@ -75,4 +76,3 @@ export default function Navigation({ itemActive }: Readonly<{ itemActive: string
 		</Navbar>
 	);
 }
-
