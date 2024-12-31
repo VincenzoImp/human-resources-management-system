@@ -1,24 +1,41 @@
 "use client";
 
-import { useEmployees, useText, useUser } from "../context";
+import { useText, useUser } from "../context";
 import type { Employee } from "../context";
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination } from "@nextui-org/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination, Spinner } from "@nextui-org/react";
 import { SearchIcon } from "../icons";
-import { Key, useCallback, useMemo, useState } from "react";
+import { Key, useCallback, useEffect, useMemo, useState } from "react";
+import { readEmployees } from "../api";
+import { toast } from "@/app/components/toast";
 
 export default function EmployeesTable() {
 
 	const { user } = useUser();
-    const employees = useEmployees();
+	const [employees, setEmployees] = useState<Employee[]>([]);
+	const [isLoading, setIsLoading] = useState(true);
+	useEffect(() => {
+		async function fetchEmployees() {
+			try {
+				const employeesData = await readEmployees();
+				setEmployees(employeesData);
+			} catch (error: unknown) {
+				if (error instanceof Error) {
+					toast.error(error.message);
+				}
+			}
+			setIsLoading(false);
+		}
+		fetchEmployees();
+	}, [setEmployees, setIsLoading]);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [page, setPage] = useState(1);
 	const [searchValue, setSearchValue] = useState("");
 	const [employedValue, setEmployedValue] = useState<string>("all");
 	const text = useText();
 	const visibleCloumns = useMemo(() => ["name", "surname", "phone", "email", "gender", "tax_code", "employed"], []);
-		
+	
 	const filteredItems = useMemo(() => {
-        let filteredEmployees = employees ? employees : Array<Employee>();
+        let filteredEmployees = [...employees];
 		if (searchValue) {
             filteredEmployees = filteredEmployees.filter((employee) => {
                 for (const word of searchValue.split(" ")) {
@@ -34,7 +51,6 @@ export default function EmployeesTable() {
 		}
 		if (employedValue !== "all") {
 			filteredEmployees = filteredEmployees.filter((employee) => {
-				// TO DO
 				return employee.employed !== null && employee.employed.toString() === employedValue;
 			});
 		}
@@ -196,7 +212,7 @@ export default function EmployeesTable() {
 				<TableHeader>
 					{tableColumns}
 				</TableHeader>
-				<TableBody emptyContent={"\n"} items={items}>
+				<TableBody emptyContent={"\n"} items={items} isLoading={isLoading} loadingContent={<Spinner />} >
 					{tableRows}
 				</TableBody>
 			</Table>

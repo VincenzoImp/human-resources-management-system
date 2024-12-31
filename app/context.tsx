@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState, ReactNode } from "react";
 import { User } from "firebase/auth";
-import { readEmployees } from "./api";
 
 interface Employee {
     birthdate: string | null;
@@ -32,7 +31,6 @@ interface Employee {
 interface ContextType {
     user: User | null;
     setUser: React.Dispatch<React.SetStateAction<User | null>>;
-    employees: Array<Employee> | null;
     text: Record<string, Record<string, string>>;
 }
 
@@ -59,15 +57,6 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
         }
     }, [user]);
 
-    const [employees, setEmployees] = useState<Array<Employee> | null>(null);
-    useEffect(() => {
-        if (!employees) {
-            readEmployees().then((data: Array<Employee>) => {
-                setEmployees(data);
-            });
-        }
-    }, [employees]);
-
     const text = {
         authentication: {
             authentication: "Autenticazione",
@@ -91,14 +80,14 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
             home: "Home"
         },
         employees: {
-            employees: "Dipendenti",
+            employees: "Risorse",
         },
         employeesTable: {
             searchPlaceholder: "Cerca per nome o cognome",
             filter: "Filtra",
             addNew: "Aggiungi",
             rowsPerPage: "Righe per pagina",
-            totalEmployees: "Totale dipendenti",
+            totalEmployees: "Totale Risorse",
         },
         employeePage: {
             personalInformations: "Informazioni Personali",
@@ -110,12 +99,12 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
             save: "Salva",
             delete: "Elimina",
             cancel: "Annulla",            
-            addTitle: "Aggiungi Dipendente",
-            editTitle: "Modifica Dipendente",
-            viewTitle: "Dettagli Dipendente",
-            addSuccess: "Dipendente aggiunto con successo!",
-            editSuccess: "Dipendente modificato con successo!",
-            deleteSuccess: "Dipendente eliminato con successo!",
+            addTitle: "Aggiungi Risorsa",
+            editTitle: "Modifica Risorsa",
+            viewTitle: "Dettagli Risorsa",
+            addSuccess: "Risorsa aggiunta con successo!",
+            editSuccess: "Risorsa modificata con successo!",
+            deleteSuccess: "Risorsa eliminata con successo!",
             fillRequiredFields: "Compila i campi obbligatori",
         },
         qualifications: {
@@ -123,7 +112,7 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
         },
         navigation: {
             home: "Home",
-            employees: "Dipendenti",
+            employees: "Risorse",
             qualifications: "Qualifiche"
         },
         other: {
@@ -172,7 +161,7 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
     }
 
     return (
-        <Context.Provider value={{ user, setUser, employees, text }}>
+        <Context.Provider value={{ user, setUser, text }}>
             {children}
         </Context.Provider>
     );
@@ -187,15 +176,6 @@ function useUser() {
     return { user, setUser };
 }
 
-function useEmployees() {
-    const context = React.useContext(Context);
-    if (!context) {
-        throw new Error("Context not found");
-    }
-    const { employees } = context;
-    return employees;
-}
-
 function useText() {
     const context = React.useContext(Context);
     if (!context) {
@@ -205,5 +185,5 @@ function useText() {
     return text;
 }
 
-export { ContextProvider, useUser, useEmployees, useText };
+export { ContextProvider, useUser, useText };
 export type { Employee };
