@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Input, Select, DatePicker, DateInput, Button, SelectItem, Card, CardHeader, CardBody, Table, TableHeader, TableBody, TableRow, TableCell, TableColumn, Chip, useDisclosure, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Slider, Tooltip } from "@nextui-org/react";
 import type { Employee } from "../../context";
 import { useText } from "../../context";
@@ -69,9 +69,9 @@ export default function EmployeePage({ initialEmployee, initialMode }: { initial
     const [employee, setEmployee] = useState<Employee>(initialEmployee);
     const text = useText();
     const router = useRouter();
-    const handleInputChange = (field: keyof Employee, value: string | number | null | Record<string, Record<string, string>>) => {
+    const handleInputChange = useCallback((field: keyof Employee, value: string | number | null | Record<string, Record<string, string>>) => {
         setEmployee(prev => ({ ...prev, [field]: value }));
-    };
+    }, []);
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const title = mode === "add" ? text.employeePage.addTitle : mode === "edit" ? text.employeePage.editTitle : text.employeePage.viewTitle;
     
@@ -351,7 +351,7 @@ export default function EmployeePage({ initialEmployee, initialMode }: { initial
                 </Table>
             </CardBody>
         </Card>
-    ), [mode, onOpen, onOpenChange, text]);
+    ), [mode, onOpen, text]);
 
     function cancelPressed(mode: string, initialEmployee: Employee, router: ReturnType<typeof useRouter>) {
         if (mode === "add") {
