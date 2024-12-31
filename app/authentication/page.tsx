@@ -1,7 +1,7 @@
 "use client";
 
-import { Unauthenticated } from "../modifiers";
-import { Authentication } from "./authentication";
+import { Unauthenticated } from "@/app/modifiers";
+import { Authentication } from "@/app/authentication/authentication";
 
 export default function Page() {
     return (

@@ -3,9 +3,9 @@
 import { useState, ChangeEvent } from "react";
 import { Input, Button, Card, Tabs, Tab } from "@nextui-org/react";
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, UserCredential, User } from "firebase/auth";
-import { auth } from "../firebase/config";
-import { toast } from "../components/toast";
-import { useText, useUser } from "../context";
+import { auth } from "@/app/firebase/config";
+import { toast } from "@/app/components/toast";
+import { useText, useUser } from "@/app/context";
 
 function handleEmailChange(
     e: ChangeEvent<HTMLInputElement>, 

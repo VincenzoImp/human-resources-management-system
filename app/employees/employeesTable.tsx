@@ -1,11 +1,11 @@
 "use client";
 
-import { useText, useUser } from "../context";
-import type { Employee } from "../context";
+import { useText, useUser } from "@/app/context";
+import type { Employee } from "@/app/context";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination, Spinner } from "@nextui-org/react";
-import { SearchIcon } from "../icons";
+import { SearchIcon } from "@/app/icons";
 import { Key, useCallback, useEffect, useMemo, useState } from "react";
-import { readEmployees } from "../api";
+import { readEmployees } from "@/app/api";
 import { toast } from "@/app/components/toast";
 
 export default function EmployeesTable() {

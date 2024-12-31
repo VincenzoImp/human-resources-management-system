@@ -1,8 +1,8 @@
 "use client";
 
-import { Authenticated } from "../modifiers";
-import Navigation from "../components/navigation";
-import Qualifications from "./qualifications";
+import { Authenticated } from "@/app/modifiers";
+import Navigation from "@/app/components/navigation";
+import Qualifications from "@/app/qualifications/qualifications";
 
 export default function Page() {
     return (

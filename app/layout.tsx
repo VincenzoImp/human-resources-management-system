@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import "./globals.css";
-import Providers from "./providers";
-import { ContextProvider } from "./context";
-import { Toast } from "./components/toast";
+import "@/app/globals.css";
+import Providers from "@/app/providers";
+import { ContextProvider } from "@/app/context";
+import { Toast } from "@/app/components/toast";
 
 export const metadata: Metadata = {
 	title: "IWN",

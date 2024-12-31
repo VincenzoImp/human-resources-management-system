@@ -1,6 +1,6 @@
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
-import { db } from "./firebase/config";
-import { Employee } from "./context";
+import { db } from "@/app/firebase/config";
+import { Employee } from "@/app/context";
 
 async function readEmployees() {
     const querySnapshot = await getDocs(collection(db, "employees"));

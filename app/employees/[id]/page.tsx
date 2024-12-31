@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { Employee } from "@/app/context";
-import EmployeePage from "./employeePage";
+import EmployeePage from "@/app/employees/[id]/employeePage";
 import { notFound } from "next/navigation";
 import Navigation from "@/app/components/navigation";
 import { Authenticated } from "@/app/modifiers";

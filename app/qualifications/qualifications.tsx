@@ -1,6 +1,6 @@
 "use client";
 
-import { useText } from "../context";
+import { useText } from "@/app/context";
 
 export default function Qualifications() {
     const text = useText();

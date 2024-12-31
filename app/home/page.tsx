@@ -1,8 +1,8 @@
 "use client";
 
-import { Authenticated } from "../modifiers";
-import Navigation from "../components/navigation";
-import Home from "./home";
+import { Authenticated } from "@/app/modifiers";
+import Navigation from "@/app/components/navigation";
+import Home from "@/app/home/home";
 
 export default function Page() {
     return (

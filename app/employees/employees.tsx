@@ -1,7 +1,7 @@
 "use client";
 
-import EmployeesTable from "./employeesTable";
-import { useText } from "../context";
+import EmployeesTable from "@/app/employees/employeesTable";
+import { useText } from "@/app/context";
 
 export default function Employees() {
 	const text = useText();
