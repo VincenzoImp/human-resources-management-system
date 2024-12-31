@@ -80,24 +80,28 @@ export default function EmployeePage({ initialEmployee, initialMode }: { initial
                                 label={text.employeeAttributes.name}
                                 value={employee.name || ""}
                                 onChange={(e) => handleInputChange("name", e.target.value)}
+                                isDisabled={mode === "view" && !employee.name}
                                 {...(mode === "view" ? { isReadOnly: true } : { isRequired: true, isClearable: true, onClear: () => handleInputChange("name", null) })}
                             />
                             <Input 
                                 label={text.employeeAttributes.surname}
                                 value={employee.surname || ""} 
                                 onChange={(e) => handleInputChange("surname", e.target.value)} 
+                                isDisabled={mode === "view" && !employee.surname}
                                 {...(mode === "view" ? { isReadOnly: true } : { isRequired: true, isClearable: true, onClear: () => handleInputChange("surname", null) })}
                             />
                             <Input 
                                 label={text.employeeAttributes.phone}
                                 value={employee.phone || ""}
                                 onChange={(e) => handleInputChange("phone", e.target.value.replace(/[^0-9+]/g, "").replace(/(?!^)\+/g, ""))}
+                                isDisabled={mode === "view" && !employee.phone}
                                 {...(mode === "view" ? { isReadOnly: true } : { isRequired: true, isClearable: true, onClear: () => handleInputChange("phone", null) })}
                             />
                             <Input 
                                 label={text.employeeAttributes.email}
                                 value={employee.email || ""}
                                 onChange={(e) => handleInputChange("email", e.target.value.toLowerCase())}
+                                isDisabled={mode === "view" && !employee.email}
                                 {...(mode === "view" ? { isReadOnly: true } : { isRequired: true, isClearable: true, onClear: () => handleInputChange("email", null) })}
                                 type="email"
                             />
@@ -105,6 +109,7 @@ export default function EmployeePage({ initialEmployee, initialMode }: { initial
                                 <Input 
                                     label={text.employeeAttributes.gender}
                                     value={employee.gender || ""}
+                                    isDisabled={!employee.gender}
                                     isReadOnly
                                 />
                             ) : (
@@ -123,12 +128,14 @@ export default function EmployeePage({ initialEmployee, initialMode }: { initial
                                 label={text.employeeAttributes.tax_code}
                                 value={employee.tax_code || ""} 
                                 onChange={(e) => handleInputChange("tax_code", e.target.value.toUpperCase().replace(/\s/g, ""))}
+                                isDisabled={mode === "view" && !employee.tax_code}
                                 {...(mode === "view" ? { isReadOnly: true } : { isRequired: true, isClearable: true, onClear: () => handleInputChange("tax_code", null) })}
                             />
                             {mode === "view" ? (
                                 <Input 
                                     label={text.employeeAttributes.employed}
                                     value={employee.employed || ""}
+                                    
                                     isReadOnly
                                 />
                             ) : (
@@ -171,6 +178,7 @@ export default function EmployeePage({ initialEmployee, initialMode }: { initial
                                 label={text.employeeAttributes.birthplace_city}
                                 value={employee.birthplace_city || ""}
                                 onChange={(e) => handleInputChange("birthplace_city", e.target.value)}
+                                isDisabled={mode === "view" && !employee.birthplace_city}
                                 {...(mode === "view" ? { isReadOnly: true } : { isClearable: true, onClear: () => handleInputChange("birthplace_city", null) })}
                             />
                             <Input 
