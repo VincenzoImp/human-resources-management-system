@@ -145,7 +145,7 @@ export default function EmployeesTable() {
 					)}
 				</div>
 				<div className="flex justify-between items-center">
-					<span className="text-default-400 text-small">{text.employeesTable.totalEmployees}: {filteredItems ? filteredItems.length : 0}</span>
+					<span className="text-default-400 text-small">{text.employeesTable.totalEmployees}: {!isLoading ? filteredItems.length : null}</span>
 					<label className="flex items-center text-default-400 text-small">
 						{text.employeesTable.rowsPerPage}:
 						<select

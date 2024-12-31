@@ -2,16 +2,16 @@
 
 import { useCallback, useMemo, useState } from "react";
 import { Input, Select, DatePicker, DateInput, Button, SelectItem, Card, CardHeader, CardBody, Table, TableHeader, TableBody, TableRow, TableCell, TableColumn, Chip, useDisclosure, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Slider, Tooltip } from "@nextui-org/react";
-import type { Employee } from "../../context";
-import { useText } from "../../context";
+import type { Employee } from "@/app/context";
+import { useText } from "@/app/context";
 import { createEmployee, modifyEmployee, deleteEmployee } from "@/app/api";
-import { toast } from "../../components/toast";
+import { toast } from "@/app/components/toast";
 import { parseDate } from "@internationalized/date";
 import { I18nProvider } from "@react-aria/i18n";
 import { DeleteIcon, EditIcon, PlusIcon } from "@/app/icons";
 import { useRouter } from "next/navigation";
 
-async function handleSave(employee: Employee, mode: string, saveSuccessText: string) {
+async function save(employee: Employee, mode: string, saveSuccessText: string) {
     let toastText: string | null = null;
     let redirectPath: string | null = null;
     let success: boolean = false;
@@ -33,6 +33,7 @@ async function handleSave(employee: Employee, mode: string, saveSuccessText: str
     if (mode === "edit") {
         try {
             const id = await modifyEmployee(employee);
+            employee.id = id;
             toastText = saveSuccessText;
             redirectPath = `/employees/${id}`;
             success = true;
@@ -46,7 +47,7 @@ async function handleSave(employee: Employee, mode: string, saveSuccessText: str
     return { toastText, redirectPath, success };
 }
 
-async function handleRemove(id: string, deleteSuccessText: string) {
+async function remove(id: string, deleteSuccessText: string) {
     let toastText: string | null = null;
     let redirectPath: string | null = null;
     let success: boolean = false;
@@ -65,16 +66,62 @@ async function handleRemove(id: string, deleteSuccessText: string) {
 }
 
 export default function EmployeePage({ initialEmployee, initialMode }: { initialEmployee: Employee, initialMode: "add" | "view" | "edit" }) {
+    
     const [mode, setMode] = useState<"add" | "view" | "edit">(initialMode);
     const [employee, setEmployee] = useState<Employee>(initialEmployee);
+    const [oldEmployee, setOldEmployee] = useState<Employee>(initialEmployee);
     const text = useText();
     const router = useRouter();
+    const {isOpen, onOpen, onOpenChange} = useDisclosure();
+    const title = mode === "add" ? text.employeePage.addTitle : mode === "edit" ? text.employeePage.editTitle : text.employeePage.viewTitle;
+   
     const handleInputChange = useCallback((field: keyof Employee, value: string | number | null | Record<string, Record<string, string>>) => {
         setEmployee(prev => ({ ...prev, [field]: value }));
     }, []);
-    const {isOpen, onOpen, onOpenChange} = useDisclosure();
-    const title = mode === "add" ? text.employeePage.addTitle : mode === "edit" ? text.employeePage.editTitle : text.employeePage.viewTitle;
-    
+    const handleSavePress = useCallback(async () => {
+        const requiredKeys = ["name", "surname", "phone", "email", "gender", "tax_code", "employed"];
+        for (const key of requiredKeys as (keyof Employee)[]) {
+            if (!employee[key]) {
+                toast.error(text.employeePage.fillRequiredFields);
+                return;
+            }
+        }
+        const saveSuccessText = mode === "add" ? text.employeePage.addSuccess : text.employeePage.editSuccess;
+        const { toastText, redirectPath, success } = await save(employee, mode, saveSuccessText);
+        console.log(toastText, redirectPath, success);
+        if (success) {
+            toast.success(toastText as unknown as string);
+        } else {
+            toast.error(toastText as unknown as string);
+        }
+        if (redirectPath) {
+            router.push(redirectPath);
+        }
+        setMode("view");
+        setOldEmployee(employee);
+    }, [employee, mode, router, text]);
+    const handleCancelPress = useCallback(() => {
+        if (mode === "add") {
+            router.push("/employees");
+        } else {
+            setMode("view");
+            setEmployee(oldEmployee);
+        }
+    }, [mode, oldEmployee, router]);
+    const handleRemove = useCallback(async () => {
+        if (employee.id) {
+            const { toastText, redirectPath, success } = await remove(employee.id as string, text.employeePage.deleteSuccess);
+            if (success) {
+                toast.success(toastText as unknown as string);
+            } else {
+                toast.error(toastText as unknown as string);
+            }
+            if (redirectPath) {
+                router.push(redirectPath);
+            }
+        }
+    }, [employee, router, text]);
+ 
     const personalInformationsCard = useMemo(() => (
         <Card>
             <CardHeader>
@@ -353,50 +400,6 @@ export default function EmployeePage({ initialEmployee, initialMode }: { initial
         </Card>
     ), [mode, onOpen, text]);
 
-    function cancelPressed(mode: string, initialEmployee: Employee, router: ReturnType<typeof useRouter>) {
-        if (mode === "add") {
-            router.push("/employees");
-        } else {
-            setMode("view");
-            setEmployee(initialEmployee);
-        }
-    }
-
-    async function savePressed(employee: Employee, mode: string, router: ReturnType<typeof useRouter>, text: ReturnType<typeof useText>) {
-        const requiredKeys = ["name", "surname", "phone", "email", "gender", "tax_code", "employed"];
-        for (const key of requiredKeys as (keyof Employee)[]) {
-            if (!employee[key]) {
-                toast.error(text.employeePage.fillRequiredFields);
-                return;
-            }
-        }
-        const saveSuccessText = mode === "add" ? text.employeePage.addSuccess : text.employeePage.editSuccess;
-        const { toastText, redirectPath, success } = await handleSave(employee, mode, saveSuccessText);
-        console.log(toastText, redirectPath, success);
-        if (success) {
-            toast.success(toastText as unknown as string);
-        } else {
-            toast.error(toastText as unknown as string);
-        }
-        if (redirectPath) {
-            router.push(redirectPath);
-        }
-    }
-
-    async function removePressed(id: string, text: ReturnType<typeof useText>, router: ReturnType<typeof useRouter>) {
-        if (id) {
-            const { toastText, redirectPath, success } = await handleRemove(id as string, text.employeePage.deleteSuccess);
-            if (success) {
-                toast.success(toastText as unknown as string);
-            } else {
-                toast.error(toastText as unknown as string);
-            }
-            if (redirectPath) {
-                router.push(redirectPath);
-            }
-        }
-    }
-
     return (
         <>
             <h1 className="text-4xl font-bold text-center m-8">{title}</h1>
@@ -410,10 +413,10 @@ export default function EmployeePage({ initialEmployee, initialMode }: { initial
                     <div className="flex justify-end gap-4">
                         {mode === "add" || mode === "edit" ? (
                             <>
-                                <Button color="secondary" onClick={() => cancelPressed(mode, initialEmployee, router)}>
+                                <Button color="secondary" onClick={() => handleCancelPress()}>
                                     {text.employeePage.cancel}
                                 </Button>
-                                <Button color="primary" onClick={() => savePressed(employee, mode, router, text)}>
+                                <Button color="primary" onClick={() => handleSavePress()}>
                                     {text.employeePage.save}
                                 </Button>
                             </>
@@ -421,7 +424,7 @@ export default function EmployeePage({ initialEmployee, initialMode }: { initial
                             <>
                                 <Button 
                                     color="danger" 
-                                    onClick={() => removePressed(employee.id as string, text, router)}
+                                    onClick={() => handleRemove()}
                                 >
                                     {text.employeePage.delete}
                                 </Button>
