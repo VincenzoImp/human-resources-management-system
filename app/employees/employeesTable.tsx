@@ -76,8 +76,12 @@ export default function EmployeesTable() {
 	}, []);
 
 	const renderCell = useCallback((employee: Employee, column: string) => {
+		if (column === "employed") {
+			const value = employee[column as keyof Employee]?.toString();
+			return value ? text.other[value] : "";
+		}
 		return employee[column as keyof Employee]?.toString();
-	}, []);
+	}, [text]);
 
 	const topContent = useMemo(() => {
 		return (
@@ -140,7 +144,7 @@ export default function EmployeesTable() {
 
 	const tableColumns = useMemo(() => {
 		return visibleCloumns.map((column : string) => (
-			<TableColumn key={column}>
+			<TableColumn key={column} align="center">
 				{text.employeeAttributes[column]}
 			</TableColumn>
 		));
@@ -178,7 +182,7 @@ export default function EmployeesTable() {
 
 	return (
 		<>
-			<Table
+			<Table 
 				className="container mx-auto my-8"
 				bottomContent={bottomContent}
 				bottomContentPlacement="outside"
