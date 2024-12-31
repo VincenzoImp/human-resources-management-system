@@ -25,7 +25,7 @@ export default function Page({ params } : { params: { id: string } }) {
 			}
 		};
 		fetchEmployee();
-	}, [params.id, setEmployee]);
+	}, [params.id, setEmployee, employee]);
 	const id = params.id;
 	function emptyEmployee(): Employee {
 		return {
