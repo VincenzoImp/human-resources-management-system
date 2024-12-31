@@ -6,6 +6,7 @@ import type { Employee } from "../../context";
 import EmployeePage from "./employeePage";
 import { notFound } from "next/navigation";
 import Navigation from "../../components/navigation";
+import { Authenticated } from "@/app/modifiers";
 
 export default function Page({ params } : { params: { id: string } }) {
 	const [employee, setEmployee] = useState(undefined as Employee | undefined | null);
@@ -38,10 +39,10 @@ export default function Page({ params } : { params: { id: string } }) {
 	}
 	if (id === "add-new") {
 		return (
-			<>
+			<Authenticated>
 				<Navigation itemActive="employees" />
 				<EmployeePage initialEmployee={emptyEmployee()} initialMode="add" />
-			</>
+			</Authenticated>
 		)
 	}
 	if (employees) {
@@ -56,10 +57,10 @@ export default function Page({ params } : { params: { id: string } }) {
 		return notFound();
 	} else {
 		return (
-			<>
+			<Authenticated>
 				<Navigation itemActive="employees" />
 				<EmployeePage initialEmployee={employee} initialMode="view" />
-			</>
+			</Authenticated>
 		);
 	}
 }

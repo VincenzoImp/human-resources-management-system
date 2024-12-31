@@ -80,6 +80,10 @@ export default function EmployeesTable() {
 			const value = employee[column as keyof Employee]?.toString();
 			return value ? text.other[value] : "";
 		}
+		if (column === "gender") {
+			const value = employee[column as keyof Employee]?.toString();
+			return value ? text.other[value] : "";
+		}
 		return employee[column as keyof Employee]?.toString();
 	}, [text]);
 

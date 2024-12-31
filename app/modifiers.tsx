@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "./context";
+import Footer from "./components/footer";
 
 const Authenticated: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { user } = useUser();
@@ -15,7 +16,12 @@ const Authenticated: React.FC<{ children: React.ReactNode }> = ({ children }) =>
     if (!user) {
         return null;
     }
-    return <>{children}</>;
+    return (
+        <>
+            {children}
+            <Footer />
+        </>
+    );
 };
 
 const Unauthenticated: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -30,7 +36,11 @@ const Unauthenticated: React.FC<{ children: React.ReactNode }> = ({ children }) 
     if (user) {
         return null;
     }
-    return <>{children}</>;
+    return (
+        <>
+            {children}
+        </>
+    );
 };
 
 export { Authenticated, Unauthenticated };
