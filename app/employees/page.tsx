@@ -1,14 +1,15 @@
 "use client";
 
-import { Authenticated } from "@/app/modifiers";
 import Navigation from "@/app/components/navigation";
 import Employees from "@/app/employees/employees";
+import Footer from "@/app/components/footer";
 
 export default function Page() {
     return (
-        <Authenticated>
+        <>
             <Navigation itemActive="employees" />
             <Employees />
-        </Authenticated>
+            <Footer/>
+        </>
     );
 }
