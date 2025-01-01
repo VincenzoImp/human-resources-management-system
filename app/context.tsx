@@ -25,7 +25,7 @@ interface Employee {
     phone: string | null;
     surname: string | null;
     tax_code: string | null;
-    qualifications: Record<string, Record<string, string>>
+    qualifications: Record<string, Array<Record<string, string | number>>> | null;
 }
 
 interface ContextType {
@@ -106,9 +106,10 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
             editSuccess: "Risorsa modificata con successo!",
             deleteSuccess: "Risorsa eliminata con successo!",
             fillRequiredFields: "Compila i campi obbligatori",
+            score: "Giudizio",
         },
         qualifications: {
-            qualifications: "Qualifiche"
+            qualifications: "Qualifiche",
         },
         navigation: {
             home: "Home",

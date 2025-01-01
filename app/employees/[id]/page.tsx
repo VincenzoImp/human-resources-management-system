@@ -49,7 +49,7 @@ export default function Page({ params } : { params: { id: string } }) {
 			phone: null,
 			surname: null,
 			tax_code: null,
-			qualifications: {}
+			qualifications: {},
 		};
 	}
 	if (id === "add-new") {

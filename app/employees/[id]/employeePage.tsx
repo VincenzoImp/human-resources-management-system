@@ -67,6 +67,11 @@ async function remove(id: string, deleteSuccessText: string) {
 
 export default function EmployeePage({ initialEmployee, initialMode }: { initialEmployee: Employee, initialMode: "add" | "view" | "edit" }) {
     
+    const qualificationsTableTypes = useMemo(() => ({
+        "score": ["tubusta", "carpentiere", "impiegato", "capo_tecnico", "manovale"],
+        "type_material_score": ["saldatore"]
+    }), []);
+
     const [mode, setMode] = useState<"add" | "view" | "edit">(initialMode);
     const [employee, setEmployee] = useState<Employee>(initialEmployee);
     const [oldEmployee, setOldEmployee] = useState<Employee>(initialEmployee);
@@ -349,6 +354,7 @@ export default function EmployeePage({ initialEmployee, initialMode }: { initial
         </Modal>
     ), [isOpen, onOpenChange]);
 
+
     const qualificationsCard = useMemo(() => (
         <Card>
             <CardHeader className="flex justify-between">
@@ -363,42 +369,46 @@ export default function EmployeePage({ initialEmployee, initialMode }: { initial
                 )}
             </CardHeader>
             <CardBody>
-                <Table removeWrapper>
-                    <TableHeader>
-                        <TableColumn align="center">{text.employeePage.qualifications}</TableColumn>
-                        <TableColumn align="center">Specification</TableColumn>
-                        <TableColumn align="center">Score</TableColumn>
-                        <TableColumn align="center">
-                            {mode === "view" ? null: "Actions"}
-                        </TableColumn>
-                    </TableHeader>
-                    <TableBody emptyContent={"Empty"}>
-                        <TableRow>
-                            <TableCell>High School Diploma</TableCell>
-                            <TableCell>Scientific</TableCell>
-                            <TableCell>5</TableCell>
-                            <TableCell>
-                                {mode === "view" ? null: (
-                                    <div className="flex items-center justify-center gap-4">
-                                        <Tooltip content="Edit Qualification">
-                                            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                                                <EditIcon />
-                                            </span>
-                                        </Tooltip>
-                                        <Tooltip color="danger" content="Delete Qualification">
-                                            <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                                                <DeleteIcon />
-                                            </span>
-                                        </Tooltip>
-                                    </div>
-                                )}
-                            </TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
+                { employee.qualifications && Object.keys(employee.qualifications).filter(value => qualificationsTableTypes["score"].includes(value)).length > 0 ? (
+                    <Table removeWrapper>
+                        <TableHeader>
+                            <TableColumn align="center">{text.employeePage.qualifications}</TableColumn>
+                            <TableColumn align="center">{text.employeePage.score}</TableColumn>
+                            <TableColumn align="center">
+                                {mode === "view" ? null: "Actions"}
+                            </TableColumn>
+                        </TableHeader>
+                        <TableBody emptyContent={"Empty"}>
+                            {Object.keys(employee.qualifications).filter(value => qualificationsTableTypes["score"].includes(value)).map((qualification) => (
+                                <TableRow key={qualification}>
+                                    <TableCell>{qualification}</TableCell>
+                                    <TableCell>{employee.qualifications && Array.isArray(employee.qualifications[qualification]) ? employee.qualifications[qualification][0].score.toString() : null}</TableCell>
+                                    <TableCell>
+                                        {mode === "view" ? null: (
+                                            <div className="flex items-center justify-center gap-4">
+                                                <Tooltip content="Edit Qualification">
+                                                    <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                                                        <EditIcon />
+                                                    </span>
+                                                </Tooltip>
+                                                <Tooltip color="danger" content="Delete Qualification">
+                                                    <span className="text-lg text-danger cursor-pointer active:opacity-50">
+                                                        <DeleteIcon />
+                                                    </span>
+                                                </Tooltip>
+                                            </div>
+                                        )}
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                ) : (
+                    <p>No qualifications found</p>
+                )}
             </CardBody>
         </Card>
-    ), [mode, onOpen, text]);
+    ), [mode, onOpen, text, employee, qualificationsTableTypes]);
 
     return (
         <>

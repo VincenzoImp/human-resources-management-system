@@ -160,7 +160,7 @@ export default function EmployeesTable() {
 				</div>
 			</div>
 		);
-	}, [user, searchValue, onSearchChange, onClear, onRowsPerPageChange, employedValue, onEmployedChange, filteredItems, text]);
+	}, [user, searchValue, onSearchChange, onClear, onRowsPerPageChange, employedValue, onEmployedChange, filteredItems, text, isLoading]);
 
 	const tableColumns = useMemo(() => {
 		return visibleCloumns.map((column : string) => (
