@@ -90,15 +90,10 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
             totalEmployees: "Totale Risorse",
         },
         employeePage: {
-            personalInformations: "Informazioni Personali",
-            birthInformations: "Informazioni di Nascita",
-            livingInformations: "Informazioni di Residenza",
-            qualifications: "Qualifiche",
-            documents: "Documenti",
             edit: "Modifica",
             save: "Salva",
             delete: "Elimina",
-            cancel: "Annulla",            
+            cancel: "Annulla",       
             addTitle: "Aggiungi Risorsa",
             editTitle: "Modifica Risorsa",
             viewTitle: "Dettagli Risorsa",
@@ -106,7 +101,22 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
             editSuccess: "Risorsa modificata con successo!",
             deleteSuccess: "Risorsa eliminata con successo!",
             fillRequiredFields: "Compila i campi obbligatori",
+        },
+        employeeInformations: {
+            personalInformations: "Informazioni Personali",
+            birthInformations: "Informazioni di Nascita",
+            livingInformations: "Informazioni di Residenza",
+        },
+        employeeQualifications: {
+            qualifications: "Qualifiche",
+            qualification: "Qualifica",
             score: "Giudizio",
+            actions: "Azioni",
+            technique: "Tecnica",
+            material: "Materiale",
+        },
+        employeeDocuments: {
+            documents: "Documenti",
         },
         qualifications: {
             qualifications: "Qualifiche",
@@ -158,7 +168,7 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
             impiegato: "Impiegato",
             capo_tecnico: "Capo Tecnico",
             manovale: "Manovale"
-        },
+        }
     }
 
     return (

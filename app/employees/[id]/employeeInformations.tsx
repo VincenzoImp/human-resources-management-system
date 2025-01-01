@@ -23,7 +23,7 @@ export default function EmployeeInformations() {
         employee ? (
             <Card>
                 <CardHeader>
-                    <h2 className="text-lg font-medium">{text.employeePage.personalInformations}</h2>
+                    <h2 className="text-lg font-medium">{text.employeeInformations.personalInformations}</h2>
                 </CardHeader>
                 <CardBody className="flex flex-col gap-4 grid grid-cols-1 sm:grid-cols-2">
                     <Input 
@@ -108,7 +108,7 @@ export default function EmployeeInformations() {
         employee ? (
             <Card>
                 <CardHeader>
-                    <h2 className="text-lg font-medium">{text.employeePage.birthInformations}</h2>
+                    <h2 className="text-lg font-medium">{text.employeeInformations.birthInformations}</h2>
                 </CardHeader>
                 <CardBody className="flex flex-col gap-4 grid grid-cols-1 sm:grid-cols-2">
                     {mode === "view" ? (
@@ -167,7 +167,7 @@ export default function EmployeeInformations() {
         employee ? (
             <Card>
                 <CardHeader>
-                    <h2 className="text-lg font-medium">{text.employeePage.livingInformations}</h2>
+                    <h2 className="text-lg font-medium">{text.employeeInformations.livingInformations}</h2>
                 </CardHeader>
                 <CardBody className="flex flex-col gap-4 grid grid-cols-1 sm:grid-cols-2">
                     <Input 
