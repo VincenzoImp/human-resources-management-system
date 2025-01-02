@@ -133,9 +133,6 @@ export default function EmployeesTable() {
 							<DropdownItem key="no">{text.other.unemployeds}</DropdownItem>
 						</DropdownMenu>
 					</Dropdown>
-					<Button color="primary" onClick={() => window.location.href = "/employees/add-new"}>
-						{text.employeesTable.addNew}
-					</Button>
 				</div>
 				<div className="flex justify-between items-center">
 					<span className="text-default-400 text-small">{text.employeesTable.totalEmployees}: {!isLoading ? filteredItems.length : null}</span>
