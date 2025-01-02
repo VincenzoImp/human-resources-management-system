@@ -245,13 +245,10 @@ export default function EmployeeQualifications() {
             </TableBody>
         )
         return (
-            <>
-                <Table removeWrapper>
-                    {header}
-                    {body}
-                </Table>
-                <Spacer y={4} />
-            </>
+            <Table removeWrapper>
+                {header}
+                {body}
+            </Table>
         );
     }, [employee, text, actions]);
     
@@ -282,7 +279,9 @@ export default function EmployeeQualifications() {
                     </CardHeader>
                     <CardBody>
                         {employee.qualifications && Object.keys(employee.qualifications).length > 0 ? (
-                            tables
+                            <div className="flex flex-col border border-default-200 rounded-lg gap-4 pb-4 p-2">
+                                {tables}
+                            </div>
                         ) : (
                             <>
                                 <p>{text.employeeQualifications.noQualifications}</p>
