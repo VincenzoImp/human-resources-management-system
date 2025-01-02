@@ -205,7 +205,7 @@ export default function EmployeesTable() {
 				<TableHeader>
 					{tableColumns}
 				</TableHeader>
-				<TableBody emptyContent={"\n"} items={items} isLoading={isLoading} loadingContent={<Spinner />} >
+				<TableBody items={items} isLoading={isLoading} loadingContent={<Spinner />} >
 					{tableRows}
 				</TableBody>
 			</Table>

@@ -210,7 +210,7 @@ function QualificationTable(qualification: string, employees: Employee[], isLoad
 				<TableHeader>
 					{tableColumns}
 				</TableHeader>
-				<TableBody emptyContent={"\n"} items={items} isLoading={isLoading} loadingContent={<Spinner />} >
+				<TableBody items={items} isLoading={isLoading} loadingContent={<Spinner />} >
 					{tableRows}
 				</TableBody>
 			</Table>
