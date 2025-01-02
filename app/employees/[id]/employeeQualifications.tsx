@@ -3,7 +3,7 @@
 import { JSX, useCallback, useMemo, useState } from "react";
 import { useText } from "@/app/context";
 import { useEmployee, useMode } from "@/app/employees/[id]/context";
-import { Button, Card, CardBody, CardHeader, Chip, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Radio, RadioGroup, Slider, Spacer, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, useDisclosure } from "@nextui-org/react";
+import { Button, Card, CardBody, CardHeader, Chip, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Radio, RadioGroup, Slider, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, useDisclosure } from "@nextui-org/react";
 import { DeleteIcon, EditIcon, PlusIcon } from "@/app/icons";
 
 export default function EmployeeQualifications() {
@@ -245,7 +245,7 @@ export default function EmployeeQualifications() {
             </TableBody>
         )
         return (
-            <Table removeWrapper>
+            <Table>
                 {header}
                 {body}
             </Table>
@@ -255,10 +255,10 @@ export default function EmployeeQualifications() {
     const tables = useMemo(() => {
         return (
             employee && mode ? (
-                <>
+                <div className="flex flex-col overflow-x-auto gap-2">
                     {renderTable(["score"], ["tubista", "carpentiere", "impiegato", "capo_tecnico", "manovale"], mode)}
                     {renderTable(["technique", "material", "score"], ["saldatore"], mode)}
-                </>
+                </div>
             ) : null
         );
     }, [mode, employee, renderTable]);
@@ -279,14 +279,9 @@ export default function EmployeeQualifications() {
                     </CardHeader>
                     <CardBody>
                         {employee.qualifications && Object.keys(employee.qualifications).length > 0 ? (
-                            <div className="flex flex-col border border-default-200 rounded-lg gap-4 pb-4 p-2">
-                                {tables}
-                            </div>
+                            tables
                         ) : (
-                            <>
-                                <p>{text.employeeQualifications.noQualifications}</p>
-                                <Spacer y={4} />
-                            </>
+                            <p className="text-default-400">{text.employeeQualifications.noQualifications}</p>
                         )}
                     </CardBody>
                 </Card>
