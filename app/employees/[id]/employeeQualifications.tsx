@@ -255,7 +255,7 @@ export default function EmployeeQualifications() {
     const tables = useMemo(() => {
         return (
             employee && mode ? (
-                <div className="flex flex-col overflow-x-auto gap-2">
+                <div className="flex flex-col gap-2">
                     {renderTable(["score"], ["tubista", "carpentiere", "impiegato", "capo_tecnico", "manovale"], mode)}
                     {renderTable(["technique", "material", "score"], ["saldatore"], mode)}
                 </div>
