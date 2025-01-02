@@ -15,7 +15,7 @@ export default function EmployeeQualifications() {
     const [stage, setStage] = useState<"add1" | "add2" | "edit2" | null>(null);
     const [newQualification, setNewQualification] = useState<Record<string, string | number>>({});
     const utilsDict = useMemo(() => ({
-        ["score"]: ["tubista", "carpentiere", "impiegato", "capo_tecnico", "manovale"],
+        ["score"]: ["tubista", "carpentiere", "impiegato", "capoTecnico", "manovale"],
         ["technique_material_score"]: ["saldatore"]
     }), []);
 
@@ -256,7 +256,7 @@ export default function EmployeeQualifications() {
         return (
             employee && mode ? (
                 <div className="flex flex-col gap-2">
-                    {renderTable(["score"], ["tubista", "carpentiere", "impiegato", "capo_tecnico", "manovale"], mode)}
+                    {renderTable(["score"], ["tubista", "carpentiere", "impiegato", "capoTecnico", "manovale"], mode)}
                     {renderTable(["technique", "material", "score"], ["saldatore"], mode)}
                 </div>
             ) : null

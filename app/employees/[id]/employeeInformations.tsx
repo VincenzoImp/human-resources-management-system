@@ -75,11 +75,11 @@ export default function EmployeeInformations() {
                         </Select>
                     )}
                     <Input
-                        label={text.employeeAttributes.tax_code}
-                        value={employee.tax_code || ""} 
-                        onChange={(e) => handleInputChange("tax_code", e.target.value.toUpperCase().replace(/\s/g, ""))}
-                        isDisabled={mode === "view" && !employee.tax_code}
-                        {...(mode === "view" ? { isReadOnly: true } : { isRequired: true, isClearable: true, onClear: () => handleInputChange("tax_code", null) })}
+                        label={text.employeeAttributes.taxCode}
+                        value={employee.taxCode || ""} 
+                        onChange={(e) => handleInputChange("taxCode", e.target.value.toUpperCase().replace(/\s/g, ""))}
+                        isDisabled={mode === "view" && !employee.taxCode}
+                        {...(mode === "view" ? { isReadOnly: true } : { isRequired: true, isClearable: true, onClear: () => handleInputChange("taxCode", null) })}
                     />
                     {mode === "view" ? (
                         <Input 
@@ -131,32 +131,32 @@ export default function EmployeeInformations() {
                         </I18nProvider>
                     )}
                     <Input 
-                        label={text.employeeAttributes.birthplace_city}
-                        value={employee.birthplace_city || ""}
-                        onChange={(e) => handleInputChange("birthplace_city", e.target.value)}
-                        isDisabled={mode === "view" && !employee.birthplace_city}
-                        {...(mode === "view" ? { isReadOnly: true } : { isClearable: true, onClear: () => handleInputChange("birthplace_city", null) })}
+                        label={text.employeeAttributes.birthplaceCity}
+                        value={employee.birthplaceCity || ""}
+                        onChange={(e) => handleInputChange("birthplaceCity", e.target.value)}
+                        isDisabled={mode === "view" && !employee.birthplaceCity}
+                        {...(mode === "view" ? { isReadOnly: true } : { isClearable: true, onClear: () => handleInputChange("birthplaceCity", null) })}
                     />
                     <Input 
-                        label={text.employeeAttributes.birthplace_provincia}
-                        value={employee.birthplace_provincia || ""} 
-                        onChange={(e) => handleInputChange("birthplace_provincia", e.target.value)}
-                        isDisabled={mode === "view" && !employee.birthplace_provincia}
-                        {...(mode === "view" ? { isReadOnly: true } : { isClearable: true, onClear: () => handleInputChange("birthplace_provincia", null) })}
+                        label={text.employeeAttributes.birthplaceProvincia}
+                        value={employee.birthplaceProvincia || ""} 
+                        onChange={(e) => handleInputChange("birthplaceProvincia", e.target.value)}
+                        isDisabled={mode === "view" && !employee.birthplaceProvincia}
+                        {...(mode === "view" ? { isReadOnly: true } : { isClearable: true, onClear: () => handleInputChange("birthplaceProvincia", null) })}
                     />
                     <Input 
-                        label={text.employeeAttributes.birthplace_nation}
-                        value={employee.birthplace_nation || ""} 
-                        onChange={(e) => handleInputChange("birthplace_nation", e.target.value)}
-                        isDisabled={mode === "view" && !employee.birthplace_nation}
-                        {...(mode === "view" ? { isReadOnly: true } : { isClearable: true, onClear: () => handleInputChange("birthplace_nation", null) })}
+                        label={text.employeeAttributes.birthplaceNation}
+                        value={employee.birthplaceNation || ""} 
+                        onChange={(e) => handleInputChange("birthplaceNation", e.target.value)}
+                        isDisabled={mode === "view" && !employee.birthplaceNation}
+                        {...(mode === "view" ? { isReadOnly: true } : { isClearable: true, onClear: () => handleInputChange("birthplaceNation", null) })}
                     />
                     <Input 
-                        label={text.employeeAttributes.birthplace_zipcode}
-                        value={employee.birthplace_zipcode ? String(employee.birthplace_zipcode) : ""}
-                        onChange={(e) => handleInputChange("birthplace_zipcode", e.target.value.replace(/[^\d]/g, ""))}
-                        isDisabled={mode === "view" && !employee.birthplace_zipcode}
-                        {...(mode === "view" ? { isReadOnly: true } : { isClearable: true, onClear: () => handleInputChange("birthplace_zipcode", null) })}
+                        label={text.employeeAttributes.birthplaceZipcode}
+                        value={employee.birthplaceZipcode ? String(employee.birthplaceZipcode) : ""}
+                        onChange={(e) => handleInputChange("birthplaceZipcode", e.target.value.replace(/[^\d]/g, ""))}
+                        isDisabled={mode === "view" && !employee.birthplaceZipcode}
+                        {...(mode === "view" ? { isReadOnly: true } : { isClearable: true, onClear: () => handleInputChange("birthplaceZipcode", null) })}
                     />
                 </CardBody>
             </Card>
@@ -171,39 +171,39 @@ export default function EmployeeInformations() {
                 </CardHeader>
                 <CardBody className="flex flex-col gap-4 grid grid-cols-1 sm:grid-cols-2">
                     <Input 
-                        label={text.employeeAttributes.livingplace_address}
-                        value={employee.livingplace_address || ""} 
-                        onChange={(e) => handleInputChange("livingplace_address", e.target.value)}
-                        isDisabled={mode === "view" && !employee.livingplace_address}
-                        {...(mode === "view" ? { isReadOnly: true } : { isClearable: true, onClear: () => handleInputChange("livingplace_address", null) })}
+                        label={text.employeeAttributes.livingplaceAddress}
+                        value={employee.livingplaceAddress || ""} 
+                        onChange={(e) => handleInputChange("livingplaceAddress", e.target.value)}
+                        isDisabled={mode === "view" && !employee.livingplaceAddress}
+                        {...(mode === "view" ? { isReadOnly: true } : { isClearable: true, onClear: () => handleInputChange("livingplaceAddress", null) })}
                     />
                     <Input 
-                        label={text.employeeAttributes.livingplace_city}
-                        value={employee.livingplace_city || ""}
-                        onChange={(e) => handleInputChange("livingplace_city", e.target.value)}
-                        isDisabled={mode === "view" && !employee.livingplace_city}
-                        {...(mode === "view" ? { isReadOnly: true } : { isClearable: true, onClear: () => handleInputChange("livingplace_city", null) })}
+                        label={text.employeeAttributes.livingplaceCity}
+                        value={employee.livingplaceCity || ""}
+                        onChange={(e) => handleInputChange("livingplaceCity", e.target.value)}
+                        isDisabled={mode === "view" && !employee.livingplaceCity}
+                        {...(mode === "view" ? { isReadOnly: true } : { isClearable: true, onClear: () => handleInputChange("livingplaceCity", null) })}
                     />
                     <Input 
-                        label={text.employeeAttributes.livingplace_provincia}
-                        value={employee.livingplace_provincia || ""}
-                        onChange={(e) => handleInputChange("livingplace_provincia", e.target.value)}
-                        isDisabled={mode === "view" && !employee.livingplace_provincia}
-                        {...(mode === "view" ? { isReadOnly: true } : { isClearable: true, onClear: () => handleInputChange("livingplace_provincia", null) })}
+                        label={text.employeeAttributes.livingplaceProvincia}
+                        value={employee.livingplaceProvincia || ""}
+                        onChange={(e) => handleInputChange("livingplaceProvincia", e.target.value)}
+                        isDisabled={mode === "view" && !employee.livingplaceProvincia}
+                        {...(mode === "view" ? { isReadOnly: true } : { isClearable: true, onClear: () => handleInputChange("livingplaceProvincia", null) })}
                     />
                     <Input 
-                        label={text.employeeAttributes.livingplace_nation}
-                        value={employee.livingplace_nation || ""}
-                        onChange={(e) => handleInputChange("livingplace_nation", e.target.value)}
-                        isDisabled={mode === "view" && !employee.livingplace_nation}
-                        {...(mode === "view" ? { isReadOnly: true } : { isClearable: true, onClear: () => handleInputChange("livingplace_nation", null) })}
+                        label={text.employeeAttributes.livingplaceNation}
+                        value={employee.livingplaceNation || ""}
+                        onChange={(e) => handleInputChange("livingplaceNation", e.target.value)}
+                        isDisabled={mode === "view" && !employee.livingplaceNation}
+                        {...(mode === "view" ? { isReadOnly: true } : { isClearable: true, onClear: () => handleInputChange("livingplaceNation", null) })}
                     />
                     <Input 
-                        label={text.employeeAttributes.livingplace_zipcode}
-                        value={employee.livingplace_zipcode ? String(employee.livingplace_zipcode) : ""}
-                        onChange={(e) => handleInputChange("livingplace_zipcode", e.target.value.replace(/[^\d]/g, ""))}
-                        isDisabled={mode === "view" && !employee.livingplace_zipcode}
-                        {...(mode === "view" ? { isReadOnly: true } : { isClearable: true, onClear: () => handleInputChange("livingplace_zipcode", null) })}
+                        label={text.employeeAttributes.livingplaceZipcode}
+                        value={employee.livingplaceZipcode ? String(employee.livingplaceZipcode) : ""}
+                        onChange={(e) => handleInputChange("livingplaceZipcode", e.target.value.replace(/[^\d]/g, ""))}
+                        isDisabled={mode === "view" && !employee.livingplaceZipcode}
+                        {...(mode === "view" ? { isReadOnly: true } : { isClearable: true, onClear: () => handleInputChange("livingplaceZipcode", null) })}
                     />
                 </CardBody>
             </Card>

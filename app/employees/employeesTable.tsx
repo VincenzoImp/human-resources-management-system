@@ -31,7 +31,7 @@ export default function EmployeesTable() {
 	const [searchValue, setSearchValue] = useState("");
 	const [employedValue, setEmployedValue] = useState<string>("all");
 	const text = useText();
-	const visibleCloumns = useMemo(() => ["name", "surname", "phone", "email", "gender", "tax_code", "employed"], []);
+	const visibleCloumns = useMemo(() => ["name", "surname", "phone", "email", "gender", "taxCode", "employed"], []);
 	
 	const filteredItems = useMemo(() => {
         let filteredEmployees = [...employees];

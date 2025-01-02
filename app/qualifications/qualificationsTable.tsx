@@ -2,37 +2,27 @@
 
 import { useText } from "@/app/context";
 import type { Employee } from "@/app/context";
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination, Spinner } from "@nextui-org/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination, Spinner, Accordion, AccordionItem } from "@nextui-org/react";
 import { SearchIcon } from "@/app/icons";
 import { Key, useCallback, useEffect, useMemo, useState } from "react";
 import { readEmployees } from "@/app/api";
 import { toast } from "@/app/components/toast";
 
-export default function EmployeesTable() {
-
-	const [employees, setEmployees] = useState<Employee[]>([]);
-	const [isLoading, setIsLoading] = useState(true);
-	useEffect(() => {
-		async function fetchEmployees() {
-			try {
-				const employeesData = await readEmployees();
-				setEmployees(employeesData);
-			} catch (error: unknown) {
-				if (error instanceof Error) {
-					toast.error(error.message);
-				}
-			}
-			setIsLoading(false);
-		}
-		fetchEmployees();
-	}, [setEmployees, setIsLoading]);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+function QualificationTable(qualification: string, employees: Employee[], isLoading: boolean, text: Record<string, Record<string, string>>) {
+	
+	const [rowsPerPage, setRowsPerPage] = useState(10);
     const [page, setPage] = useState(1);
 	const [searchValue, setSearchValue] = useState("");
 	const [employedValue, setEmployedValue] = useState<string>("all");
-	const text = useText();
-	const visibleCloumns = useMemo(() => ["name", "surname", "phone", "email", "gender", "tax_code", "employed"], []);
-	
+    const utilsDict = useMemo(() => ({
+        ["score"]: ["tubista", "carpentiere", "impiegato", "capoTecnico", "manovale"],
+        ["technique_material_score"]: ["saldatore"]
+    }), []);
+	const visibleCloumns = useMemo(() => {
+		const key = Object.keys(utilsDict).find(key => utilsDict[key as keyof typeof utilsDict].includes(qualification));
+        const columns = key?.split("_") || [];
+		return ["name", "surname", "employed", "qualification", ...columns];
+	}, [qualification, utilsDict]);
 	const filteredItems = useMemo(() => {
         let filteredEmployees = [...employees];
 		if (searchValue) {
@@ -53,9 +43,26 @@ export default function EmployeesTable() {
 				return employee.employed !== null && employee.employed.toString() === employedValue;
 			});
 		}
-		return filteredEmployees;
-	}, [employees, searchValue, employedValue]);
-
+		const qualificationItems: Record<string, string | number>[] = [];
+		for (const employee of filteredEmployees) {
+			if (employee.qualifications) {
+				if (employee.qualifications[qualification]) {
+					employee.qualifications[qualification].forEach((item) => {
+						const qualificationItem = {
+							name: employee.name || "",
+							surname: employee.surname || "",
+							employed: employee.employed !== null ? employee.employed : "",
+							qualification: qualification,
+							...item
+						};
+						qualificationItems.push(qualificationItem);
+					});
+				}
+			}
+		}
+		return qualificationItems;
+	}, [employees, searchValue, employedValue, qualification]);
+	
 	const pages = useMemo(() =>	{
 		return Math.ceil(filteredItems.length / rowsPerPage);
 	}, [filteredItems, rowsPerPage]);
@@ -90,16 +97,17 @@ export default function EmployeesTable() {
 		setPage(1);
 	}, []);
 
-	const renderCell = useCallback((employee: Employee, column: string) => {
+	const renderCell = useCallback((qualificationItem: Record<string, string | number>, column: string) => {
 		if (column === "employed") {
-			const value = employee[column as keyof Employee]?.toString();
+			const value = qualificationItem[column as keyof Record<string, string | number>];
+			console.log(qualificationItem);
 			return value ? text.other[value] : "";
 		}
-		if (column === "gender") {
-			const value = employee[column as keyof Employee]?.toString();
-			return value ? text.other[value] : "";
+		if (column === "qualification") {
+			const value = qualificationItem[column as keyof Record<string, string | number>];
+			return text.qualificationsList[value as string];
 		}
-		return employee[column as keyof Employee]?.toString();
+		return qualificationItem[column as keyof Record<string, string | number>];
 	}, [text]);
 
 	const topContent = useMemo(() => {
@@ -109,7 +117,7 @@ export default function EmployeesTable() {
 					<Input
 						isClearable
 						className="w-full"
-						placeholder={text.employeesTable.searchPlaceholder}
+						placeholder={text.qualificationsTable.searchPlaceholder}
 						startContent={<SearchIcon />}
 						value={searchValue}
 						onClear={onClear}
@@ -118,7 +126,7 @@ export default function EmployeesTable() {
 					<Dropdown>
 						<DropdownTrigger>
 							<Button variant="flat">
-								{text.employeesTable.filter}
+								{text.qualificationsTable.filter}
 							</Button>
 						</DropdownTrigger>
 						<DropdownMenu 
@@ -135,9 +143,9 @@ export default function EmployeesTable() {
 					</Dropdown>
 				</div>
 				<div className="flex justify-between items-center">
-					<span className="text-default-400 text-small">{text.employeesTable.totalEmployees}: {!isLoading ? filteredItems.length : null}</span>
+					<span className="text-default-400 text-small">{text.qualificationsTable.totalQualifications}: {!isLoading ? filteredItems.length : null}</span>
 					<label className="flex items-center text-default-400 text-small">
-						{text.employeesTable.rowsPerPage}:
+						{text.qualificationsTable.rowsPerPage}:
 						<select
 							className="bg-transparent outline-none text-default-400 text-small"
 							onChange={onRowsPerPageChange}
@@ -155,17 +163,17 @@ export default function EmployeesTable() {
 	const tableColumns = useMemo(() => {
 		return visibleCloumns.map((column : string) => (
 			<TableColumn key={column} align="center">
-				{text.employeeAttributes[column]}
+				{text.qualificationsTable[column]}
 			</TableColumn>
 		));
 	}, [visibleCloumns, text]);
 
 	const tableRows = useMemo(() => {
-		return items.map((employee : Employee) => (
-			<TableRow key={employee.id} className="cursor-pointer hover:bg-default-100" href={`/employees/${employee.id}`}>
+		return items.map((qualificationItem, index) => (
+			<TableRow key={index}>
 				{visibleCloumns.map((column : string) => (
 					<TableCell key={column}>
-						{renderCell(employee, column)}
+						{renderCell(qualificationItem, column)}
 					</TableCell>
 				))}
 			</TableRow>
@@ -209,3 +217,39 @@ export default function EmployeesTable() {
 		</>
 	);
 }
+
+export default function QualificationsTable() {
+
+	const [employees, setEmployees] = useState<Employee[]>([]);
+	const [isLoading, setIsLoading] = useState(true);
+	useEffect(() => {
+		async function fetchEmployees() {
+			try {
+				const employeesData = await readEmployees();
+				setEmployees(employeesData);
+			} catch (error: unknown) {
+				if (error instanceof Error) {
+					toast.error(error.message);
+				}
+			}
+			setIsLoading(false);
+		}
+		fetchEmployees();
+	}, [setEmployees, setIsLoading]);
+	const text = useText();
+	return (
+		employees ? (
+			Object.keys(text.qualificationsList).sort().map((qualification) => (
+				<Accordion key={qualification} className="container mx-auto my-4" variant="splitted">
+					<AccordionItem key={qualification} aria-label={qualification} title={text.qualificationsList[qualification]}>
+						{QualificationTable(qualification, employees, isLoading, text)}
+					</AccordionItem>
+				</Accordion>
+			))
+		) : null
+	);	
+}
+
+// permetti la ricerca per tutti i campi tranne score ed elimina la colonna qualifica 
+// permetti il click sulla riga per aprire la pagina informazioni della risorsa
+// quando la card e' aperta lo scondo e' nero con bordo bianco

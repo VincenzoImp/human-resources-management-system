@@ -5,26 +5,26 @@ import { User } from "firebase/auth";
 
 interface Employee {
     birthdate: string | null;
-    birthplace_city: string | null;
-    birthplace_nation: string | null;
-    birthplace_provincia: string | null;
-    birthplace_zipcode: number | null;
+    birthplaceCity: string | null;
+    birthplaceNation: string | null;
+    birthplaceProvincia: string | null;
+    birthplaceZipcode: number | null;
     documents: string | null;
     email: string | null;
     employed: "Yes" | "No" | null;
     gender: string | null;
     id?: string | null;
-    livingplace_address: string | null;
-    livingplace_city: string | null;
-    livingplace_nation: string | null;
-    livingplace_provincia: string | null;
-    livingplace_zipcode: number | null;
-    // n_mat: number | null;
-    // n_pro: number | null;
+    livingplaceAddress: string | null;
+    livingplaceCity: string | null;
+    livingplaceNation: string | null;
+    livingplaceProvincia: string | null;
+    livingplaceZipcode: number | null;
+    // nMat: number | null;
+    // nPro: number | null;
     name: string | null;
     phone: string | null;
     surname: string | null;
-    tax_code: string | null;
+    taxCode: string | null;
     qualifications: Record<string, Array<Record<string, string | number>>> | null;
 }
 
@@ -86,7 +86,7 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
             searchPlaceholder: "Cerca per nome o cognome",
             filter: "Filtra",
             addNew: "Aggiungi",
-            rowsPerPage: "Righe per pagina",
+            rowsPerPage: "Risorse per pagina",
             totalEmployees: "Totale Risorse",
         },
         employeePage: {
@@ -130,6 +130,19 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
         qualifications: {
             qualifications: "Qualifiche",
         },
+        qualificationsTable: {
+            name: "Nome",
+            surname: "Cognome",
+            employed: "Assunto",
+            score: "Giudizio",
+            searchPlaceholder: "Cerca per nome o cognome",
+            filter: "Filtra",
+            totalQualifications: "Totale Qualifiche",
+            rowsPerPage: "Qualifiche per pagina",
+            qualification: "Qualifica",
+            technique: "Tecnica",
+            material: "Materiale",
+        },
         navigation: {
             home: "Home",
             employees: "Risorse",
@@ -148,26 +161,26 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
         },
         employeeAttributes: {
             birthdate: "Data di Nascita",
-            birthplace_city: "Città di Nascita",
-            birthplace_nation: "Nazione di Nascita",
-            birthplace_provincia: "Provincia di Nascita",
-            birthplace_zipcode: "CAP di Nascita",
+            birthplaceCity: "Città di Nascita",
+            birthplaceNation: "Nazione di Nascita",
+            birthplaceProvincia: "Provincia di Nascita",
+            birthplaceZipcode: "CAP di Nascita",
             documents: "Documenti",
             email: "Email",
             employed: "Assunto",
             gender: "Genere",
             id: "ID",
-            livingplace_address: "Indirizzo di Residenza",
-            livingplace_city: "Città di Residenza",
-            livingplace_nation: "Nazione di Residenza",
-            livingplace_provincia: "Provincia di Residenza",
-            livingplace_zipcode: "CAP di Residenza",
-            // n_mat: "N Mat",
-            // n_pro: "N Pro",
+            livingplaceAddress: "Indirizzo di Residenza",
+            livingplaceCity: "Città di Residenza",
+            livingplaceNation: "Nazione di Residenza",
+            livingplaceProvincia: "Provincia di Residenza",
+            livingplaceZipcode: "CAP di Residenza",
+            // nMat: "N Mat",
+            // nPro: "N Pro",
             name: "Nome",
             phone: "Telefono",
             surname: "Cognome",
-            tax_code: "Codice Fiscale",
+            taxCode: "Codice Fiscale",
             qualifications: "Qualifiche"
         },
         qualificationsList: {
@@ -175,7 +188,7 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
             saldatore: "Saldatore",
             carpentiere: "Carpentiere",
             impiegato: "Impiegato",
-            capo_tecnico: "Capo Tecnico",
+            capoTecnico: "Capo Tecnico",
             manovale: "Manovale"
         }
     }

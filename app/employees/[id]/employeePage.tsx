@@ -75,7 +75,7 @@ export default function EmployeePage() {
 
     const handleSavePress = useCallback(async () => {
         if (!employee || !mode) return;
-        const requiredKeys = ["name", "surname", "phone", "email", "gender", "tax_code", "employed"];
+        const requiredKeys = ["name", "surname", "phone", "email", "gender", "taxCode", "employed"];
         for (const key of requiredKeys as (keyof Employee)[]) {
             if (!employee[key]) {
                 toast.error(text.employeePage.fillRequiredFields);
