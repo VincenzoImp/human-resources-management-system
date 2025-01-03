@@ -38,6 +38,7 @@ function QualificationTable(qualification: string, employees: Employee[], isLoad
 						const qualificationItem = {
 							name: employee.name || "",
 							surname: employee.surname || "",
+							id: employee.id || "",
 							employed: employee.employed !== null ? employee.employed : "",
 							qualification: qualification,
 							...item
@@ -51,7 +52,7 @@ function QualificationTable(qualification: string, employees: Employee[], isLoad
 			return qualificationItems.filter((qualificationItem) => {
 				const values = [];
 				for (const column of visibleCloumns) {
-					if (column !== "score" && column !== "employed") {
+					if (column !== "score" && column !== "employed" && column !== "id") {
 						values.push(qualificationItem[column as keyof Record<string, string | number>].toString().toLowerCase());
 					}
 				}
@@ -171,8 +172,8 @@ function QualificationTable(qualification: string, employees: Employee[], isLoad
 	}, [visibleCloumns, text]);
 
 	const tableRows = useMemo(() => {
-		return items.map((qualificationItem, index) => (
-			<TableRow key={index}>
+		return items.map((qualificationItem) => (
+			<TableRow key={qualificationItem.id} className="cursor-pointer hover:bg-default-100" href={`/employees/${qualificationItem.id}`}>
 				{visibleCloumns.map((column : string) => (
 					<TableCell key={column}>
 						{renderCell(qualificationItem, column)}
