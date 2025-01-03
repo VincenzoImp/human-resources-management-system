@@ -195,7 +195,7 @@ export default function EmployeesTable() {
 
 	return (
 		<div className="container mx-auto">
-			<Card className="mx-1">
+			<Card className="mx-2">
 				<Table 
 					className="p-4"
 					bottomContent={bottomContent}
