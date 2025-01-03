@@ -2,7 +2,7 @@
 
 import { useText } from "@/app/context";
 import type { Employee } from "@/app/context";
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination, Spinner } from "@nextui-org/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination, Spinner, Card } from "@nextui-org/react";
 import { SearchIcon } from "@/app/icons";
 import { Key, useCallback, useEffect, useMemo, useState } from "react";
 import { readEmployees } from "@/app/api";
@@ -194,9 +194,9 @@ export default function EmployeesTable() {
 	}, [page, pages]);
 
 	return (
-		<>
+		<Card className="container mx-auto">
 			<Table 
-				className="container mx-auto my-8"
+				className="p-4"
 				bottomContent={bottomContent}
 				bottomContentPlacement="outside"
 				topContent={topContent}
@@ -209,6 +209,6 @@ export default function EmployeesTable() {
 					{tableRows}
 				</TableBody>
 			</Table>
-		</>
+		</Card>
 	);
 }
