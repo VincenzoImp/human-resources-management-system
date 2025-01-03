@@ -10,6 +10,18 @@ import { toast } from "@/app/components/toast";
 
 function QualificationTable(qualification: string, employees: Employee[], isLoading: boolean, text: Record<string, Record<string, string>>) {
 	
+	function sortItems(items: Record<string, string | number>[]) {
+		// sort by score descending, name ascending, surname ascending
+		return items.sort((a, b) => {
+			if (b.score === a.score) {
+				if (a.name === b.name) {
+					return (a.surname as string).localeCompare(b.surname as string);
+				}
+				return (a.name as string).localeCompare(b.name as string);
+			}
+			return (b.score as number) - (a.score as number);
+		});
+	}
 	const [rowsPerPage, setRowsPerPage] = useState(10);
     const [page, setPage] = useState(1);
 	const [searchValue, setSearchValue] = useState("");
@@ -49,7 +61,7 @@ function QualificationTable(qualification: string, employees: Employee[], isLoad
 			}
 		}
 		if (searchValue.trim() !== "") {
-			return qualificationItems.filter((qualificationItem) => {
+			return sortItems(qualificationItems.filter((qualificationItem) => {
 				const values = [];
 				for (const column of visibleCloumns) {
 					if (column !== "score" && column !== "employed" && column !== "id") {
@@ -66,9 +78,10 @@ function QualificationTable(qualification: string, employees: Employee[], isLoad
 					}
 				}
 				return false;
-			});
+			}));
 		}
-		return qualificationItems;
+		return sortItems(qualificationItems);
+
 	}, [employees, searchValue, employedValue, qualification, visibleCloumns]);
 	
 	const pages = useMemo(() =>	{
