@@ -1,7 +1,9 @@
 "use client";
 
+import { Spacer } from "@nextui-org/react";
+
 export default function Footer() {
     return (
-        <footer className="mt-24"/>
+        <Spacer y={12} />
     );
 }
