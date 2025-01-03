@@ -255,7 +255,7 @@ export default function QualificationsTable() {
 	return (
 
 		employees ? (
-			<div className="gap-4 container mx-auto">
+			<div className="container mx-auto flex gap-4 flex-col">
 				{Object.keys(text.qualificationsList).sort().map((qualification) => (
 					<Accordion key={qualification} variant="splitted">
 						<AccordionItem 
