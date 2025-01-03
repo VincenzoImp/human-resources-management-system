@@ -265,26 +265,28 @@ export default function EmployeeQualifications() {
 
     const qualificationsCard = useMemo(() => (
             employee && mode ? (
-                <Card>
-                    <CardHeader className="flex justify-between">
-                        <h2 className="text-lg font-medium">{text.employeeQualifications.qualifications}</h2>
-                        {mode === "view" ? null : (
-                            <Chip variant="light" className="inline-block" endContent={
-                                <Button size="sm" isIconOnly color="default" onPress={() => { setStage("add1"); onOpenChange(); }}>
-                                    <PlusIcon />
-                                </Button>
-                            }>
-                            </Chip>
-                        )}
-                    </CardHeader>
-                    <CardBody>
-                        {employee.qualifications && Object.keys(employee.qualifications).length > 0 ? (
-                            tables
-                        ) : (
-                            <p className="text-default-400">{text.employeeQualifications.noQualifications}</p>
-                        )}
-                    </CardBody>
-                </Card>
+                <div className="container mx-auto">
+                    <Card className="mx-2">
+                        <CardHeader className="flex justify-between">
+                            <h2 className="text-lg font-medium">{text.employeeQualifications.qualifications}</h2>
+                            {mode === "view" ? null : (
+                                <Chip variant="light" className="inline-block" endContent={
+                                    <Button size="sm" isIconOnly color="default" onPress={() => { setStage("add1"); onOpenChange(); }}>
+                                        <PlusIcon />
+                                    </Button>
+                                }>
+                                </Chip>
+                            )}
+                        </CardHeader>
+                        <CardBody>
+                            {employee.qualifications && Object.keys(employee.qualifications).length > 0 ? (
+                                tables
+                            ) : (
+                                <p className="text-default-400">{text.employeeQualifications.noQualifications}</p>
+                            )}
+                        </CardBody>
+                    </Card>
+                </div>
             ) : null
         ), [employee, mode, text, tables, onOpenChange]);
 

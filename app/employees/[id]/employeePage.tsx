@@ -123,7 +123,7 @@ export default function EmployeePage() {
     }, [employee, router, text, mode]);
 
     const controlButtons = useMemo(() => (
-        <div className="flex justify-end gap-4">
+        <div className="flex justify-end gap-4 mx-2">
             {mode === "add" || mode === "edit" ? (
                 <>
                     <Button color="secondary" onClick={() => handleCancelPress()}>
