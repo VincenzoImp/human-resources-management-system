@@ -257,5 +257,3 @@ export default function QualificationsTable() {
 		) : null
 	);
 }
-
-// permetti il click sulla riga per aprire la pagina informazioni della risorsa
