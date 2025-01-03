@@ -9,7 +9,7 @@ import { toast } from "@/app/components/toast";
 import { useRouter } from "next/navigation";
 import EmployeeInformations from "@/app/employees/[id]/employeeInformations";
 import { useEmployee, useMode } from "@/app/employees/[id]/context";
-import EmployeeQualifications from "./employeeQualifications";
+import EmployeeQualifications from "@/app/employees/[id]/employeeQualifications";
 
 async function save(employee: Employee, mode: string, saveSuccessText: string) {
     let toastText: string | null = null;
