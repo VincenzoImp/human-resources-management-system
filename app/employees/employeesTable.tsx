@@ -7,7 +7,6 @@ import { SearchIcon } from "@/app/icons";
 import { Key, useCallback, useEffect, useMemo, useState } from "react";
 import { readEmployees } from "@/app/api";
 import { toast } from "@/app/components/toast";
-import { div } from "framer-motion/client";
 
 export default function EmployeesTable() {
 
