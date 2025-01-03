@@ -253,18 +253,21 @@ export default function QualificationsTable() {
 	const text = useText();
 
 	return (
+
 		employees ? (
-			Object.keys(text.qualificationsList).sort().map((qualification) => (
-				<Accordion key={qualification} className="container mx-auto my-4" variant="splitted">
-					<AccordionItem 
-						key={qualification} 
-						aria-label={qualification} 
-						title={text.qualificationsList[qualification]}
-					>
-						{QualificationTable(qualification, employees, isLoading, text)}
-					</AccordionItem>
-				</Accordion>
-			))
+			<div className="gap-4 container mx-auto">
+				{Object.keys(text.qualificationsList).sort().map((qualification) => (
+					<Accordion key={qualification} variant="splitted">
+						<AccordionItem 
+							key={qualification} 
+							aria-label={qualification} 
+							title={text.qualificationsList[qualification]}
+						>
+							{QualificationTable(qualification, employees, isLoading, text)}
+						</AccordionItem>
+					</Accordion>
+				))}
+			</div>
 		) : null
 	);
 }

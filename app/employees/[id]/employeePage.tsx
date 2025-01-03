@@ -153,7 +153,7 @@ export default function EmployeePage() {
         <>
             <h1 className="text-4xl font-bold text-center m-8">{title}</h1>
             <div className="flex flex-col gap-4">
-                <div className="flex flex-col gap-8 w-full container mx-auto">
+                <div className="flex flex-col gap-4 w-full container mx-auto">
                     <EmployeeInformations/>
                     <EmployeeQualifications/>
                     {controlButtons}
