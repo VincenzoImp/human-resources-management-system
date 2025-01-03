@@ -21,23 +21,10 @@ function QualificationTable(qualification: string, employees: Employee[], isLoad
 	const visibleCloumns = useMemo(() => {
 		const key = Object.keys(utilsDict).find(key => utilsDict[key as keyof typeof utilsDict].includes(qualification));
         const columns = key?.split("_") || [];
-		return ["name", "surname", "employed", "qualification", ...columns];
+		return ["name", "surname", "employed", ...columns];
 	}, [qualification, utilsDict]);
 	const filteredItems = useMemo(() => {
         let filteredEmployees = [...employees];
-		if (searchValue) {
-            filteredEmployees = filteredEmployees.filter((employee) => {
-                for (const word of searchValue.split(" ")) {
-					if (word === "") {
-						continue;
-					}
-					if ((employee.name && employee.name.toLowerCase().includes(word.toLowerCase())) || (employee.surname && employee.surname.toLowerCase().includes(word.toLowerCase()))) {
-                        return true;
-                    }
-                }
-                return false;
-            });
-		}
 		if (employedValue !== "all") {
 			filteredEmployees = filteredEmployees.filter((employee) => {
 				return employee.employed !== null && employee.employed.toString() === employedValue;
@@ -60,8 +47,28 @@ function QualificationTable(qualification: string, employees: Employee[], isLoad
 				}
 			}
 		}
+		if (searchValue.trim() !== "") {
+			return qualificationItems.filter((qualificationItem) => {
+				const values = [];
+				for (const column of visibleCloumns) {
+					if (column !== "score" && column !== "employed") {
+						values.push(qualificationItem[column as keyof Record<string, string | number>].toString().toLowerCase());
+					}
+				}
+				const valuesString = values.join(" ");
+				for (const word of searchValue.split(" ")) {
+					if (word === "") {
+						continue;
+					}
+					if (valuesString.includes(word.toLowerCase())) {
+						return true;
+					}
+				}
+				return false;
+			});
+		}
 		return qualificationItems;
-	}, [employees, searchValue, employedValue, qualification]);
+	}, [employees, searchValue, employedValue, qualification, visibleCloumns]);
 	
 	const pages = useMemo(() =>	{
 		return Math.ceil(filteredItems.length / rowsPerPage);
@@ -100,12 +107,7 @@ function QualificationTable(qualification: string, employees: Employee[], isLoad
 	const renderCell = useCallback((qualificationItem: Record<string, string | number>, column: string) => {
 		if (column === "employed") {
 			const value = qualificationItem[column as keyof Record<string, string | number>];
-			console.log(qualificationItem);
 			return value ? text.other[value] : "";
-		}
-		if (column === "qualification") {
-			const value = qualificationItem[column as keyof Record<string, string | number>];
-			return text.qualificationsList[value as string];
 		}
 		return qualificationItem[column as keyof Record<string, string | number>];
 	}, [text]);
@@ -237,19 +239,22 @@ export default function QualificationsTable() {
 		fetchEmployees();
 	}, [setEmployees, setIsLoading]);
 	const text = useText();
+
 	return (
 		employees ? (
 			Object.keys(text.qualificationsList).sort().map((qualification) => (
 				<Accordion key={qualification} className="container mx-auto my-4" variant="splitted">
-					<AccordionItem key={qualification} aria-label={qualification} title={text.qualificationsList[qualification]}>
+					<AccordionItem 
+						key={qualification} 
+						aria-label={qualification} 
+						title={text.qualificationsList[qualification]}
+					>
 						{QualificationTable(qualification, employees, isLoading, text)}
 					</AccordionItem>
 				</Accordion>
 			))
 		) : null
-	);	
+	);
 }
 
-// permetti la ricerca per tutti i campi tranne score ed elimina la colonna qualifica 
 // permetti il click sulla riga per aprire la pagina informazioni della risorsa
-// quando la card e' aperta lo scondo e' nero con bordo bianco

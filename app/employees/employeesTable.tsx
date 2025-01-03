@@ -35,7 +35,7 @@ export default function EmployeesTable() {
 	
 	const filteredItems = useMemo(() => {
         let filteredEmployees = [...employees];
-		if (searchValue) {
+		if (searchValue.trim() !== "") {
             filteredEmployees = filteredEmployees.filter((employee) => {
                 for (const word of searchValue.split(" ")) {
 					if (word === "") {

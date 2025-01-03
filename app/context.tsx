@@ -135,7 +135,7 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
             surname: "Cognome",
             employed: "Assunto",
             score: "Giudizio",
-            searchPlaceholder: "Cerca per nome o cognome",
+            searchPlaceholder: "Cerca per tutti i campi",
             filter: "Filtra",
             totalQualifications: "Totale Qualifiche",
             rowsPerPage: "Qualifiche per pagina",
