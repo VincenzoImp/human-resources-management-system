@@ -204,7 +204,7 @@ function QualificationTable(qualification: string, employees: Employee[], isLoad
 	return (
 		<>
 			<Table 
-				className="container mx-auto my-8"
+				className="container mx-auto mb-2"
 				bottomContent={bottomContent}
 				bottomContentPlacement="outside"
 				topContent={topContent}
