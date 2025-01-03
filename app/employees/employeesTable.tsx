@@ -7,6 +7,7 @@ import { SearchIcon } from "@/app/icons";
 import { Key, useCallback, useEffect, useMemo, useState } from "react";
 import { readEmployees } from "@/app/api";
 import { toast } from "@/app/components/toast";
+import { div } from "framer-motion/client";
 
 export default function EmployeesTable() {
 
@@ -194,21 +195,23 @@ export default function EmployeesTable() {
 	}, [page, pages]);
 
 	return (
-		<Card className="container mx-auto">
-			<Table 
-				className="p-4"
-				bottomContent={bottomContent}
-				bottomContentPlacement="outside"
-				topContent={topContent}
-				topContentPlacement="outside"
-			>
-				<TableHeader>
-					{tableColumns}
-				</TableHeader>
-				<TableBody items={items} isLoading={isLoading} loadingContent={<Spinner />} >
-					{tableRows}
-				</TableBody>
-			</Table>
-		</Card>
+		<div className="container mx-auto">
+			<Card className="mx-1">
+				<Table 
+					className="p-4"
+					bottomContent={bottomContent}
+					bottomContentPlacement="outside"
+					topContent={topContent}
+					topContentPlacement="outside"
+				>
+					<TableHeader>
+						{tableColumns}
+					</TableHeader>
+					<TableBody items={items} isLoading={isLoading} loadingContent={<Spinner />} >
+						{tableRows}
+					</TableBody>
+				</Table>
+			</Card>
+		</div>
 	);
 }
