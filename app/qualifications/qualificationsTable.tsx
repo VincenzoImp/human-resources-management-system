@@ -11,13 +11,13 @@ import { toast } from "@/app/components/toast";
 function QualificationTable(qualification: string, employees: Employee[], isLoading: boolean, text: Record<string, Record<string, string>>) {
 	
 	function sortItems(items: Record<string, string | number>[]) {
-		// sort by score descending, name ascending, surname ascending
+		// sort by score descending, surname ascending, name ascending
 		return items.sort((a, b) => {
-			if (b.score === a.score) {
-				if (a.name === b.name) {
-					return (a.surname as string).localeCompare(b.surname as string);
+			if (a.score === b.score) {
+				if (a.surname === b.surname) {
+					return (a.name as string).localeCompare(b.name as string);
 				}
-				return (a.name as string).localeCompare(b.name as string);
+				return (a.surname as string).localeCompare(b.surname as string);
 			}
 			return (b.score as number) - (a.score as number);
 		});
@@ -35,6 +35,7 @@ function QualificationTable(qualification: string, employees: Employee[], isLoad
         const columns = key?.split("_") || [];
 		return ["name", "surname", "employed", ...columns];
 	}, [qualification, utilsDict]);
+
 	const filteredItems = useMemo(() => {
         let filteredEmployees = [...employees];
 		if (employedValue !== "all") {
@@ -60,8 +61,9 @@ function QualificationTable(qualification: string, employees: Employee[], isLoad
 				}
 			}
 		}
+		let filteredQualificationItems = [...qualificationItems];
 		if (searchValue.trim() !== "") {
-			return sortItems(qualificationItems.filter((qualificationItem) => {
+			filteredQualificationItems = qualificationItems.filter((qualificationItem) => {
 				const values = [];
 				for (const column of visibleCloumns) {
 					if (column !== "score" && column !== "employed" && column !== "id") {
@@ -78,10 +80,9 @@ function QualificationTable(qualification: string, employees: Employee[], isLoad
 					}
 				}
 				return false;
-			}));
+			});
 		}
-		return sortItems(qualificationItems);
-
+		return sortItems(filteredQualificationItems);
 	}, [employees, searchValue, employedValue, qualification, visibleCloumns]);
 	
 	const pages = useMemo(() =>	{

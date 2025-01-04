@@ -53,7 +53,13 @@ export default function EmployeesTable() {
 				return employee.employed !== null && employee.employed.toString() === employedValue;
 			});
 		}
-		return filteredEmployees;
+		// sort by surname ascending, name ascending
+		return filteredEmployees.sort((a, b) => {
+			if (a.surname === b.surname) {
+				return (a.name as string).localeCompare(b.name as string);
+			}
+			return (a.surname as string).localeCompare(b.surname as string);
+		});
 	}, [employees, searchValue, employedValue]);
 
 	const pages = useMemo(() =>	{
