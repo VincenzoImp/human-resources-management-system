@@ -114,7 +114,7 @@ function Authentication() {
                                 onChange={(e) => handlePasswordChange(e, setPassword)}
                                 isRequired
                             />
-                            <Button onClick={() => handleLogin(email, password, text.authentication.loginSuccess, text.authentication.emailError, text.authentication.passwordError, setEmail, setPassword, setUser)} color="primary" className="w-full">
+                            <Button onPress={() => handleLogin(email, password, text.authentication.loginSuccess, text.authentication.emailError, text.authentication.passwordError, setEmail, setPassword, setUser)} color="primary" className="w-full">
                                 {text.authentication.loginButton}
                             </Button>
                         </Tab>
@@ -137,7 +137,7 @@ function Authentication() {
                                 onChange={(e) => handlePasswordChange(e, setPassword)}
                                 isRequired
                             />
-                            <Button onClick={() => handleRegister(email, password, text.authentication.registrationSuccess, text.authentication.emailError, text.authentication.passwordError, setEmail, setPassword)} color="primary" className="w-full">
+                            <Button onPress={() => handleRegister(email, password, text.authentication.registrationSuccess, text.authentication.emailError, text.authentication.passwordError, setEmail, setPassword)} color="primary" className="w-full">
                                 {text.authentication.registerButton}
                             </Button>
                         </Tab>

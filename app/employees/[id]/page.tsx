@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, use } from "react";
 import type { Employee } from "@/app/context";
 import EmployeePage from "@/app/employees/[id]/employeePage";
 import { notFound } from "next/navigation";
@@ -10,9 +10,9 @@ import { toast } from "@/app/components/toast";
 import { useEmployee, useMode } from "@/app/employees/[id]/context";
 import Footer from "@/app/components/footer";
 
-interface EmployeePageProps {
-    params: { id: string };
-}
+type EmployeePageProps = {
+    params: Promise<{id: string}>;
+};
 
 const emptyEmployee: Employee = {
     birthdate: null,
@@ -37,7 +37,7 @@ const emptyEmployee: Employee = {
 };
 
 export default function Page({ params }: EmployeePageProps) {
-    const employeeId = params.id;
+    const { id: employeeId } = use(params);
     const { mode, setMode } = useMode();
     const { employee, setEmployee } = useEmployee();
 

@@ -53,7 +53,7 @@ export default function Navigation({ itemActive }: Readonly<{ itemActive: string
 							<p className="font-semibold">{text.authentication.loggedInAs}</p>
 							<p className="font-semibold">{user?.email}</p>
 						</DropdownItem>
-						<DropdownItem key="logout" color="danger" onClick={() => handleLogout(text.authentication.logoutSuccess, setUser)}>
+						<DropdownItem key="logout" color="danger" onPress={() => handleLogout(text.authentication.logoutSuccess, setUser)}>
 							{text.authentication.logoutButton}
 						</DropdownItem>
 					</DropdownMenu>

@@ -126,10 +126,10 @@ export default function EmployeePage() {
         <div className="flex justify-end gap-4 mx-2">
             {mode === "add" || mode === "edit" ? (
                 <>
-                    <Button color="secondary" onClick={() => handleCancelPress()}>
+                    <Button color="secondary" onPress={() => handleCancelPress()}>
                         {text.employeePage.cancel}
                     </Button>
-                    <Button color="primary" onClick={() => handleSavePress()}>
+                    <Button color="primary" onPress={() => handleSavePress()}>
                         {text.employeePage.save}
                     </Button>
                 </>
@@ -137,11 +137,11 @@ export default function EmployeePage() {
                 <>
                     <Button 
                         color="danger" 
-                        onClick={() => handleRemove()}
+                        onPress={() => handleRemove()}
                     >
                         {text.employeePage.delete}
                     </Button>
-                    <Button color="primary" onClick={() => setMode("edit")}>
+                    <Button color="primary" onPress={() => setMode("edit")}>
                         {text.employeePage.edit}
                     </Button>
                 </>
