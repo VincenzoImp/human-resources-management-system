@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import type { Employee } from "@/app/context";
 import EmployeePage from "@/app/employees/[id]/employeePage";
 import { notFound } from "next/navigation";
@@ -10,76 +10,78 @@ import { toast } from "@/app/components/toast";
 import { useEmployee, useMode } from "@/app/employees/[id]/context";
 import Footer from "@/app/components/footer";
 
-export default function Page({ params } : { params: { id: string } }) {
-	function emptyEmployee(): Employee {
-		return {
-			birthdate: null,
-			birthplaceCity: null,
-			birthplaceNation: null,
-			birthplaceProvincia: null,
-			birthplaceZipcode: null,
-			documents: null,
-			email: null,
-			employed: null,
-			gender: null,
-			livingplaceAddress: null,
-			livingplaceCity: null,
-			livingplaceNation: null,
-			livingplaceProvincia: null,
-			livingplaceZipcode: null,
-			// nMat: null,
-			// nPro: null,
-			name: null,
-			phone: null,
-			surname: null,
-			taxCode: null,
-			qualifications: {},
-		};
-	}
-	const employeeId = params.id;
-	const { mode, setMode } = useMode();
-	const { employee, setEmployee } = useEmployee();
-	useEffect(() => {
-		const fetchEmployee = async () => {
-			if (employee === undefined) {
-				if (employeeId === "add-new") {
-					setEmployee(emptyEmployee());
-				} else {
-					try {
-						const employee = await readEmployee(employeeId);
-						setEmployee(employee);
-					} catch (error: unknown) {
-						if (error instanceof Error) {
-							toast.error(error.message);
-						}
-					}
-				}
-			}
-		};
-		const fetchMode = () => {
-			if (mode === undefined) {
-				if (employeeId === "add-new") {
-					setMode("add");
-				} else {
-					setMode("view");
-				}
-			}
-		};
-		fetchMode();
-		fetchEmployee();
-	}, [employeeId, setMode, setEmployee, employee, mode]);
+interface EmployeePageProps {
+    params: { id: string };
+}
 
-	if (employee === undefined) {
-		return null;
-	} else if (employee === null) {
-		return notFound();
-	} else {
-		return (
-			<>
-				<Navigation itemActive="employees" />
-				<EmployeePage/>
-				<Footer/>
-			</>
-		);
-	}
+const emptyEmployee: Employee = {
+    birthdate: null,
+    birthplaceCity: null,
+    birthplaceNation: null,
+    birthplaceProvincia: null,
+    birthplaceZipcode: null,
+    documents: null,
+    email: null,
+    employed: null,
+    gender: null,
+    livingplaceAddress: null,
+    livingplaceCity: null,
+    livingplaceNation: null,
+    livingplaceProvincia: null,
+    livingplaceZipcode: null,
+    name: null,
+    phone: null,
+    surname: null,
+    taxCode: null,
+    qualifications: {},
+};
+
+export default function Page({ params }: EmployeePageProps) {
+    const employeeId = params.id;
+    const { mode, setMode } = useMode();
+    const { employee, setEmployee } = useEmployee();
+
+    const fetchMode = useCallback(() => {
+        if (mode === undefined) {
+            setMode(employeeId === "add-new" ? "add" : "view");
+        }
+    }, [mode, employeeId, setMode]);
+
+    const fetchEmployee = useCallback(async () => {
+        if (employee === undefined) {
+            if (employeeId === "add-new") {
+                setEmployee(emptyEmployee);
+            } else {
+                try {
+                    const employee = await readEmployee(employeeId);
+                    setEmployee(employee);
+                } catch (error: unknown) {
+                    if (error instanceof Error) {
+                        toast.error(error.message);
+                    }
+                }
+            }
+        }
+    }, [employee, employeeId, setEmployee]);
+
+    useEffect(() => {
+        fetchMode();
+        fetchEmployee();
+    }, [fetchMode, fetchEmployee]);
+
+    if (employee === undefined) {
+        return null;
+    }
+    if (employee === null) {
+        return notFound();
+    }
+
+    return (
+
+        <>
+            <Navigation itemActive="employees" />
+            <EmployeePage />
+            <Footer />
+        </>
+    );
 }

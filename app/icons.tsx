@@ -1,3 +1,5 @@
+"use client";
+
 import { JSX, SVGProps } from "react";
 
 const SearchIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {

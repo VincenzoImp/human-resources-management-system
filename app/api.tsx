@@ -1,3 +1,5 @@
+"use client";
+
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { db } from "@/app/firebase/config";
 import { Employee } from "@/app/context";
