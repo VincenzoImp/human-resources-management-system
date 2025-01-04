@@ -252,9 +252,8 @@ export default function QualificationsTable() {
 		fetchEmployees();
 	}, [setEmployees, setIsLoading]);
 	const text = useText();
-
+		
 	return (
-
 		employees ? (
 			<div className="container mx-auto flex gap-4 flex-col">
 				{Object.keys(text.qualificationsList).sort().map((qualification) => (
