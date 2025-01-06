@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import EmployeeInformations from "@/app/employees/[id]/employeeInformations";
 import { useEmployee, useMode } from "@/app/employees/[id]/context";
 import EmployeeQualifications from "@/app/employees/[id]/employeeQualifications";
+import EmployeeDocuments from "@/app/employees/[id]/employeeDocuments";
 
 async function save(employee: Employee, mode: string, saveSuccessText: string) {
     let toastText: string | null = null;
@@ -156,6 +157,7 @@ export default function EmployeePage() {
                 <div className="flex flex-col gap-4 w-full container mx-auto">
                     <EmployeeInformations/>
                     <EmployeeQualifications/>
+                    <EmployeeDocuments/>
                     {controlButtons}
                 </div>
             </div>

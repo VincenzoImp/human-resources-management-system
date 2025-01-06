@@ -1,6 +1,6 @@
 "use client";
 
-import { useText } from "@/app/context";
+import { useAttributesQualifications, useText } from "@/app/context";
 import type { Employee } from "@/app/context";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination, Spinner, Accordion, AccordionItem } from "@nextui-org/react";
 import { SearchIcon } from "@/app/icons";
@@ -26,15 +26,13 @@ function QualificationTable(qualification: string, employees: Employee[], isLoad
     const [page, setPage] = useState(1);
 	const [searchValue, setSearchValue] = useState("");
 	const [employedValue, setEmployedValue] = useState<string>("all");
-    const utilsDict = useMemo(() => ({
-        ["score"]: ["tubista", "carpentiere", "impiegato", "capoTecnico", "manovale"],
-        ["technique_material_score"]: ["saldatore"]
-    }), []);
+    const attributesQualifications = useAttributesQualifications();
+	
 	const visibleCloumns = useMemo(() => {
-		const key = Object.keys(utilsDict).find(key => utilsDict[key as keyof typeof utilsDict].includes(qualification));
+		const key = Object.keys(attributesQualifications).find(key => attributesQualifications[key as keyof typeof attributesQualifications].includes(qualification));
         const columns = key?.split("_") || [];
 		return ["name", "surname", "employed", ...columns];
-	}, [qualification, utilsDict]);
+	}, [qualification, attributesQualifications]);
 
 	const filteredItems = useMemo(() => {
         let filteredEmployees = [...employees];

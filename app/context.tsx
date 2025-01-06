@@ -19,19 +19,19 @@ interface Employee {
     livingplaceNation: string | null;
     livingplaceProvincia: string | null;
     livingplaceZipcode: number | null;
-    // nMat: number | null;
-    // nPro: number | null;
     name: string | null;
+    notes: string | null;
     phone: string | null;
+    qualifications: Record<string, Array<Record<string, string | number>>> | null;
     surname: string | null;
     taxCode: string | null;
-    qualifications: Record<string, Array<Record<string, string | number>>> | null;
 }
 
 interface ContextType {
     user: User | null;
     setUser: React.Dispatch<React.SetStateAction<User | null>>;
     text: Record<string, Record<string, string>>;
+    attributesQualifications: Record<string, string[]>;
 }
 
 const Context = React.createContext<ContextType | null>(null);
@@ -106,6 +106,7 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
             personalInformations: "Informazioni Personali",
             birthInformations: "Informazioni di Nascita",
             livingInformations: "Informazioni di Residenza",
+            notesInformations: "Note",
         },
         employeeQualifications: {
             qualifications: "Qualifiche",
@@ -126,6 +127,7 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
         },
         employeeDocuments: {
             documents: "Documenti",
+            noDocuments: "Nessun Documento",
         },
         qualifications: {
             qualifications: "Qualifiche",
@@ -175,13 +177,12 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
             livingplaceNation: "Nazione di Residenza",
             livingplaceProvincia: "Provincia di Residenza",
             livingplaceZipcode: "CAP di Residenza",
-            // nMat: "N Mat",
-            // nPro: "N Pro",
             name: "Nome",
+            notes: "Note",
             phone: "Telefono",
+            qualifications: "Qualifiche",
             surname: "Cognome",
             taxCode: "Codice Fiscale",
-            qualifications: "Qualifiche"
         },
         qualificationsList: {
             tubista: "Tubista",
@@ -189,12 +190,20 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
             carpentiere: "Carpentiere",
             impiegato: "Impiegato",
             capoTecnico: "Capo Tecnico",
-            manovale: "Manovale"
+            manovale: "Manovale",
+            aiutante: "Aiutante",
+            accoppiatorista: "Accoppiatorista",
+            montatore: "Montatore",
         }
     }
 
+    const attributesQualifications = {
+        ["score"]: ["tubista", "carpentiere", "impiegato", "capoTecnico", "manovale", "aiutante", "accoppiatorista", "montatore"],
+        ["technique_material_score"]: ["saldatore"]
+    };
+
     return (
-        <Context.Provider value={{ user, setUser, text }}>
+        <Context.Provider value={{ user, setUser, text, attributesQualifications }}>
             {children}
         </Context.Provider>
     );
@@ -218,5 +227,14 @@ function useText() {
     return text;
 }
 
-export { ContextProvider, useUser, useText };
+function useAttributesQualifications() {
+    const context = React.useContext(Context);
+    if (!context) {
+        throw new Error("Context not found");
+    }
+    const { attributesQualifications } = context;
+    return attributesQualifications;
+}
+
+export { ContextProvider, useUser, useText, useAttributesQualifications };
 export type { Employee };

@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo } from "react";
 import { Employee, useText } from "@/app/context";
-import { Card, CardBody, CardHeader, DateInput, DatePicker, Input, Select, SelectItem } from "@nextui-org/react";
+import { Card, CardBody, CardHeader, DateInput, DatePicker, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
 import { I18nProvider } from "@react-aria/i18n";
 import { parseDate } from "@internationalized/date";
 import { useEmployee, useMode } from "@/app/employees/[id]/context";
@@ -52,6 +52,7 @@ export default function EmployeeInformations() {
                             label={text.employeeAttributes.email}
                             value={employee.email || ""}
                             onChange={(e) => handleInputChange("email", e.target.value.toLowerCase())}
+                            isInvalid={false}
                             isDisabled={mode === "view" && !employee.email}
                             {...(mode === "view" ? { isReadOnly: true } : { isRequired: true, isClearable: true, onClear: () => handleInputChange("email", null) })}
                             type="email"
@@ -68,7 +69,7 @@ export default function EmployeeInformations() {
                                 label={text.employeeAttributes.gender}
                                 onChange={(e) => handleInputChange("gender", e.target.value)}
                                 defaultSelectedKeys={[employee.gender || ""]}
-                                isRequired
+                                isRequired isInvalid={false}
                             >
                                 <SelectItem value="male" key={"male"}>{text.other.male}</SelectItem>
                                 <SelectItem value="female" key={"female"}>{text.other.female}</SelectItem>
@@ -87,7 +88,7 @@ export default function EmployeeInformations() {
                                 label={text.employeeAttributes.employed}
                                 value={text.other[employee.employed as string] || ""}
                                 isDisabled={!employee.employed}
-                                isReadOnly
+                                isReadOnly isInvalid={false}
                             />
                         ) : (
                             <Select
@@ -216,11 +217,32 @@ export default function EmployeeInformations() {
         ) : null
     ), [employee, handleInputChange, mode, text]);
 
+    const notesCard = useMemo(() => (
+        employee ? (
+            <div className="container mx-auto">
+                <Card className="mx-2">
+                    <CardHeader>
+                        <h2 className="text-lg font-medium">{text.employeeInformations.notesInformations}</h2>
+                    </CardHeader>
+                    <CardBody>
+                        <Textarea 
+                            value={employee.notes || ""}
+                            onChange={(e) => handleInputChange("notes", e.target.value)}
+                            isDisabled={mode === "view" && !employee.notes}
+                            {...(mode === "view" ? { isReadOnly: true } : {})}
+                        />
+                    </CardBody>
+                </Card>
+            </div>
+        ) : null
+    ), [employee, handleInputChange, mode, text]);
+
     return (
         <>
             {personalInformationsCard}
             {birthInformationsCard}
             {livingInformationsCard}
+            {notesCard}
         </>
     );
 }

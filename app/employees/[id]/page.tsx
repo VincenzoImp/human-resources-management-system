@@ -30,10 +30,11 @@ const emptyEmployee: Employee = {
     livingplaceProvincia: null,
     livingplaceZipcode: null,
     name: null,
+    notes: null,
     phone: null,
+    qualifications: {},
     surname: null,
     taxCode: null,
-    qualifications: {},
 };
 
 export default function Page({ params }: EmployeePageProps) {

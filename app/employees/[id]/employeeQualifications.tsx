@@ -1,7 +1,7 @@
 "use client";
 
 import { JSX, useCallback, useMemo, useState } from "react";
-import { useText } from "@/app/context";
+import { useText, useAttributesQualifications } from "@/app/context";
 import { useEmployee, useMode } from "@/app/employees/[id]/context";
 import { Button, Card, CardBody, CardHeader, Chip, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Radio, RadioGroup, Slider, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, useDisclosure } from "@nextui-org/react";
 import { DeleteIcon, EditIcon, PlusIcon } from "@/app/icons";
@@ -14,10 +14,7 @@ export default function EmployeeQualifications() {
     const {isOpen, onOpenChange} = useDisclosure();
     const [stage, setStage] = useState<"add1" | "add2" | "edit2" | null>(null);
     const [newQualification, setNewQualification] = useState<Record<string, string | number>>({});
-    const utilsDict = useMemo(() => ({
-        ["score"]: ["tubista", "carpentiere", "impiegato", "capoTecnico", "manovale"],
-        ["technique_material_score"]: ["saldatore"]
-    }), []);
+    const attributesQualifications = useAttributesQualifications();
 
     const addQualification = useCallback((qualification: string) => {
         const _newQualification = { ...newQualification };
@@ -91,7 +88,7 @@ export default function EmployeeQualifications() {
                                 key={index} 
                                 value={qualification} 
                                 onChange={(e) => {
-                                    const key = Object.keys(utilsDict).find(key => utilsDict[key as keyof typeof utilsDict].includes(e.target.value as string));
+                                    const key = Object.keys(attributesQualifications).find(key => attributesQualifications[key as keyof typeof attributesQualifications].includes(e.target.value as string));
                                     const columns = key?.split("_") || [];
                                     const defaultValues = columns.reduce((acc, column) => (column === "score" ? { ...acc, [column]: 0 } : { ...acc, [column]: "" }), {});
                                     setNewQualification({ qualification: e.target.value, ...defaultValues });
@@ -114,7 +111,7 @@ export default function EmployeeQualifications() {
         );
         const contentStage2 = () => {
             const body: JSX.Element[] = [];
-            const key = Object.keys(utilsDict).find(key => utilsDict[key as keyof typeof utilsDict].includes(newQualification.qualification as string));
+            const key = Object.keys(attributesQualifications).find(key => attributesQualifications[key as keyof typeof attributesQualifications].includes(newQualification.qualification as string));
             const columns = key?.split("_") || [];
             columns.map((column, index) => {
                 switch (column) {
@@ -202,7 +199,7 @@ export default function EmployeeQualifications() {
                 </ModalContent>
             </Modal>
         )
-    }, [isOpen, onOpenChange, stage, text, newQualification, setNewQualification, utilsDict, addQualification, editQualification]);
+    }, [isOpen, onOpenChange, stage, text, newQualification, setNewQualification, attributesQualifications, addQualification, editQualification]);
 
     const renderTable = useCallback((columns: string[], qualifications: string[], mode: "view" | "edit" | "add") => {
         const _qualifications = Object.keys(employee?.qualifications || {}).filter(key => qualifications.includes(key));
@@ -256,12 +253,11 @@ export default function EmployeeQualifications() {
         return (
             employee && mode ? (
                 <div className="flex flex-col gap-2">
-                    {renderTable(["score"], ["tubista", "carpentiere", "impiegato", "capoTecnico", "manovale"], mode)}
-                    {renderTable(["technique", "material", "score"], ["saldatore"], mode)}
+                    { Object.keys(attributesQualifications).map((key) => renderTable(key.split("_"), attributesQualifications[key as keyof typeof attributesQualifications], mode)) }
                 </div>
             ) : null
         );
-    }, [mode, employee, renderTable]);
+    }, [mode, employee, renderTable, attributesQualifications]);
 
     const qualificationsCard = useMemo(() => (
             employee && mode ? (
