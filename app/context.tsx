@@ -128,6 +128,7 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
         employeeDocuments: {
             documents: "Documenti",
             noDocuments: "Nessun Documento",
+            actions: "Azioni",
         },
         qualifications: {
             qualifications: "Qualifiche",

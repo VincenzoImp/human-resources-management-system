@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useText } from "@/app/context";
 import { useEmployee, useMode } from "@/app/employees/[id]/context";
-import { Button, Card, CardBody, CardHeader, Chip } from "@nextui-org/react";
+import { Button, Card, CardBody, CardHeader, Chip, Tab, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@nextui-org/react";
 import { PlusIcon } from "@/app/icons";
 
 export default function EmployeeDocuments() {
@@ -12,8 +12,49 @@ export default function EmployeeDocuments() {
     const { mode } = useMode();
     const text = useText();
     const [newDocument, setNewDocument] = useState<Set<string>>(new Set());
+    const _columns = mode === "view" ? ["documents"] : ["documents", "actions"];
+    const _rows = employee?.documents || [];
 
-    return employee && mode ? (
+    const documentsModal = useMemo(() => (
+        <div className="container mx-auto">
+            <h1>Modal</h1>
+        </div>
+    ), [])
+
+    const header = (
+        <TableHeader>
+            {_columns.map((column) => (
+                <TableColumn key={column} align="center">
+                    {text.employeeDocuments[column]}
+                </TableColumn>
+            ))}
+        </TableHeader>
+    )
+    const body = (
+        <TableBody>
+            <TableRow>
+                {_rows.map((row, index) => (
+                        <TableRow key={index}>
+                            {_columns.map((column) => (
+                                <TableCell key={column} align="center">
+                                    {column === "qualification" ? text.qualificationsList[row[column] as string] : row[column]}
+                                </TableCell>
+                            ))}
+                        </TableRow>
+                    ))}
+            </TableRow>
+        </TableBody>
+    )
+
+    const table = useMemo(() => (
+        <Table>
+            {header}
+            {body}
+        </Table>
+    ), [header, body])
+
+    const documentsCard = useMemo(() => (
+        employee && mode ? (
             <div className="container mx-auto">
                 <Card className="mx-2">
                     <CardHeader className="flex justify-between">
@@ -29,12 +70,20 @@ export default function EmployeeDocuments() {
                     </CardHeader>
                     <CardBody>
                         {employee.documents && employee.documents.length > 0 ? (
-                            null
+                            table
                         ) : (
                             <p className="text-default-400">{text.employeeDocuments.noDocuments}</p>
                         )}
                     </CardBody>
                 </Card>
             </div>
-        ) : null;
+        ) : null
+    ), [employee, mode])
+
+    return (
+        <>
+            {documentsCard}
+            {documentsModal}
+        </>
+    )
 }
