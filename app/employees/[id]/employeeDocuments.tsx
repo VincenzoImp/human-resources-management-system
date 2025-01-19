@@ -1,19 +1,35 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { JSX, use, useCallback, useMemo, useState } from "react";
 import { useText } from "@/app/context";
 import { useEmployee, useMode } from "@/app/employees/[id]/context";
-import { Button, Card, CardBody, CardHeader, Chip, Tab, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@nextui-org/react";
-import { PlusIcon } from "@/app/icons";
+import { Button, Card, CardBody, CardHeader, Chip, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, useDisclosure } from "@nextui-org/react";
+import { DeleteIcon, PlusIcon } from "@/app/icons";
 
 export default function EmployeeDocuments() {
 
     const { employee, setEmployee } = useEmployee();
     const { mode } = useMode();
     const text = useText();
-    const [newDocument, setNewDocument] = useState<Set<string>>(new Set());
-    const _columns = mode === "view" ? ["documents"] : ["documents", "actions"];
-    const _rows = employee?.documents || [];
+    const {isOpen, onOpenChange} = useDisclosure();
+
+    const addDocument = useCallback((document: string) => {
+        // TODO: Add document to employee
+    }, [employee])
+    
+    const deleteDocument = useCallback((document: string) => {
+        // TODO: Delete document from employee
+    }, [employee])
+
+    const actions = useCallback((document: string): JSX.Element => {
+        return (
+            <div className="flex items-center justify-center gap-4">
+                <span className="text-lg text-danger cursor-pointer active:opacity-50">
+                    <DeleteIcon onClick={() => deleteDocument(document)} />
+                </span>
+            </div>
+        )
+    }, [deleteDocument])
 
     const documentsModal = useMemo(() => (
         <div className="container mx-auto">
@@ -21,37 +37,49 @@ export default function EmployeeDocuments() {
         </div>
     ), [])
 
-    const header = (
-        <TableHeader>
-            {_columns.map((column) => (
-                <TableColumn key={column} align="center">
-                    {text.employeeDocuments[column]}
-                </TableColumn>
-            ))}
-        </TableHeader>
-    )
-    const body = (
-        <TableBody>
-            <TableRow>
-                {_rows.map((row, index) => (
-                        <TableRow key={index}>
-                            {_columns.map((column) => (
-                                <TableCell key={column} align="center">
-                                    {column === "qualification" ? text.qualificationsList[row[column] as string] : row[column]}
-                                </TableCell>
-                            ))}
-                        </TableRow>
-                    ))}
-            </TableRow>
-        </TableBody>
-    )
+    const table = useMemo(() => {
+        const _documents = Array.isArray(employee?.documents) ? employee.documents : [];
+        if (_documents.length === 0) return null;
+        const _columns = mode === "view" ? ["document"] : ["document", "actions"];
+        let _row: Record<string, string | JSX.Element>[] = [];
+        _documents.forEach((document: string) => {
+            if (mode === "view") {
+                _row.push({ document: document })
+            } else {
+                _row.push({ document: document, actions: actions(document) })
+            }
+        })
 
-    const table = useMemo(() => (
-        <Table>
-            {header}
-            {body}
-        </Table>
-    ), [header, body])
+        const header = (
+            <TableHeader>
+                {_columns.map((column) => (
+                    <TableColumn key={column} align="center">
+                        {text.employeeDocuments[column]}
+                    </TableColumn>
+                ))}
+            </TableHeader>
+        )
+
+        const body = (
+            <TableBody>
+                {_row.map((row, index) => (
+                    <TableRow key={index}>
+                        {Object.keys(row).map((key) => (
+                            <TableCell key={key} align="center">
+                                {row[key]}
+                            </TableCell>
+                        ))}
+                    </TableRow>
+                ))}
+            </TableBody>
+        )
+        return (
+            <Table>
+                {header}
+                {body}
+            </Table>
+        )
+    }, [employee, text, mode])
 
     const documentsCard = useMemo(() => (
         employee && mode ? (
