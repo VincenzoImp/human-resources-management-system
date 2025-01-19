@@ -6,8 +6,9 @@ import { useEmployee, useMode } from "@/app/employees/[id]/context";
 import { Button, Card, CardBody, CardHeader, Chip, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, useDisclosure } from "@nextui-org/react";
 import { DeleteIcon, PlusIcon } from "@/app/icons";
 import { storage } from "@/app/firebase/config";
-import { ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
+import { toast } from "@/app/components/toast";
 
 export default function EmployeeDocuments() {
 
@@ -40,6 +41,30 @@ export default function EmployeeDocuments() {
         }
     }, [employee, setEmployee])
 
+    const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setNewDocumentUploading(true);
+            const filename = `${uuidv4()}_${file.name}`;
+            const storageRef = ref(storage, `employees/${employee?.id}/documents/${filename}`);
+            uploadBytes(storageRef, file).then((snapshot) => {
+                setNewDocument(snapshot.metadata.name);
+                setNewDocumentUploading(false);
+            }).catch((error) => {
+                toast.error(error.message);
+                setNewDocumentUploading(false);
+            })
+        }
+    }, [employee, setNewDocument, setNewDocumentUploading])
+
+    async function _getDownloadURL(employeeId: string | undefined, document: string): Promise<string> {
+        if (employeeId) {
+            const storageRef = ref(storage, `employees/${employeeId}/documents/${document}`);
+            return getDownloadURL(storageRef);
+        }
+        return "#";
+    }
+
     const actions = useCallback((document: string): JSX.Element => {
         return (
             <div className="flex items-center justify-center gap-4">
@@ -52,45 +77,34 @@ export default function EmployeeDocuments() {
 
     const documentsModal = useMemo(() => {
         return (
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+            <Modal isOpen={isOpen} onOpenChange={() => { onOpenChange(); setNewDocument(null); }}>
                 <ModalContent>
                     <ModalHeader>
                         {text.employeeDocuments.addDocument}
                     </ModalHeader>
                     <ModalBody>
-                        <Input 
-                            type="file"                             
-                            onChange={(e) => {
-                                const file = e.target.files?.[0];
-                                if (file) {
-                                    setNewDocumentUploading(true);
-                                    const filename = `${uuidv4()}_${file.name}`;
-                                    const storageRef = ref(storage, `employees/${employee?.id}/documents/${filename}`);
-                                    uploadBytes(storageRef, file).then((snapshot) => {
-                                        setNewDocument(snapshot.metadata.fullPath);
-                                        setNewDocumentUploading(false);
-                                    }).catch((error) => {
-                                        console.error(error);
-                                        setNewDocumentUploading(false);
-                                    })
-                                }
-                            }} 
-                        />
+                        <Input type="file" onChange={(e) => handleInputChange(e)} />                         
                     </ModalBody>
                     <ModalFooter>
-                        <Button color="default" onPress={() => onOpenChange()}>{text.employeeDocuments.cancel}</Button>
-                        <Button color="primary" onPress={() => {
-                            if (newDocument) {
-                                addDocument(newDocument);
-                                setNewDocument(null);
-                                onOpenChange();
-                            }
-                        }} isLoading={newDocumentUploading}>{text.employeeDocuments.add}</Button>
+                        <Button color="default" onPress={() => { onOpenChange(); setNewDocument(null); }}>
+                            {text.employeeDocuments.cancel}
+                        </Button>
+                        <Button color="primary" isDisabled={newDocument === null || newDocumentUploading} isLoading={newDocumentUploading}
+                            onPress={() => {
+                                if (newDocument) {
+                                    addDocument(newDocument);
+                                    setNewDocument(null);
+                                    onOpenChange();
+                                }
+                            }}
+                        >
+                            {newDocumentUploading ? null : text.employeeDocuments.add}
+                        </Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
         )
-    }, [isOpen, onOpenChange, addDocument])
+    }, [isOpen, onOpenChange, addDocument, newDocument, newDocumentUploading, handleInputChange, text])
 
     const table = useMemo(() => {
         const _documents = Array.isArray(employee?.documents) ? employee.documents : [];
@@ -121,7 +135,13 @@ export default function EmployeeDocuments() {
                     <TableRow key={index}>
                         {Object.keys(row).map((key) => (
                             <TableCell key={key} align="center">
-                                {row[key]}
+                                {key === "document" ? (
+                                    <Button color="default" onPress={() => _getDownloadURL(employee?.id ?? undefined, row[key] as string).then((url) => window.open(url))}>
+                                        {row[key]}
+                                    </Button>
+                                ) : (
+                                    row[key]
+                                )}
                             </TableCell>
                         ))}
                     </TableRow>
