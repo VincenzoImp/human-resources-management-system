@@ -1,10 +1,13 @@
 "use client";
 
-import { JSX, use, useCallback, useMemo, useState } from "react";
+import { JSX, useCallback, useMemo, useState } from "react";
 import { useText } from "@/app/context";
 import { useEmployee, useMode } from "@/app/employees/[id]/context";
-import { Button, Card, CardBody, CardHeader, Chip, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, useDisclosure } from "@nextui-org/react";
+import { Button, Card, CardBody, CardHeader, Chip, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, useDisclosure } from "@nextui-org/react";
 import { DeleteIcon, PlusIcon } from "@/app/icons";
+import { storage } from "@/app/firebase/config";
+import { ref, uploadBytes } from "firebase/storage";
+import { v4 as uuidv4 } from "uuid";
 
 export default function EmployeeDocuments() {
 
@@ -12,14 +15,30 @@ export default function EmployeeDocuments() {
     const { mode } = useMode();
     const text = useText();
     const {isOpen, onOpenChange} = useDisclosure();
+    const [newDocument, setNewDocument] = useState<string | null>(null);
+    const [newDocumentUploading, setNewDocumentUploading] = useState<boolean>(false);
 
     const addDocument = useCallback((document: string) => {
-        // TODO: Add document to employee
-    }, [employee])
+        if (employee) {
+            if (employee.documents && !employee.documents.includes(document)) {
+                setEmployee({
+                    ...employee,
+                    documents: [...employee.documents, document]
+                })
+            }
+        }
+    }, [employee, setEmployee])
     
     const deleteDocument = useCallback((document: string) => {
-        // TODO: Delete document from employee
-    }, [employee])
+        if (employee) {
+            if (employee.documents && employee.documents.includes(document)) {
+                setEmployee({
+                    ...employee,
+                    documents: employee.documents.filter((doc) => doc !== document)
+                })
+            }
+        }
+    }, [employee, setEmployee])
 
     const actions = useCallback((document: string): JSX.Element => {
         return (
@@ -31,17 +50,53 @@ export default function EmployeeDocuments() {
         )
     }, [deleteDocument])
 
-    const documentsModal = useMemo(() => (
-        <div className="container mx-auto">
-            <h1>Modal</h1>
-        </div>
-    ), [])
+    const documentsModal = useMemo(() => {
+        return (
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+                <ModalContent>
+                    <ModalHeader>
+                        {text.employeeDocuments.addDocument}
+                    </ModalHeader>
+                    <ModalBody>
+                        <Input 
+                            type="file"                             
+                            onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                    setNewDocumentUploading(true);
+                                    const filename = `${uuidv4()}_${file.name}`;
+                                    const storageRef = ref(storage, `employees/${employee?.id}/documents/${filename}`);
+                                    uploadBytes(storageRef, file).then((snapshot) => {
+                                        setNewDocument(snapshot.metadata.fullPath);
+                                        setNewDocumentUploading(false);
+                                    }).catch((error) => {
+                                        console.error(error);
+                                        setNewDocumentUploading(false);
+                                    })
+                                }
+                            }} 
+                        />
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="default" onPress={() => onOpenChange()}>{text.employeeDocuments.cancel}</Button>
+                        <Button color="primary" onPress={() => {
+                            if (newDocument) {
+                                addDocument(newDocument);
+                                setNewDocument(null);
+                                onOpenChange();
+                            }
+                        }} isLoading={newDocumentUploading}>{text.employeeDocuments.add}</Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+        )
+    }, [isOpen, onOpenChange, addDocument])
 
     const table = useMemo(() => {
         const _documents = Array.isArray(employee?.documents) ? employee.documents : [];
         if (_documents.length === 0) return null;
         const _columns = mode === "view" ? ["document"] : ["document", "actions"];
-        let _row: Record<string, string | JSX.Element>[] = [];
+        const _row: Record<string, string | JSX.Element>[] = [];
         _documents.forEach((document: string) => {
             if (mode === "view") {
                 _row.push({ document: document })
@@ -79,7 +134,7 @@ export default function EmployeeDocuments() {
                 {body}
             </Table>
         )
-    }, [employee, text, mode])
+    }, [employee, text, mode, actions])
 
     const documentsCard = useMemo(() => (
         employee && mode ? (
@@ -89,7 +144,7 @@ export default function EmployeeDocuments() {
                         <h2 className="text-lg font-medium">{text.employeeDocuments.documents}</h2>
                         {mode === "view" ? null : (
                             <Chip variant="light" className="inline-block" endContent={
-                                <Button size="sm" isIconOnly color="default" onPress={() => null}>
+                                <Button size="sm" isIconOnly color="default" onPress={() => onOpenChange()}>
                                     <PlusIcon />
                                 </Button>
                             }>
@@ -106,7 +161,7 @@ export default function EmployeeDocuments() {
                 </Card>
             </div>
         ) : null
-    ), [employee, mode])
+    ), [employee, mode, text, table, onOpenChange])
 
     return (
         <>

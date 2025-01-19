@@ -20,7 +20,7 @@ const emptyEmployee: Employee = {
     birthplaceNation: null,
     birthplaceProvincia: null,
     birthplaceZipcode: null,
-    documents: null,
+    documents: [],
     email: null,
     employed: null,
     gender: null,

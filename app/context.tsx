@@ -9,7 +9,7 @@ interface Employee {
     birthplaceNation: string | null;
     birthplaceProvincia: string | null;
     birthplaceZipcode: number | null;
-    documents: string | null;
+    documents: Array<string> | null;
     email: string | null;
     employed: "Yes" | "No" | null;
     gender: string | null;
@@ -129,7 +129,10 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
             documents: "Documenti",
             document: "Documento",
             noDocuments: "Nessun Documento",
+            addDocument: "Aggiungi Documento",
             actions: "Azioni",
+            cancel: "Annulla",
+            add: "Aggiungi",
         },
         qualifications: {
             qualifications: "Qualifiche",
