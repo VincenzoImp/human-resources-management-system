@@ -31,7 +31,7 @@ export default function EmployeesTable() {
 	const [searchValue, setSearchValue] = useState("");
 	const [employedValue, setEmployedValue] = useState<string>("all");
 	const text = useText();
-	const visibleCloumns = useMemo(() => ["name", "surname", "phone", "email", "gender", "taxCode", "employed"], []);
+	const visibleCloumns = useMemo(() => ["name", "surname", "livingplaceCity", "livingplaceProvincia", "employed"], []);
 	
 	const filteredItems = useMemo(() => {
         let filteredEmployees = [...employees];
@@ -41,9 +41,14 @@ export default function EmployeesTable() {
 					if (word === "") {
 						continue;
 					}
-					if ((employee.name && employee.name.toLowerCase().includes(word.toLowerCase())) || (employee.surname && employee.surname.toLowerCase().includes(word.toLowerCase()))) {
-                        return true;
-                    }
+					for (const column of visibleCloumns) {
+						if (column === "employed") {
+							continue;
+						}
+						if (employee[column as keyof Employee] && employee[column as keyof Employee]?.toString().toLowerCase().includes(word.toLowerCase())) {
+							return true;
+						}
+					}
                 }
                 return false;
             });
@@ -60,7 +65,7 @@ export default function EmployeesTable() {
 			}
 			return (a.surname as string).localeCompare(b.surname as string);
 		});
-	}, [employees, searchValue, employedValue]);
+	}, [employees, searchValue, employedValue, visibleCloumns]);
 
 	const pages = useMemo(() =>	{
 		return Math.ceil(filteredItems.length / rowsPerPage);

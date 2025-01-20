@@ -83,7 +83,7 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
             employees: "Risorse",
         },
         employeesTable: {
-            searchPlaceholder: "Cerca per nome o cognome",
+            searchPlaceholder: "Cerca per tutti i campi",
             filter: "Filtra",
             addNew: "Aggiungi",
             rowsPerPage: "Risorse per pagina",
