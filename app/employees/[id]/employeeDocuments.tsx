@@ -5,10 +5,8 @@ import { useText } from "@/app/context";
 import { useEmployee, useMode } from "@/app/employees/[id]/context";
 import { Button, Card, CardBody, CardHeader, Chip, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, useDisclosure } from "@nextui-org/react";
 import { DeleteIcon, NewWindowIcon, PlusIcon } from "@/app/icons";
-import { storage } from "@/app/firebase/config";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { v4 as uuidv4 } from "uuid";
 import { toast } from "@/app/components/toast";
+import { getDocumentUrl, uploadDocument } from "@/app/api";
 
 export default function EmployeeDocuments() {
 
@@ -41,35 +39,34 @@ export default function EmployeeDocuments() {
         }
     }, [employee, setEmployee])
 
-    const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        if (file) {
+        if (file && employee && employee?.id) {
             setNewDocumentUploading(true);
-            const filename = `${uuidv4()}_${file.name}`;
-            const storageRef = ref(storage, `employees/${employee?.id}/documents/${filename}`);
-            uploadBytes(storageRef, file).then((snapshot) => {
-                setNewDocument(snapshot.metadata.name);
-                setNewDocumentUploading(false);
-            }).catch((error) => {
-                toast.error(error.message);
-                setNewDocumentUploading(false);
-            })
+            try {
+                const filename = await uploadDocument(employee.id, file);
+                setNewDocument(filename);
+            } catch (error) {
+                toast.error(error);
+            }
+            setNewDocumentUploading(false);
         }
     }, [employee, setNewDocument, setNewDocumentUploading])
-
-    async function _getDownloadURL(employeeId: string | undefined, document: string): Promise<string> {
-        if (employeeId) {
-            const storageRef = ref(storage, `employees/${employeeId}/documents/${document}`);
-            return getDownloadURL(storageRef);
-        }
-        return "#";
-    }
 
     const actions = useCallback((document: string): JSX.Element => {
         return (
             <div className="flex items-center justify-center gap-4">
                 <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                    <NewWindowIcon onClick={() => _getDownloadURL(employee?.id ?? undefined, document).then((url) => window.open(url))} />
+                    <NewWindowIcon onClick={async () => {
+                        if (employee && employee?.id) {
+                            try {
+                                const url = await getDocumentUrl(employee.id, document);
+                                window.open(url);
+                            } catch (error) {
+                                toast.error(error);
+                            }
+                        }
+                    }} />
                 </span>
                 {mode === "view" ? null : (
                     <span className="text-lg text-danger cursor-pointer active:opacity-50">
@@ -88,7 +85,7 @@ export default function EmployeeDocuments() {
                         {text.employeeDocuments.addDocument}
                     </ModalHeader>
                     <ModalBody>
-                        <Input type="file" onChange={(e) => handleInputChange(e)} />                         
+                        <Input type="file" onChange={(e) => handleInputChange(e)} />
                     </ModalBody>
                     <ModalFooter>
                         <Button color="default" onPress={() => { onOpenChange(); setNewDocument(null); }}>
@@ -137,7 +134,7 @@ export default function EmployeeDocuments() {
                         {Object.keys(row).map((key) => (
                             <TableCell key={key} align="center">
                                 {key === "document" ? (
-                                    row[key as keyof typeof row].toString().split("_")[1]
+                                    row[key as keyof typeof row].toString().split("_").slice(1).join("_")
                                 ) : (
                                     row[key as keyof typeof row]
                                 )}

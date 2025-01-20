@@ -1,8 +1,22 @@
 "use client";
 
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
-import { db } from "@/app/firebase/config";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { db, storage, auth } from "@/app/firebase/config";
 import { Employee } from "@/app/context";
+import { v4 as uuidv4 } from "uuid";
+
+function checkWritePriviledges() {
+    // checl if auth uid is in the list of admins quering the database for the list of admins
+    // if the uid is in the list of admins, return true
+    // else return false
+    
+    // const uid = auth.currentUser?.uid;
+    // if (!uid) {
+    //     return false;
+    // }
+    // const docRef = doc(db, "admins", uid);
+}
 
 async function readEmployees() {
     const querySnapshot = await getDocs(collection(db, "employees"));
@@ -47,4 +61,16 @@ async function deleteEmployee(id: string) {
     await deleteDoc(docRef);
 }
 
-export { readEmployees, readEmployee, createEmployee, modifyEmployee, deleteEmployee };
+async function getDocumentUrl(employeeId: string, document: string) {
+    const storageRef = ref(storage, `employees/${employeeId}/documents/${document}`);
+    return getDownloadURL(storageRef);
+}
+
+async function uploadDocument(employeeId: string, file: File) {
+    const filename = `${uuidv4()}_${file.name}`;
+    const storageRef = ref(storage, `employees/${employeeId}/documents/${filename}`);
+    const snapshot = await uploadBytes(storageRef, file);
+    return snapshot.metadata.name;
+}
+
+export { readEmployees, readEmployee, createEmployee, modifyEmployee, deleteEmployee, getDocumentUrl, uploadDocument };
