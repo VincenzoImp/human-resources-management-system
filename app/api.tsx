@@ -2,21 +2,21 @@
 
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { db, storage, auth } from "@/app/firebase/config";
+import { db, storage } from "@/app/firebase/config";
 import { Employee } from "@/app/context";
 import { v4 as uuidv4 } from "uuid";
 
-function checkWritePriviledges() {
-    // checl if auth uid is in the list of admins quering the database for the list of admins
-    // if the uid is in the list of admins, return true
-    // else return false
+// function checkWritePriviledges() {
+//     // checl if auth uid is in the list of admins quering the database for the list of admins
+//     // if the uid is in the list of admins, return true
+//     // else return false
     
-    // const uid = auth.currentUser?.uid;
-    // if (!uid) {
-    //     return false;
-    // }
-    // const docRef = doc(db, "admins", uid);
-}
+//     // const uid = auth.currentUser?.uid;
+//     // if (!uid) {
+//     //     return false;
+//     // }
+//     // const docRef = doc(db, "admins", uid);
+// }
 
 async function readEmployees() {
     const querySnapshot = await getDocs(collection(db, "employees"));
