@@ -4,7 +4,7 @@ import { JSX, useCallback, useMemo, useState } from "react";
 import { useText } from "@/app/context";
 import { useEmployee, useMode } from "@/app/employees/[id]/context";
 import { Button, Card, CardBody, CardHeader, Chip, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, useDisclosure } from "@nextui-org/react";
-import { DeleteIcon, PlusIcon } from "@/app/icons";
+import { DeleteIcon, NewWindowIcon, PlusIcon } from "@/app/icons";
 import { storage } from "@/app/firebase/config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
@@ -68,12 +68,17 @@ export default function EmployeeDocuments() {
     const actions = useCallback((document: string): JSX.Element => {
         return (
             <div className="flex items-center justify-center gap-4">
-                <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                    <DeleteIcon onClick={() => deleteDocument(document)} />
+                <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                    <NewWindowIcon onClick={() => _getDownloadURL(employee?.id ?? undefined, document).then((url) => window.open(url))} />
                 </span>
+                {mode === "view" ? null : (
+                    <span className="text-lg text-danger cursor-pointer active:opacity-50">
+                        <DeleteIcon onClick={() => deleteDocument(document)} />
+                    </span>
+                )}
             </div>
         )
-    }, [deleteDocument])
+    }, [deleteDocument, mode, employee])
 
     const documentsModal = useMemo(() => {
         return (
@@ -109,15 +114,11 @@ export default function EmployeeDocuments() {
     const table = useMemo(() => {
         const _documents = Array.isArray(employee?.documents) ? employee.documents : [];
         if (_documents.length === 0) return null;
-        const _columns = mode === "view" ? ["document"] : ["document", "actions"];
-        const _row: Record<string, string | JSX.Element>[] = [];
-        _documents.forEach((document: string) => {
-            if (mode === "view") {
-                _row.push({ document: document })
-            } else {
-                _row.push({ document: document, actions: actions(document) })
-            }
-        })
+        const _columns = ["document", "actions"];
+        const _row: { document: string, actions: JSX.Element }[] = _documents.map((document) => ({
+            document,
+            actions: actions(document)
+        }))
 
         const header = (
             <TableHeader>
@@ -136,11 +137,9 @@ export default function EmployeeDocuments() {
                         {Object.keys(row).map((key) => (
                             <TableCell key={key} align="center">
                                 {key === "document" ? (
-                                    <Button color="default" onPress={() => _getDownloadURL(employee?.id ?? undefined, row[key] as string).then((url) => window.open(url))}>
-                                        {row[key]}
-                                    </Button>
+                                    row[key as keyof typeof row].toString().split("_")[1]
                                 ) : (
-                                    row[key]
+                                    row[key as keyof typeof row]
                                 )}
                             </TableCell>
                         ))}
@@ -154,7 +153,7 @@ export default function EmployeeDocuments() {
                 {body}
             </Table>
         )
-    }, [employee, text, mode, actions])
+    }, [employee, text, actions])
 
     const documentsCard = useMemo(() => (
         employee && mode ? (
