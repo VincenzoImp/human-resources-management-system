@@ -2,6 +2,8 @@
 
 import React, { useEffect, useState, ReactNode } from "react";
 import { User } from "firebase/auth";
+import { readPermissions } from "@/app/api";
+import toast from "react-hot-toast";
 
 interface Employee {
     birthdate: string | null;
@@ -30,6 +32,9 @@ interface Employee {
 interface ContextType {
     user: User | null;
     setUser: React.Dispatch<React.SetStateAction<User | null>>;
+    permissions: {
+        write: boolean;
+    } | null;
     text: Record<string, Record<string, string>>;
     attributesQualifications: Record<string, string[]>;
 }
@@ -45,6 +50,7 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
                 return user ? JSON.parse(user) : null;
             } catch (error) {
                 console.error(error);
+                toast.error("Errore nel recupero dell'utente");
                 return null;
             }
         }
@@ -56,6 +62,25 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
             localStorage.removeItem("user");
         }
     }, [user]);
+
+    const [permissions, setPermissions] = useState<{ write: boolean } | null>(null);
+    useEffect(() => {
+        const fetchPermissions = async () => {
+            if (permissions === null && user) {
+                try {
+                    const userPermissions = await readPermissions(user.uid);
+                    setPermissions(userPermissions);
+                } catch (error) {
+                    console.error(error);
+                    toast.error("Errore nel recupero dei permessi");
+                    setPermissions({
+                        write: false
+                    });
+                }
+            }
+        }
+        fetchPermissions();
+    }, [permissions, user]);
 
     const text = {
         authentication: {
@@ -208,7 +233,7 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
     };
 
     return (
-        <Context.Provider value={{ user, setUser, text, attributesQualifications }}>
+        <Context.Provider value={{ user, setUser, permissions, text, attributesQualifications }}>
             {children}
         </Context.Provider>
     );
@@ -221,6 +246,15 @@ function useUser() {
     }
     const { user, setUser } = context;
     return { user, setUser };
+}
+
+function usePermissions() {
+    const context = React.useContext(Context);
+    if (!context) {
+        throw new Error("Context not found");
+    }
+    const { permissions } = context;
+    return permissions;
 }
 
 function useText() {
@@ -241,5 +275,5 @@ function useAttributesQualifications() {
     return attributesQualifications;
 }
 
-export { ContextProvider, useUser, useText, useAttributesQualifications };
+export { ContextProvider, useUser, usePermissions, useText, useAttributesQualifications };
 export type { Employee };

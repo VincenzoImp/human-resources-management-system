@@ -6,17 +6,17 @@ import { db, storage } from "@/app/firebase/config";
 import { Employee } from "@/app/context";
 import { v4 as uuidv4 } from "uuid";
 
-// function checkWritePriviledges() {
-//     // checl if auth uid is in the list of admins quering the database for the list of admins
-//     // if the uid is in the list of admins, return true
-//     // else return false
-    
-//     // const uid = auth.currentUser?.uid;
-//     // if (!uid) {
-//     //     return false;
-//     // }
-//     // const docRef = doc(db, "admins", uid);
-// }
+async function readPermissions(uid: string) {
+    const docRef = doc(db, "settings", "permissions");
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+        const permissions = docSnap.data() as Record<string, string[]>;
+        return {
+            write: permissions.writers.includes(uid)
+        };
+    }
+    return null;
+}
 
 async function readEmployees() {
     const querySnapshot = await getDocs(collection(db, "employees"));
@@ -73,4 +73,4 @@ async function uploadDocument(employeeId: string, file: File) {
     return snapshot.metadata.name;
 }
 
-export { readEmployees, readEmployee, createEmployee, modifyEmployee, deleteEmployee, getDocumentUrl, uploadDocument };
+export { readEmployees, readEmployee, createEmployee, modifyEmployee, deleteEmployee, getDocumentUrl, uploadDocument, readPermissions };

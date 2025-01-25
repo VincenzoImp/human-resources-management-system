@@ -44,13 +44,13 @@ export default function Page({ params }: EmployeePageProps) {
 
     const fetchMode = useCallback(() => {
         if (mode === undefined) {
-            setMode(employeeId === "aggiungi" ? "add" : "view");
+            setMode(employeeId === "add-new" ? "add" : "view");
         }
     }, [mode, employeeId, setMode]);
 
     const fetchEmployee = useCallback(async () => {
         if (employee === undefined) {
-            if (employeeId === "aggiungi") {
+            if (employeeId === "add-new") {
                 setEmployee(emptyEmployee);
             } else {
                 try {
@@ -79,7 +79,7 @@ export default function Page({ params }: EmployeePageProps) {
 
     return (
         <>
-            <Navigation itemActive="risorse" />
+            <Navigation itemActive="employees" />
             <EmployeePage />
             <Footer />
         </>

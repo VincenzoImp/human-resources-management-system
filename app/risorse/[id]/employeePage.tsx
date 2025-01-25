@@ -11,6 +11,7 @@ import EmployeeInformations from "@/app/risorse/[id]/employeeInformations";
 import { useEmployee, useMode } from "@/app/risorse/[id]/context";
 import EmployeeQualifications from "@/app/risorse/[id]/employeeQualifications";
 import EmployeeDocuments from "@/app/risorse/[id]/employeeDocuments";
+import { usePermissions } from "@/app/context";
 
 async function save(employee: Employee, mode: string, saveSuccessText: string) {
     let toastText: string | null = null;
@@ -73,6 +74,7 @@ export default function EmployeePage() {
     const text = useText();
     const router = useRouter();
     const title = mode === "add" ? text.employeePage.addTitle : mode === "edit" ? text.employeePage.editTitle : text.employeePage.viewTitle;
+    const permissions = usePermissions();
 
     const handleSavePress = useCallback(async () => {
         if (!employee || !mode) return;
@@ -127,10 +129,18 @@ export default function EmployeePage() {
         <div className="flex justify-end gap-4 mx-2">
             {mode === "add" || mode === "edit" ? (
                 <>
-                    <Button color="secondary" onPress={() => handleCancelPress()}>
+                    <Button 
+                        color="secondary" 
+                        onPress={() => handleCancelPress()} 
+                        isDisabled={!permissions || permissions.write === false}
+                    >
                         {text.employeePage.cancel}
                     </Button>
-                    <Button color="primary" onPress={() => handleSavePress()}>
+                    <Button 
+                        color="primary" 
+                        onPress={() => handleSavePress()} 
+                        isDisabled={!permissions || permissions.write === false}
+                    >
                         {text.employeePage.save}
                     </Button>
                 </>
@@ -139,16 +149,21 @@ export default function EmployeePage() {
                     <Button 
                         color="danger" 
                         onPress={() => handleRemove()}
+                        isDisabled={!permissions || permissions.write === false}
                     >
                         {text.employeePage.delete}
                     </Button>
-                    <Button color="primary" onPress={() => setMode("edit")}>
+                    <Button 
+                        color="primary" 
+                        onPress={() => setMode("edit")}
+                        isDisabled={!permissions || permissions.write === false}
+                    >
                         {text.employeePage.edit}
                     </Button>
                 </>
             )}
         </div>
-    ), [handleCancelPress, handleRemove, handleSavePress, mode, text, setMode]);
+    ), [handleCancelPress, handleRemove, handleSavePress, mode, text, setMode, permissions]);
 
     return (
         <>

@@ -242,7 +242,7 @@ export default function EmployeeQualifications() {
             </TableBody>
         )
         return (
-            <Table>
+            <Table key={columns.join("_")}>
                 {header}
                 {body}
             </Table>

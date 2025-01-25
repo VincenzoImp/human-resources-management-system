@@ -7,11 +7,14 @@ import { SearchIcon } from "@/app/icons";
 import { Key, useCallback, useEffect, useMemo, useState } from "react";
 import { readEmployees } from "@/app/api";
 import { toast } from "@/app/components/toast";
+import { usePermissions } from "@/app/context";
 
 export default function EmployeesTable() {
 
 	const [employees, setEmployees] = useState<Employee[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
+	const permissions = usePermissions();
+
 	useEffect(() => {
 		async function fetchEmployees() {
 			try {
@@ -144,7 +147,7 @@ export default function EmployeesTable() {
 							<DropdownItem key="no">{text.other.unemployeds}</DropdownItem>
 						</DropdownMenu>
 					</Dropdown>
-					<Button color="primary" onPress={() => window.location.href = "/risorse/aggiungi"}>
+					<Button color="primary" onPress={() => window.location.href = "/risorse/aggiungi"} isDisabled={!permissions || permissions.write === false}>
 						{text.employeesTable.addNew}
 					</Button>
 				</div>
@@ -164,7 +167,7 @@ export default function EmployeesTable() {
 				</div>
 			</div>
 		);
-	}, [searchValue, onSearchChange, onClear, onRowsPerPageChange, employedValue, onEmployedChange, filteredItems, text, isLoading]);
+	}, [searchValue, onSearchChange, onClear, onRowsPerPageChange, employedValue, onEmployedChange, filteredItems, text, isLoading, permissions]);
 
 	const tableColumns = useMemo(() => {
 		return visibleCloumns.map((column : string) => (
