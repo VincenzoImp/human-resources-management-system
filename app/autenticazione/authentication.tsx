@@ -86,7 +86,7 @@ function handleLogout(
 function Authentication() {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-    const [activeKey, setActiveKey] = useState<string>("login");
+    // const [activeKey, setActiveKey] = useState<string>("login");
     const { setUser } = useUser();
     const text = useText();
     return (
