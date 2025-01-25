@@ -1,7 +1,7 @@
 "use client";
 
 import { useText } from "@/app/context";
-import QualificationsTable from "@/app/qualifications/qualificationsTable";
+import QualificationsTable from "@/app/qualifiche/qualificationsTable";
 
 export default function Qualifications() {
     const text = useText();

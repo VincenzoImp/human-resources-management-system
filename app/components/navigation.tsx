@@ -11,7 +11,7 @@ export default function Navigation({ itemActive }: Readonly<{ itemActive: string
 	const menuItems = {
 		home: text.navigation.home,
 		risorse: text.navigation.employees,
-		qualifications: text.navigation.qualifications
+		qualifiche: text.navigation.qualifications
 	};
 	const { user, setUser } = useUser();
 	return (
