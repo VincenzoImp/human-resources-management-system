@@ -10,7 +10,7 @@ export default function Navigation({ itemActive }: Readonly<{ itemActive: string
 	const text = useText();
 	const menuItems = {
 		home: text.navigation.home,
-		employees: text.navigation.employees,
+		risorse: text.navigation.employees,
 		qualifications: text.navigation.qualifications
 	};
 	const { user, setUser } = useUser();

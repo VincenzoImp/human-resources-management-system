@@ -7,10 +7,10 @@ import { useText } from "@/app/context";
 import { createEmployee, modifyEmployee, deleteEmployee, readEmployee } from "@/app/api";
 import { toast } from "@/app/components/toast";
 import { useRouter } from "next/navigation";
-import EmployeeInformations from "@/app/employees/[id]/employeeInformations";
-import { useEmployee, useMode } from "@/app/employees/[id]/context";
-import EmployeeQualifications from "@/app/employees/[id]/employeeQualifications";
-import EmployeeDocuments from "@/app/employees/[id]/employeeDocuments";
+import EmployeeInformations from "@/app/risorse/[id]/employeeInformations";
+import { useEmployee, useMode } from "@/app/risorse/[id]/context";
+import EmployeeQualifications from "@/app/risorse/[id]/employeeQualifications";
+import EmployeeDocuments from "@/app/risorse/[id]/employeeDocuments";
 
 async function save(employee: Employee, mode: string, saveSuccessText: string) {
     let toastText: string | null = null;
@@ -21,7 +21,7 @@ async function save(employee: Employee, mode: string, saveSuccessText: string) {
             const id = await createEmployee(employee);
             employee.id = id;
             toastText = saveSuccessText;
-            redirectPath = `/employees/${id}`;
+            redirectPath = `/risorse/${id}`;
             success = true;
 
         } catch (error: unknown) {
@@ -36,7 +36,7 @@ async function save(employee: Employee, mode: string, saveSuccessText: string) {
             const id = await modifyEmployee(employee);
             employee.id = id;
             toastText = saveSuccessText;
-            redirectPath = `/employees/${id}`;
+            redirectPath = `/risorse/${id}`;
             success = true;
         } catch (error: unknown) {
             if (error instanceof Error) {
@@ -55,7 +55,7 @@ async function remove(id: string, deleteSuccessText: string) {
     try {
         await deleteEmployee(id);
         toastText = deleteSuccessText;
-        redirectPath = "/employees";
+        redirectPath = "/risorse";
         success = true;
     } catch (error: unknown) {
         if (error instanceof Error) {
@@ -101,7 +101,7 @@ export default function EmployeePage() {
     const handleCancelPress = useCallback(async () => {
         if (!employee || !mode) return;
         if (mode === "add") {
-            router.push("/employees");
+            router.push("/risorse");
         } else {
             setMode("view");
             setEmployee(await readEmployee(employee.id as string));

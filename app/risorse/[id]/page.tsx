@@ -2,12 +2,12 @@
 
 import { useEffect, useCallback, use } from "react";
 import type { Employee } from "@/app/context";
-import EmployeePage from "@/app/employees/[id]/employeePage";
+import EmployeePage from "@/app/risorse/[id]/employeePage";
 import { notFound } from "next/navigation";
 import Navigation from "@/app/components/navigation";
 import { readEmployee } from "@/app/api";
 import { toast } from "@/app/components/toast";
-import { useEmployee, useMode } from "@/app/employees/[id]/context";
+import { useEmployee, useMode } from "@/app/risorse/[id]/context";
 import Footer from "@/app/components/footer";
 
 type EmployeePageProps = {
@@ -44,13 +44,13 @@ export default function Page({ params }: EmployeePageProps) {
 
     const fetchMode = useCallback(() => {
         if (mode === undefined) {
-            setMode(employeeId === "add-new" ? "add" : "view");
+            setMode(employeeId === "aggiungi" ? "add" : "view");
         }
     }, [mode, employeeId, setMode]);
 
     const fetchEmployee = useCallback(async () => {
         if (employee === undefined) {
-            if (employeeId === "add-new") {
+            if (employeeId === "aggiungi") {
                 setEmployee(emptyEmployee);
             } else {
                 try {
@@ -79,7 +79,7 @@ export default function Page({ params }: EmployeePageProps) {
 
     return (
         <>
-            <Navigation itemActive="employees" />
+            <Navigation itemActive="risorse" />
             <EmployeePage />
             <Footer />
         </>

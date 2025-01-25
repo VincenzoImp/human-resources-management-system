@@ -144,7 +144,7 @@ export default function EmployeesTable() {
 							<DropdownItem key="no">{text.other.unemployeds}</DropdownItem>
 						</DropdownMenu>
 					</Dropdown>
-					<Button color="primary" onPress={() => window.location.href = "/employees/add-new"}>
+					<Button color="primary" onPress={() => window.location.href = "/risorse/aggiungi"}>
 						{text.employeesTable.addNew}
 					</Button>
 				</div>
@@ -176,7 +176,7 @@ export default function EmployeesTable() {
 
 	const tableRows = useMemo(() => {
 		return items.map((employee : Employee) => (
-			<TableRow key={employee.id} className="cursor-pointer hover:bg-default-100" href={`/employees/${employee.id}`}>
+			<TableRow key={employee.id} className="cursor-pointer hover:bg-default-100" href={`/risorse/${employee.id}`}>
 				{visibleCloumns.map((column : string) => (
 					<TableCell key={column}>
 						{renderCell(employee, column)}

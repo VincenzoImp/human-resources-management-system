@@ -2,7 +2,7 @@
 
 import { JSX, useCallback, useMemo, useState } from "react";
 import { useText } from "@/app/context";
-import { useEmployee, useMode } from "@/app/employees/[id]/context";
+import { useEmployee, useMode } from "@/app/risorse/[id]/context";
 import { Button, Card, CardBody, CardHeader, Chip, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, useDisclosure } from "@nextui-org/react";
 import { DeleteIcon, NewWindowIcon, PlusIcon } from "@/app/icons";
 import { toast } from "@/app/components/toast";

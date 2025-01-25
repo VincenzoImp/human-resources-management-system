@@ -1,6 +1,6 @@
 "use client";
 
-import EmployeesTable from "@/app/employees/employeesTable";
+import EmployeesTable from "@/app/risorse/employeesTable";
 import { useText } from "@/app/context";
 
 export default function Employees() {

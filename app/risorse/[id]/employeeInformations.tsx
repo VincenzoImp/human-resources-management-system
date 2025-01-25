@@ -5,7 +5,7 @@ import { Employee, useText } from "@/app/context";
 import { Card, CardBody, CardHeader, DateInput, DatePicker, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
 import { I18nProvider } from "@react-aria/i18n";
 import { parseDate } from "@internationalized/date";
-import { useEmployee, useMode } from "@/app/employees/[id]/context";
+import { useEmployee, useMode } from "@/app/risorse/[id]/context";
 
 export default function EmployeeInformations() {
     
