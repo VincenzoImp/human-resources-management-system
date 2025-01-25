@@ -9,7 +9,7 @@ const Authenticated: React.FC<{ children: React.ReactNode }> = ({ children }) =>
     const router = useRouter();
     useEffect(() => {
         if (!user) {
-            router.push("/authentication");
+            router.push("/autenticazione");
         }
     }, [user, router]);
     if (!user) {
