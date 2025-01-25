@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, ChangeEvent } from "react";
-import { Input, Button, Card, Tabs, Tab } from "@nextui-org/react";
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, UserCredential, User } from "firebase/auth";
+import { Input, Button, Card } from "@nextui-org/react";
+import { signInWithEmailAndPassword, signOut, UserCredential, User } from "firebase/auth";
 import { auth } from "@/app/firebase/config";
 import { toast } from "@/app/components/toast";
 import { useText, useUser } from "@/app/context";
@@ -47,29 +47,29 @@ function handleLogin(
     setPassword("");
 }
 
-function handleRegister(
-    email: string, 
-    password: string, 
-    registrationSuccessText: string,
-    emailErrorText: string,
-    passwordErrorText: string,
-    setEmail: (value: string) => void, 
-    setPassword: (value: string) => void
-) {
-    if (!email.includes("@") || !email.includes(".")) {
-        toast.error(emailErrorText);
-    } else if (password.length < 6) {
-        toast.error(passwordErrorText);
-    } else {
-        createUserWithEmailAndPassword(auth, email, password).then(() => {
-            toast.success(registrationSuccessText);
-        }).catch((error: Error) => {
-            toast.error(error.message);
-        });
-    }
-    setEmail("");
-    setPassword("");
-}
+// function handleRegister(
+//     email: string, 
+//     password: string, 
+//     registrationSuccessText: string,
+//     emailErrorText: string,
+//     passwordErrorText: string,
+//     setEmail: (value: string) => void, 
+//     setPassword: (value: string) => void
+// ) {
+//     if (!email.includes("@") || !email.includes(".")) {
+//         toast.error(emailErrorText);
+//     } else if (password.length < 6) {
+//         toast.error(passwordErrorText);
+//     } else {
+//         createUserWithEmailAndPassword(auth, email, password).then(() => {
+//             toast.success(registrationSuccessText);
+//         }).catch((error: Error) => {
+//             toast.error(error.message);
+//         });
+//     }
+//     setEmail("");
+//     setPassword("");
+// }
 
 function handleLogout(
     logoutSuccessText: string,
@@ -94,8 +94,8 @@ function Authentication() {
             <div className="flex flex-col items-center">
                 <h1 className="text-2xl font-bold text-center">{text.authentication.authentication}</h1>
                 <Card className="p-4 m-4 w-full">
-                    <Tabs selectedKey={activeKey} onSelectionChange={(key) => setActiveKey(String(key))} className="justify-center pb-4">
-                        <Tab key="login" title={text.authentication.login} className="py-0">
+                    {/* <Tabs selectedKey={activeKey} onSelectionChange={(key) => setActiveKey(String(key))} className="justify-center pb-4">
+                        <Tab key="login" title={text.authentication.login} className="py-0"> */}
                             <Input
                                 className="mb-4"
                                 label={text.authentication.email}
@@ -117,7 +117,7 @@ function Authentication() {
                             <Button onPress={() => handleLogin(email, password, text.authentication.loginSuccess, text.authentication.emailError, text.authentication.passwordError, setEmail, setPassword, setUser)} color="primary" className="w-full">
                                 {text.authentication.loginButton}
                             </Button>
-                        </Tab>
+                        {/* </Tab>
                         <Tab key="register" title={text.authentication.register} className="py-0">
                             <Input
                                 className="mb-4"
@@ -141,7 +141,7 @@ function Authentication() {
                                 {text.authentication.registerButton}
                             </Button>
                         </Tab>
-                    </Tabs>
+                    </Tabs> */}
                 </Card>
             </div>
         </div>
