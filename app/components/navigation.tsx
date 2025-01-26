@@ -17,7 +17,7 @@ export default function Navigation({ itemActive }: Readonly<{ itemActive: string
 	return (
 		<Navbar isBordered isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>
 			<NavbarContent className="sm:hidden" justify="start">
-				<NavbarMenuToggle/>
+				<NavbarMenuToggle aria-label={text.navigation.toggleMenu} />
 			</NavbarContent>
 			<NavbarContent justify="center" className="sm:flex-1">
 				<NavbarBrand>
@@ -31,6 +31,7 @@ export default function Navigation({ itemActive }: Readonly<{ itemActive: string
 							color={itemActive === key ? "primary" : "foreground"}
 							href={`/${key}`}
 							aria-current={itemActive === key ? "page" : undefined}
+							aria-label={value}
 						>
 							{value}
 						</Link>
@@ -39,21 +40,22 @@ export default function Navigation({ itemActive }: Readonly<{ itemActive: string
 			</NavbarContent>
 			<NavbarContent as="div" justify="end">
 				<Dropdown placement="bottom-end">
-					<DropdownTrigger>
+					<DropdownTrigger aria-label={text.authentication.accountMenu}>
 						<Avatar
 							isBordered
 							as="button"
 							className="transition-transform"
 							size="sm"
 							showFallback
+							aria-label={text.authentication.avatar}
 						/>
 					</DropdownTrigger>
 					<DropdownMenu variant="flat">
-						<DropdownItem key="profile" className="h-14 gap-2">
+						<DropdownItem key={text.authentication.profile} className="h-14 gap-2" aria-label={text.authentication.profile}>
 							<p className="font-semibold">{text.authentication.loggedInAs}</p>
 							<p className="font-semibold">{user?.email}</p>
 						</DropdownItem>
-						<DropdownItem key="logout" color="danger" onPress={() => handleLogout(text.authentication.logoutSuccess, setUser)}>
+						<DropdownItem key={text.authentication.logoutButton} color="danger" onPress={() => handleLogout(text.authentication.logoutSuccess, setUser)} aria-label={text.authentication.logoutButton}>
 							{text.authentication.logoutButton}
 						</DropdownItem>
 					</DropdownMenu>
@@ -64,9 +66,10 @@ export default function Navigation({ itemActive }: Readonly<{ itemActive: string
 					<NavbarMenuItem key={`${key}-${index}`}>
 						<Link
 							className="w-full"
-							color = { itemActive === key ? "primary" : "foreground" }
+							color={itemActive === key ? "primary" : "foreground"}
 							href={`/${key.toLowerCase()}`}
 							size="lg"
+							aria-label={value}
 						>
 							{value}
 						</Link>

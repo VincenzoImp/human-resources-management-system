@@ -86,6 +86,10 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
 
     const text = {
         authentication: {
+            toggleMenu: "Menu Navigazione",
+            accountMenu: "Menu Account",
+            avatar: "Avatar",
+            profile: "Profilo",
             authentication: "Autenticazione",
             loginSuccess: "Accesso effettuato con successo!",
             registrationSuccess: "Registrazione effettuata con successo!",

@@ -104,6 +104,7 @@ function Authentication() {
                                 value={email}
                                 onChange={(e) => handleEmailChange(e, setEmail)}
                                 isRequired
+                                aria-label={text.authentication.email}
                             />
                             <Input
                                 className="mb-4"
@@ -113,8 +114,14 @@ function Authentication() {
                                 value={password}
                                 onChange={(e) => handlePasswordChange(e, setPassword)}
                                 isRequired
+                                aria-label={text.authentication.password}
                             />
-                            <Button onPress={() => handleLogin(email, password, text.authentication.loginSuccess, text.authentication.emailError, text.authentication.passwordError, setEmail, setPassword, setUser)} color="primary" className="w-full">
+                            <Button 
+                                onPress={() => handleLogin(email, password, text.authentication.loginSuccess, text.authentication.emailError, text.authentication.passwordError, setEmail, setPassword, setUser)} 
+                                color="primary" 
+                                className="w-full"
+                                aria-label={text.authentication.loginButton}
+                            >
                                 {text.authentication.loginButton}
                             </Button>
                         {/* </Tab>
@@ -127,6 +134,7 @@ function Authentication() {
                                 value={email}
                                 onChange={(e) => handleEmailChange(e, setEmail)}
                                 isRequired
+                                aria-label={text.authentication.email}
                             />
                             <Input
                                 className="mb-4"
@@ -136,8 +144,9 @@ function Authentication() {
                                 value={password}
                                 onChange={(e) => handlePasswordChange(e, setPassword)}
                                 isRequired
+                                aria-label={text.authentication.password}
                             />
-                            <Button onPress={() => handleRegister(email, password, text.authentication.registrationSuccess, text.authentication.emailError, text.authentication.passwordError, setEmail, setPassword)} color="primary" className="w-full">
+                            <Button onPress={() => handleRegister(email, password, text.authentication.registrationSuccess, text.authentication.emailError, text.authentication.passwordError, setEmail, setPassword)} color="primary" className="w-full" aria-label={text.authentication.registerButton}>
                                 {text.authentication.registerButton}
                             </Button>
                         </Tab>
