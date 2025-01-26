@@ -1,2 +1,1 @@
 - aggiungi le modali di conferma sulle write action
-- 

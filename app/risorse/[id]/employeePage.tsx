@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useMemo } from "react";
-import { Button } from "@nextui-org/react";
+import { useCallback, useMemo, useState } from "react";
+import { Button, Modal, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
 import type { Employee } from "@/app/context";
 import { useText } from "@/app/context";
 import { createEmployee, modifyEmployee, deleteEmployee, readEmployee } from "@/app/api";
@@ -75,16 +75,23 @@ export default function EmployeePage() {
     const router = useRouter();
     const title = mode === "add" ? text.employeePage.addTitle : mode === "edit" ? text.employeePage.editTitle : text.employeePage.viewTitle;
     const permissions = usePermissions();
+    const { isOpen, onOpenChange } = useDisclosure();
+    const [fromButtonType, setFromButtonType] = useState<"delete" | "add" | "edit" | null>(null);
 
-    const handleSavePress = useCallback(async () => {
-        if (!employee || !mode) return;
+    const checkRequiredFields = useCallback(() => {
+        if (!employee || !mode) return false;
         const requiredKeys = ["name", "surname", "phone", "email", "gender", "taxCode", "employed"];
         for (const key of requiredKeys as (keyof Employee)[]) {
             if (!employee[key]) {
                 toast.error(text.employeePage.fillRequiredFields);
-                return;
+                return false;
             }
         }
+        return true;
+    }, [employee, mode, text]);
+
+    const handleSavePress = useCallback(async () => {
+        if (!employee || !mode) return;
         const saveSuccessText = mode === "add" ? text.employeePage.addSuccess : text.employeePage.editSuccess;
         const { toastText, redirectPath, success } = await save(employee, mode, saveSuccessText);
         if (success) {
@@ -97,7 +104,7 @@ export default function EmployeePage() {
         }
         setMode("view");
         setEmployee(await readEmployee(employee.id as string));
-    }, [employee, mode, router, text, setMode, setEmployee]);
+    }, [employee, mode, router, setMode, setEmployee, text]);
 
     const handleCancelPress = useCallback(async () => {
         if (!employee || !mode) return;
@@ -109,7 +116,7 @@ export default function EmployeePage() {
         }
     }, [employee, mode, router, setMode, setEmployee]);
 
-    const handleRemove = useCallback(async () => {
+    const handleRemovePress = useCallback(async () => {
         if (!employee || !mode) return;
         if (employee.id) {
             const { toastText, redirectPath, success } = await remove(employee.id as string, text.employeePage.deleteSuccess);
@@ -124,6 +131,58 @@ export default function EmployeePage() {
         }
     }, [employee, router, text, mode]);
 
+    const confirmationModal = useMemo(() => {
+        let title = "";
+        let color: "danger" | "primary" | undefined;
+        let value = "";
+        switch (fromButtonType) {
+            case "delete":
+                title = text.employeePage.deleteConfirmation;
+                color = "danger";
+                value = text.employeePage.delete;
+                break;
+            case "add":
+                title = text.employeePage.addConfirmation;
+                color = "primary";
+                value = text.employeePage.add;
+                break;
+            case "edit":
+                title = text.employeePage.editConfirmation;
+                color = "primary";
+                value = text.employeePage.edit;
+                break;
+        }
+        return (
+            <Modal isOpen={isOpen} onOpenChange={ () => {onOpenChange(); setFromButtonType(null);} }>
+                <ModalContent>
+                    <ModalHeader>
+                        {title}
+                    </ModalHeader>
+                    <ModalFooter>
+                        <Button color="secondary" onPress={() => {onOpenChange(); setFromButtonType(null);}}>
+                            {text.employeePage.cancel}
+                        </Button>
+                        <Button 
+                            color={color}
+                            onPress={() => {
+                                if (fromButtonType === "delete") {
+                                    handleRemovePress();
+                                } else {
+                                    handleSavePress();
+                                }
+                                onOpenChange();
+                                setFromButtonType(null);
+                            }}
+                        >
+                            {value}
+                        </Button>
+                        
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+        );
+    }, [mode, text, isOpen, onOpenChange, fromButtonType]);
+
     const controlButtons = useMemo(() => (
         <div className="flex justify-end gap-4 mx-2">
             {mode === "add" || mode === "edit" ? (
@@ -136,7 +195,12 @@ export default function EmployeePage() {
                     </Button>
                     <Button 
                         color="primary" 
-                        onPress={() => handleSavePress()} 
+                        onPress={() => { 
+                            if (checkRequiredFields()){
+                                setFromButtonType(mode); 
+                                onOpenChange(); 
+                            }
+                        }}
                         isDisabled={!permissions || permissions.write === false}
                     >
                         {text.employeePage.save}
@@ -146,7 +210,7 @@ export default function EmployeePage() {
                 <>
                     <Button 
                         color="danger" 
-                        onPress={() => handleRemove()}
+                        onPress={() => { setFromButtonType("delete"); onOpenChange(); }}
                         isDisabled={!permissions || permissions.write === false}
                     >
                         {text.employeePage.delete}
@@ -161,7 +225,7 @@ export default function EmployeePage() {
                 </>
             )}
         </div>
-    ), [handleCancelPress, handleRemove, handleSavePress, mode, text, setMode, permissions]);
+    ), [handleCancelPress, handleRemovePress, handleSavePress, mode, text, setMode, permissions]);
 
     return (
         <>
@@ -174,6 +238,7 @@ export default function EmployeePage() {
                     {controlButtons}
                 </div>
             </div>
+            {confirmationModal}
         </>
     );
 }
