@@ -84,7 +84,7 @@ export default function Page({ params }: EmployeePageProps) {
         } else {
             return (
                 <>
-                    <Navigation itemActive="employees" />
+                    <Navigation itemActive="risorse" />
                     <EmployeePage />
                     <Footer />
                 </>

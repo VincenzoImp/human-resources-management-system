@@ -41,7 +41,7 @@ export default function EmployeeDocuments() {
 
     const handleInputChange = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        if (file && employee && employee?.id) {
+        if (file) {
             setNewDocumentUploading(true);
             try {
                 const filename = await uploadDocument("employees/documents/", file);
@@ -51,20 +51,18 @@ export default function EmployeeDocuments() {
             }
             setNewDocumentUploading(false);
         }
-    }, [employee, setNewDocument, setNewDocumentUploading])
+    }, [setNewDocument, setNewDocumentUploading])
 
     const actions = useCallback((document: string): JSX.Element => {
         return (
             <div className="flex items-center justify-center gap-4">
                 <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                     <NewWindowIcon onClick={async () => {
-                        if (employee && employee?.id) {
-                            try {
-                                const url = await getDocumentUrl(`employees/documents/${document}`);
-                                window.open(url);
-                            } catch (error) {
-                                toast.error(error);
-                            }
+                        try {
+                            const url = await getDocumentUrl(`employees/documents/${document}`);
+                            window.open(url);
+                        } catch (error) {
+                            toast.error(error);
                         }
                     }} />
                 </span>
@@ -75,7 +73,7 @@ export default function EmployeeDocuments() {
                 )}
             </div>
         )
-    }, [deleteDocument, mode, employee])
+    }, [deleteDocument, mode])
 
     const documentsModal = useMemo(() => {
         return (
