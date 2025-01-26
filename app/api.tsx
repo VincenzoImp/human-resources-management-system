@@ -12,7 +12,7 @@ async function readPermissions(uid: string) {
     if (docSnap.exists()) {
         const permissions = docSnap.data() as Record<string, string[]>;
         return {
-            write: permissions.writers.includes(uid)
+            write: permissions.write.includes(uid)
         };
     }
     return null;

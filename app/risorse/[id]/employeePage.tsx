@@ -132,7 +132,6 @@ export default function EmployeePage() {
                     <Button 
                         color="secondary" 
                         onPress={() => handleCancelPress()} 
-                        isDisabled={!permissions || permissions.write === false}
                     >
                         {text.employeePage.cancel}
                     </Button>

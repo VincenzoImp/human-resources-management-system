@@ -48,9 +48,10 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
             const user = localStorage.getItem("user");
             try {
                 return user ? JSON.parse(user) : null;
-            } catch (error) {
-                console.error(error);
-                toast.error("Errore nel recupero dell'utente");
+            } catch (error: unknown) {
+                if (error instanceof Error) {
+                    toast.error(error.message);
+                }
                 return null;
             }
         }
@@ -70,9 +71,10 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
                 try {
                     const userPermissions = await readPermissions(user.uid);
                     setPermissions(userPermissions);
-                } catch (error) {
-                    console.error(error);
-                    toast.error("Errore nel recupero dei permessi");
+                } catch (error: unknown) {
+                    if (error instanceof Error) {
+                        toast.error(error.message);
+                    }
                     setPermissions({
                         write: false
                     });

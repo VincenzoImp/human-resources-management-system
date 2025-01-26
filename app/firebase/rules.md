@@ -7,10 +7,8 @@ service cloud.firestore {
     // Consenti la lettura a tutti gli utenti autenticati
     match /{document=**} {
       allow read: if request.auth != null;
-
-      // Consenti la scrittura solo se l'UID dell'utente è nell'array "writers" del documento "permissions"
-      allow write: if request.auth != null && 
-                   request.auth.uid in get(/databases/$(database)/documents/settings/permissions).data.writers;
+      // Consenti la scrittura solo se l'UID dell'utente è nell'array "write" del documento "permissions"
+      allow write: if request.auth != null && request.auth.uid in get(/databases/$(database)/documents/settings/permissions).data.write;
     }
   }
 }
@@ -25,10 +23,8 @@ service firebase.storage {
     match /{allPaths=**} {
       // Consenti la lettura a tutti gli utenti autenticati
       allow read: if request.auth != null;
-      
-      // Consenti la scrittura solo se l'UID è presente nel campo "writers" del documento "permissions" in Firestore
-      allow write: if request.auth != null && 
-                   request.auth.uid in firestore.get(/databases/$(database)/documents/settings/permissions).data.writers;
+      // Consenti la scrittura solo se l'UID è presente nel campo "write" del documento "permissions" in Firestore
+      allow write: if request.auth != null && request.auth.uid in ["967KwlGzAOP6t40wpGwoQ4KpBG22"];
     }
   }
 }
