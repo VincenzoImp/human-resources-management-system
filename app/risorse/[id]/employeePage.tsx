@@ -87,7 +87,6 @@ export default function EmployeePage() {
         }
         const saveSuccessText = mode === "add" ? text.employeePage.addSuccess : text.employeePage.editSuccess;
         const { toastText, redirectPath, success } = await save(employee, mode, saveSuccessText);
-        console.log(toastText, redirectPath, success);
         if (success) {
             toast.success(toastText as unknown as string);
         } else {

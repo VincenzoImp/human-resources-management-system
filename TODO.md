@@ -1,4 +1,2 @@
-- ricontrolla tutto il flusso delle azioni di write 
-- testa i permessi nel write i documenti che si rompe tutto
 - aggiungi le modali di conferma sulle write action
-- nota che non si possono caricare documenti quando la risorsa si sta aggiungendo
+- 
