@@ -44,7 +44,7 @@ export default function EmployeeDocuments() {
         if (file && employee && employee?.id) {
             setNewDocumentUploading(true);
             try {
-                const filename = await uploadDocument(employee.id, file);
+                const filename = await uploadDocument("employees/documents/", file);
                 setNewDocument(filename);
             } catch (error) {
                 toast.error(error);
@@ -60,7 +60,7 @@ export default function EmployeeDocuments() {
                     <NewWindowIcon onClick={async () => {
                         if (employee && employee?.id) {
                             try {
-                                const url = await getDocumentUrl(employee.id, document);
+                                const url = await getDocumentUrl(`employees/documents/${document}`);
                                 window.open(url);
                             } catch (error) {
                                 toast.error(error);

@@ -1,7 +1,7 @@
 "use client";
 
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes, deleteObject, listAll } from "firebase/storage";
 import { db, storage } from "@/app/firebase/config";
 import { Employee } from "@/app/context";
 import { v4 as uuidv4 } from "uuid";
@@ -26,6 +26,7 @@ async function readEmployees() {
         employee.id = doc.id;
         employees.push(employee);
     });
+    flushEmployeesDocuments(employees);
     return employees;
 }
 
@@ -61,16 +62,32 @@ async function deleteEmployee(id: string) {
     await deleteDoc(docRef);
 }
 
-async function getDocumentUrl(employeeId: string, document: string) {
-    const storageRef = ref(storage, `employees/${employeeId}/documents/${document}`);
+async function getDocumentUrl(fullPath: string) {
+    const storageRef = ref(storage, fullPath);
     return getDownloadURL(storageRef);
 }
 
-async function uploadDocument(employeeId: string, file: File) {
+async function uploadDocument(basePath: string, file: File) {
     const filename = `${uuidv4()}_${file.name}`;
-    const storageRef = ref(storage, `employees/${employeeId}/documents/${filename}`);
+    const storageRef = ref(storage, `${basePath}${filename}`);
     const snapshot = await uploadBytes(storageRef, file);
     return snapshot.metadata.name;
+}
+
+async function deleteDocument(fullPath: string) {
+    const storageRef = ref(storage, fullPath);
+    await deleteObject(storageRef);
+}
+
+async function flushEmployeesDocuments(employees: Employee[]) {
+    const employeesDocuments = employees.map(employee => employee.documents).flat();
+    const storageRef = ref(storage, "employees/documents");
+    const storageList = await listAll(storageRef);
+    const storageDocuments = storageList.items.map(item => item.name);
+    const documentsToDelete = storageDocuments.filter(document => !employeesDocuments.includes(document));
+    documentsToDelete.forEach(async document => {
+        await deleteDocument(`employees/documents/${document}`);
+    });
 }
 
 export { readEmployees, readEmployee, createEmployee, modifyEmployee, deleteEmployee, getDocumentUrl, uploadDocument, readPermissions };
