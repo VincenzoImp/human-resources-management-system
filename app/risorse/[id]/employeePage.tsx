@@ -181,7 +181,7 @@ export default function EmployeePage() {
                 </ModalContent>
             </Modal>
         );
-    }, [mode, text, isOpen, onOpenChange, fromButtonType]);
+    }, [text, isOpen, onOpenChange, fromButtonType, handleRemovePress, handleSavePress]);
 
     const controlButtons = useMemo(() => (
         <div className="flex justify-end gap-4 mx-2">
@@ -225,7 +225,7 @@ export default function EmployeePage() {
                 </>
             )}
         </div>
-    ), [handleCancelPress, handleRemovePress, handleSavePress, mode, text, setMode, permissions]);
+    ), [handleCancelPress, mode, text, setMode, permissions, checkRequiredFields, onOpenChange]);
 
     return (
         <>
