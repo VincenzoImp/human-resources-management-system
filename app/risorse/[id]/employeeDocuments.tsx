@@ -47,11 +47,13 @@ export default function EmployeeDocuments() {
                 const filename = await uploadDocument("employees/documents/", file);
                 setNewDocument(filename);
             } catch (error) {
+                onOpenChange(); 
+                setNewDocument(null);
                 toast.error(error);
             }
             setNewDocumentUploading(false);
         }
-    }, [setNewDocument, setNewDocumentUploading])
+    }, [setNewDocument, setNewDocumentUploading, onOpenChange])
 
     const actions = useCallback((document: string): JSX.Element => {
         return (
@@ -77,7 +79,7 @@ export default function EmployeeDocuments() {
 
     const documentsModal = useMemo(() => {
         return (
-            <Modal isOpen={isOpen} onOpenChange={() => { onOpenChange(); setNewDocument(null); }}>
+            <Modal isOpen={isOpen} onOpenChange={() => { onOpenChange(); setNewDocument(null); setNewDocumentUploading(false); }}>
                 <ModalContent>
                     <ModalHeader>
                         {text.employeeDocuments.addDocument}
@@ -86,14 +88,25 @@ export default function EmployeeDocuments() {
                         <Input type="file" onChange={(e) => handleInputChange(e)} />
                     </ModalBody>
                     <ModalFooter>
-                        <Button color="default" onPress={() => { onOpenChange(); setNewDocument(null); }}>
+                        <Button 
+                            color="default" 
+                            onPress={() => { 
+                                onOpenChange(); 
+                                setNewDocument(null); 
+                                setNewDocumentUploading(false);
+                            }}
+                        >
                             {text.employeeDocuments.cancel}
                         </Button>
-                        <Button color="primary" isDisabled={newDocument === null || newDocumentUploading} isLoading={newDocumentUploading}
+                        <Button 
+                            color="primary" 
+                            isDisabled={newDocument === null || newDocumentUploading} 
+                            isLoading={newDocumentUploading}
                             onPress={() => {
                                 if (newDocument) {
                                     addDocument(newDocument);
                                     setNewDocument(null);
+                                    setNewDocumentUploading(false);
                                     onOpenChange();
                                 }
                             }}
@@ -104,7 +117,7 @@ export default function EmployeeDocuments() {
                 </ModalContent>
             </Modal>
         )
-    }, [isOpen, onOpenChange, addDocument, newDocument, newDocumentUploading, handleInputChange, text])
+    }, [isOpen, onOpenChange, addDocument, newDocument, newDocumentUploading, handleInputChange, text, setNewDocument, setNewDocumentUploading])
 
     const table = useMemo(() => {
         const _documents = Array.isArray(employee?.documents) ? employee.documents : [];
