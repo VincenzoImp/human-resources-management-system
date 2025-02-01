@@ -1,6 +1,6 @@
 "use client";
 
-import { Spacer } from "@nextui-org/react";
+import { Spacer } from "@heroui/react";
 
 export default function Footer() {
     return (

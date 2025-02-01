@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
-import { Button, Modal, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
+import { Button, Modal, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@heroui/react";
 import type { Employee } from "@/app/context";
 import { useText } from "@/app/context";
 import { createEmployee, modifyEmployee, deleteEmployee, readEmployee } from "@/app/api";

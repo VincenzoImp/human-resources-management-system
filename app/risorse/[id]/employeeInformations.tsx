@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo } from "react";
 import { Employee, useText } from "@/app/context";
-import { Card, CardBody, CardHeader, DateInput, DatePicker, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
+import { Card, CardBody, CardHeader, DateInput, DatePicker, Input, Select, SelectItem, Textarea } from "@heroui/react";
 import { I18nProvider } from "@react-aria/i18n";
 import { parseDate } from "@internationalized/date";
 import { useEmployee, useMode } from "@/app/risorse/[id]/context";

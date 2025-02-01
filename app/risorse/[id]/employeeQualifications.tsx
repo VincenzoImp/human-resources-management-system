@@ -3,7 +3,7 @@
 import { JSX, useCallback, useMemo, useState } from "react";
 import { useText, useAttributesQualifications } from "@/app/context";
 import { useEmployee, useMode } from "@/app/risorse/[id]/context";
-import { Button, Card, CardBody, CardHeader, Chip, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Radio, RadioGroup, Slider, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, useDisclosure } from "@nextui-org/react";
+import { Button, Card, CardBody, CardHeader, Chip, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Radio, RadioGroup, Slider, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, useDisclosure } from "@heroui/react";
 import { DeleteIcon, EditIcon, PlusIcon } from "@/app/icons";
 
 export default function EmployeeQualifications() {

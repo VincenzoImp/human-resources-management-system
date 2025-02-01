@@ -2,7 +2,7 @@
 
 import { useAttributesQualifications, useText } from "@/app/context";
 import type { Employee } from "@/app/context";
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination, Spinner, Accordion, AccordionItem } from "@nextui-org/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination, Spinner, Accordion, AccordionItem } from "@heroui/react";
 import { SearchIcon } from "@/app/icons";
 import { Key, useCallback, useEffect, useMemo, useState } from "react";
 import { readEmployees } from "@/app/api";

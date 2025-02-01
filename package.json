@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@internationalized/date": "^3.6.0",
-    "@nextui-org/react": "^2.4.8",
+    "@heroui/react": "2.6.14",
     "firebase": "^11.1.0",
     "framer-motion": "^11.11.9",
     "next": "^15.1.3",
@@ -30,5 +30,17 @@
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.6.3"
-  }
+  },
+  "description": "This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VincenzoImp/iwn.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VincenzoImp/iwn/issues"
+  },
+  "homepage": "https://github.com/VincenzoImp/iwn#readme"
 }
