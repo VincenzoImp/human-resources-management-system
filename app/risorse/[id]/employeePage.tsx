@@ -111,8 +111,8 @@ export default function EmployeePage() {
         if (mode === "add") {
             router.push("/risorse");
         } else {
-            setMode("view");
             setEmployee(await readEmployee(employee.id as string));
+            setMode("view");
         }
     }, [employee, mode, router, setMode, setEmployee]);
 
