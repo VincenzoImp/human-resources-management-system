@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, ChangeEvent } from "react";
-import { Input, Button, Card } from "@nextui-org/react";
+import { Input, Button, Card } from "@heroui/react";
 import { signInWithEmailAndPassword, signOut, UserCredential, User } from "firebase/auth";
 import { auth } from "@/app/firebase/config";
 import { toast } from "@/app/components/toast";

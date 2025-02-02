@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo } from "react";
 import { Employee, useText } from "@/app/context";
-import { Card, CardBody, CardHeader, DateInput, DatePicker, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
+import { CalendarDate, Card, CardBody, CardHeader, DateInput, DatePicker, Input, Select, SelectItem, Textarea } from "@heroui/react";
 import { I18nProvider } from "@react-aria/i18n";
 import { parseDate } from "@internationalized/date";
 import { useEmployee, useMode } from "@/app/risorse/[id]/context";
@@ -106,7 +106,7 @@ export default function EmployeeInformations() {
             </div>
         ) : null
     ), [employee, handleInputChange, mode, text]);
-    
+
     const birthInformationsCard = useMemo(() => (
         employee ? (
             <div className="container mx-auto">
@@ -119,7 +119,7 @@ export default function EmployeeInformations() {
                             <I18nProvider locale="it-IT">
                                 <DateInput 
                                     label={text.employeeAttributes.birthdate}
-                                    defaultValue={employee.birthdate ? parseDate(employee.birthdate as string) : null}
+                                    defaultValue={employee.birthdate ? parseDate(employee.birthdate as string) as unknown as CalendarDate : null}
                                     isDisabled={!employee.birthdate}
                                     isReadOnly
                                 />
@@ -128,8 +128,8 @@ export default function EmployeeInformations() {
                             <I18nProvider locale="it-IT">
                                 <DatePicker 
                                     label={text.employeeAttributes.birthdate}
-                                    onChange={(e) => handleInputChange("birthdate", e ? e.toString() : null)}
-                                    defaultValue={employee.birthdate ? parseDate(employee.birthdate as string) : null}
+                                    onChange={(e: CalendarDate | null) => handleInputChange("birthdate", e ? e.toString() : null)}
+                                    defaultValue={employee.birthdate ? parseDate(employee.birthdate as string) as unknown as CalendarDate : null}
                                     showMonthAndYearPickers
                                 />
                             </I18nProvider>
