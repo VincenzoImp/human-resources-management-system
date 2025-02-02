@@ -185,7 +185,7 @@ function QualificationTable(qualification: string, employees: Employee[], isLoad
 
 	const tableRows = useMemo(() => {
 		return items.map((qualificationItem, index) => (
-			<TableRow key={index} className="cursor-pointer hover:bg-default-100" href={`/employees/${qualificationItem.id}`}>
+			<TableRow key={index} className="cursor-pointer hover:bg-default-100" href={`/risorse/${qualificationItem.id}`}>
 				{visibleCloumns.map((column : string) => (
 					<TableCell key={column}>
 						{renderCell(qualificationItem, column)}
