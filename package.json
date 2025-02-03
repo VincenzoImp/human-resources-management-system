@@ -37,8 +37,8 @@
     "type": "git",
     "url": "git+https://github.com/VincenzoImp/iwn.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Vincenzo Imperati",
+  "license": "Proprietary",
   "bugs": {
     "url": "https://github.com/VincenzoImp/iwn/issues"
   },
