@@ -1,6 +1,6 @@
 "use client";
 
-import { useAttributesQualifications, useText } from "@/app/context";
+import { useAttributesEmployees, useAttributesQualifications, useText } from "@/app/context";
 import type { Employee } from "@/app/context";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination, Spinner, Accordion, AccordionItem } from "@heroui/react";
 import { SearchIcon } from "@/app/icons";
@@ -27,12 +27,13 @@ function QualificationTable(qualification: string, employees: Employee[], isLoad
 	const [searchValue, setSearchValue] = useState("");
 	const [employedValue, setEmployedValue] = useState<string>("all");
     const attributesQualifications = useAttributesQualifications();
+	const attributesEmployees = useAttributesEmployees();
 	
 	const visibleCloumns = useMemo(() => {
 		const key = Object.keys(attributesQualifications).find(key => attributesQualifications[key as keyof typeof attributesQualifications].includes(qualification));
         const columns = key?.split("_") || [];
-		return ["name", "surname", "employed", ...columns];
-	}, [qualification, attributesQualifications]);
+		return [...attributesEmployees.searchKeys, "employed", ...columns];
+	}, [qualification, attributesQualifications, attributesEmployees]);
 
 	const filteredItems = useMemo(() => {
         let filteredEmployees = [...employees];

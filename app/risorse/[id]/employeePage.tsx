@@ -3,7 +3,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { Button, Modal, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@heroui/react";
 import type { Employee } from "@/app/context";
-import { useText } from "@/app/context";
+import { useAttributesEmployees, useText } from "@/app/context";
 import { createEmployee, modifyEmployee, deleteEmployee, readEmployee } from "@/app/api";
 import { toast } from "@/app/components/toast";
 import { useRouter } from "next/navigation";
@@ -77,18 +77,18 @@ export default function EmployeePage() {
     const permissions = usePermissions();
     const { isOpen, onOpenChange } = useDisclosure();
     const [fromButtonType, setFromButtonType] = useState<"delete" | "add" | "edit" | null>(null);
+    const attributesEmployees = useAttributesEmployees();
 
     const checkRequiredFields = useCallback(() => {
         if (!employee || !mode) return false;
-        const requiredKeys = ["name", "surname", "phone", "email", "gender", "taxCode", "employed"];
-        for (const key of requiredKeys as (keyof Employee)[]) {
+        for (const key of attributesEmployees.requiredKeys as (keyof Employee)[]) {
             if (!employee[key]) {
                 toast.error(text.employeePage.fillRequiredFields);
                 return false;
             }
         }
         return true;
-    }, [employee, mode, text]);
+    }, [employee, mode, text, attributesEmployees]);
 
     const handleSavePress = useCallback(async () => {
         if (!employee || !mode) return;

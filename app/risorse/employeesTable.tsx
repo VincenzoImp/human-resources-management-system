@@ -1,6 +1,6 @@
 "use client";
 
-import { useText } from "@/app/context";
+import { useAttributesEmployees, useText } from "@/app/context";
 import type { Employee } from "@/app/context";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Input, Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Pagination, Spinner, Card } from "@heroui/react";
 import { SearchIcon } from "@/app/icons";
@@ -34,7 +34,8 @@ export default function EmployeesTable() {
 	const [searchValue, setSearchValue] = useState("");
 	const [employedValue, setEmployedValue] = useState<string>("all");
 	const text = useText();
-	const visibleCloumns = useMemo(() => ["name", "surname", "livingplaceCity", "livingplaceProvincia", "employed"], []);
+	const attributesEmployees = useAttributesEmployees();
+	const visibleCloumns = useMemo(() => [...attributesEmployees.searchKeys, "employed"], [attributesEmployees]);
 	
 	const filteredItems = useMemo(() => {
         let filteredEmployees = [...employees];

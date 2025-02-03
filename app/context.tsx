@@ -37,6 +37,7 @@ interface ContextType {
     } | null;
     text: Record<string, Record<string, string>>;
     attributesQualifications: Record<string, string[]>;
+    attributesEmployees: Record<string, string[]>;
 }
 
 const Context = React.createContext<ContextType | null>(null);
@@ -184,6 +185,8 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
             qualification: "Qualifica",
             technique: "Tecnica",
             material: "Materiale",
+            livingplaceNation: "Nazione di Residenza",
+            livingplaceProvincia: "Provincia di Residenza",
         },
         navigation: {
             home: "Home",
@@ -242,8 +245,13 @@ const ContextProvider = ({ children }: Readonly<{ children: ReactNode }>) => {
         ["technique_material_score"]: ["saldatore"]
     };
 
+    const attributesEmployees = {
+        requiredKeys: ["name", "surname", "phone", "email", "gender", "taxCode", "employed", "birthplaceNation", "livingplaceNation", "livingplaceProvincia"],
+        searchKeys: ["name", "surname", "livingplaceProvincia", "livingplaceNation"]
+    };
+
     return (
-        <Context.Provider value={{ user, setUser, permissions, text, attributesQualifications }}>
+        <Context.Provider value={{ user, setUser, permissions, text, attributesQualifications, attributesEmployees }}>
             {children}
         </Context.Provider>
     );
@@ -285,5 +293,14 @@ function useAttributesQualifications() {
     return attributesQualifications;
 }
 
-export { ContextProvider, useUser, usePermissions, useText, useAttributesQualifications };
+function useAttributesEmployees() {
+    const context = React.useContext(Context);
+    if (!context) {
+        throw new Error("Context not found");
+    }
+    const { attributesEmployees } = context;
+    return attributesEmployees;
+}
+
+export { ContextProvider, useUser, usePermissions, useText, useAttributesQualifications, useAttributesEmployees };
 export type { Employee };
