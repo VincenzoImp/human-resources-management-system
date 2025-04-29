@@ -53,7 +53,9 @@ function QualificationTable(qualification: string, employees: Employee[], isLoad
 							id: employee.id || "",
 							employed: employee.employed !== null ? employee.employed : "",
 							qualification: qualification,
-							...item
+							livingplaceProvincia: employee.livingplaceProvincia || "",
+							livingplaceNation: employee.livingplaceNation || "",
+							...item,						
 						};
 						qualificationItems.push(qualificationItem);
 					});
