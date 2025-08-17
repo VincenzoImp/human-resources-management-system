@@ -4,10 +4,10 @@ A comprehensive web application for managing company employees and their qualifi
 
 ## 🌐 Live Demo
 
-Try the application live at: **[https://hrms-demo.vercel.app](https://hrms-demo.vercel.app)**
+Try the application live at: **[https://gestionale-three.vercel.app](https://gestionale-three.vercel.app)**
 
 **Demo Credentials:**
-- **Email**: `demo@hrms.app`
+- **Email**: `demo@gestionale.com`
 - **Password**: `demo2024`
 
 *Note: The demo account has read-only access. Some features requiring write permissions may be limited.*
