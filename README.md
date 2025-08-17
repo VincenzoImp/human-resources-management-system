@@ -2,6 +2,16 @@
 
 A comprehensive web application for managing company employees and their qualifications, built with Next.js and Firebase.
 
+## 🌐 Live Demo
+
+Try the application live at: **[https://hrms-demo.vercel.app](https://hrms-demo.vercel.app)**
+
+**Demo Credentials:**
+- **Email**: `demo@hrms.app`
+- **Password**: `demo2024`
+
+*Note: The demo account has read-only access. Some features requiring write permissions may be limited.*
+
 ## 🚀 Features
 
 ### Employee Management
