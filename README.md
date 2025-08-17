@@ -1,7 +1,5 @@
 # Human Resources Management System
 
-A comprehensive web application for managing company employees and their qualifications, built with Next.js and Firebase.
-
 ## 🌐 Live Demo
 
 Try the application live at: **[https://gestionale-three.vercel.app](https://gestionale-three.vercel.app)**
