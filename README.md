@@ -299,14 +299,6 @@ iwn/
 └── README.md
 ```
 
-## 🤝 Contributing
-
-This is a proprietary application. See `LICENSE.md` for usage terms and restrictions.
-
-## 📄 License
-
-Proprietary - All rights reserved by Vincenzo Imperati. See `LICENSE.md` for full terms.
-
 ## 🐛 Troubleshooting
 
 ### Common Issues
