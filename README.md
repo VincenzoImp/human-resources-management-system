@@ -1,4 +1,4 @@
-# IWN - Human Resources Management System
+# Human Resources Management System
 
 A comprehensive web application for managing company employees and their qualifications, built with Next.js and Firebase.
 
