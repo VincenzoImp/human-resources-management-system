@@ -18,4 +18,4 @@ This software is provided "as is", without warranty of any kind, express or impl
 
 ## Contact
 
-For permission requests or other inquiries, please contact [your email address or website].
+For permission requests or other inquiries, please contact https://vincenzo.imperati.dev.
